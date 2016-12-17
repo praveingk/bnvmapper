@@ -18,6 +18,10 @@ public class VirtCoreLink {
         hc = endPoints[0]+"-"+endPoints[1];
     }
 
+    public VirtSwitchPort[] getEndPoints() {
+        return endPoints;
+    }
+
     @Override
     public int hashCode() {
         return hc.hashCode();
@@ -38,4 +42,11 @@ public class VirtCoreLink {
         return this.endPoints[0]+"<->"+ this.endPoints[1];
     }
 
+    public void setBandWidth (Double bandWidth) {
+        this.bandWidth = bandWidth;
+    }
+
+    public double getBandwidth() {
+        return bandWidth;
+    }
 }

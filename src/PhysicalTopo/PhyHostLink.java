@@ -5,7 +5,7 @@ package PhysicalTopo;
  */
 public class PhyHostLink {
     String ID;
-    Double bandWidth; /* In Gbps */
+    Double Capacity; /* In Gbps */
     PhySwitchPort switchPort;
     PhyHost hostPort;
     String hc;
@@ -30,6 +30,10 @@ public class PhyHostLink {
         return false;
     }
     public String toString() {
-        return this.hostPort+"<->"+ this.switchPort;
+        return  "("+ this.Capacity+")"+this.hostPort+"<->"+ this.switchPort;
+    }
+
+    public void setCapacity(Double Capacity) {
+        this.Capacity = Capacity;
     }
 }

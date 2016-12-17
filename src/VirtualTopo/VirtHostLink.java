@@ -29,7 +29,19 @@ public class VirtHostLink {
 
         return false;
     }
+
+    public VirtHost getHostPort(){
+        return hostPort;
+    }
+
+    public VirtSwitchPort getSwitchPort() {
+        return switchPort;
+    }
     public String toString() {
         return this.hostPort+"<->"+ this.switchPort;
+    }
+
+    public void setBandWidth (Double bandWidth) {
+        this.bandWidth = bandWidth;
     }
 }

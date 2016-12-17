@@ -1,8 +1,11 @@
 package PhysicalTopo;
 
+import VirtualTopo.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 
 /**
@@ -11,11 +14,31 @@ import java.util.HashMap;
 public class PhyTopo {
     private ArrayList<PhyHost> Hosts = new ArrayList<>();
     private ArrayList<PhySwitch> Switches = new ArrayList<>();
+    private ArrayList<PhySwitchPort> switchPorts = new ArrayList<>();
+
     private ArrayList<PhyCoreLink> coreLinks = new ArrayList<>();
     private ArrayList<PhyHostLink> hostLinks = new ArrayList<>();
 
     private HashMap<String, PhyHost> HostMapper = new HashMap<>();
     private HashMap<String, PhySwitch> SwitchMapper = new HashMap<>();
+
+
+    public ArrayList<PhyHost> getHosts() {
+        return Hosts;
+    }
+    public ArrayList<PhySwitch> getSwitches() {
+        return Switches;
+    }
+    public ArrayList<PhySwitchPort> getSwitchPorts() {
+        return switchPorts;
+    }
+    public ArrayList<PhyCoreLink> getCoreLinks() {
+        return coreLinks;
+    }
+    public ArrayList<PhyHostLink> getHostLinks() {
+        return hostLinks;
+    }
+
 
     public void loadPhyTopology (String phyTopoFile) {
         try {
@@ -36,7 +59,9 @@ public class PhyTopo {
                         break;
                     case "S":
                         String switchName = tokens[1];
+                        int tcap = Integer.parseInt(tokens[2]);
                         PhySwitch ps = new PhySwitch(switchName);
+                        ps.setTcamCapacity(tcap);
                         Switches.add(ps);
                         SwitchMapper.put(switchName, ps);
                         System.out.println(ps.toString());
@@ -46,6 +71,7 @@ public class PhyTopo {
                         String linkID = "HostLink"+ hostLinkNum;
                         String ep1 = tokens[1];
                         String []swTok = tokens[2].split("/");
+                        Double cap = Double.parseDouble(tokens[3]);
                         String ep2 = swTok[0];
                         String port = swTok[1];
 
@@ -55,8 +81,10 @@ public class PhyTopo {
                         sw = SwitchMapper.get(ep2);
                         PhySwitchPort psp = new PhySwitchPort(ep2+port, sw);
                         sw.addSwitchPort(psp);
+                        switchPorts.add(psp);
                         if (host != null && sw != null) {
                             PhyHostLink phl = new PhyHostLink(linkID, psp, host);
+                            phl.setCapacity(cap);
                             hostLinks.add(phl);
                             System.out.println(phl.toString());
                         } else {
@@ -68,7 +96,7 @@ public class PhyTopo {
                         linkID = "CoreLink"+ coreLinkNum;
                         String []swTok1 = tokens[1].split("/");
                         String []swTok2 = tokens[2].split("/");
-
+                        cap = Double.parseDouble(tokens[3]);
                         ep1 = swTok1[0];
                         String port1 = swTok1[1];
                         ep2 = swTok2[0];
@@ -82,8 +110,11 @@ public class PhyTopo {
                         sw1.addSwitchPort(psp1);
                         PhySwitchPort psp2 = new PhySwitchPort(ep2+port2, sw2);
                         sw2.addSwitchPort(psp2);
+                        switchPorts.add(psp1);
+                        switchPorts.add(psp2);
                         if (sw1 != null && sw2 != null) {
                             PhyCoreLink pcl = new PhyCoreLink(linkID, psp1, psp2);
+                            pcl.setCapacity(cap);
                             coreLinks.add(pcl);
                             System.out.println(pcl.toString());
                         } else {

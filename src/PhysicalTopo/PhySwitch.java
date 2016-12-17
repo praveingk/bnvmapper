@@ -9,6 +9,7 @@ public class PhySwitch {
     private String ID;
     private ArrayList<PhySwitchPort> switchPorts = new ArrayList<>();
     String hc = new String();
+    private int TcamCapacity;
     public PhySwitch(String ID) {
         this.ID = ID;
     }
@@ -25,6 +26,9 @@ public class PhySwitch {
         switchPorts.add(psp);
     }
 
+    public void setTcamCapacity(int cap) {
+        this.TcamCapacity = cap;
+    }
     public boolean contains(PhySwitchPort switchPort) {
         return switchPorts.contains(switchPort);
     }

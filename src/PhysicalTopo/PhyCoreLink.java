@@ -1,6 +1,7 @@
 package PhysicalTopo;
 
 import Utils.LinkType;
+import VirtualTopo.VirtSwitchPort;
 
 import static Utils.LinkType.*;
 
@@ -9,7 +10,7 @@ import static Utils.LinkType.*;
  */
 public class PhyCoreLink {
     String ID;
-    Double bandWidth; /* In Gbps */
+    Double Capacity; /* In Gbps */
     PhySwitchPort []endPoints = new PhySwitchPort[2];
     String hc;
     LinkType linkType;
@@ -29,6 +30,9 @@ public class PhyCoreLink {
             linkType = CORE;
         }
     }
+    public PhySwitchPort[] getEndPoints() {
+        return endPoints;
+    }
 
     @Override
     public int hashCode() {
@@ -47,7 +51,13 @@ public class PhyCoreLink {
         return false;
     }
     public String toString() {
-        return this.linkType + ": " + this.endPoints[0]+"<->"+ this.endPoints[1];
+        return this.linkType +"("+ this.Capacity+")"+ ": " + this.endPoints[0]+"<->"+ this.endPoints[1];
+    }
+    public void setCapacity(Double Capacity) {
+        this.Capacity = Capacity;
     }
 
+    public double getCapacity() {
+        return this.Capacity;
+    }
 }

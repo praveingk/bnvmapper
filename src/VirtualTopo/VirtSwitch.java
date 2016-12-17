@@ -11,6 +11,7 @@ public class VirtSwitch extends VirtNode {
     private String ID;
     private ArrayList<VirtSwitchPort> switchPorts = new ArrayList<>();
     String hc = new String();
+    private int TcamCapacity;
     public VirtSwitch(String ID) {
         this.ID = ID;
     }
@@ -34,6 +35,9 @@ public class VirtSwitch extends VirtNode {
         System.out.println(this.switchPorts.toString());
     }
 
+    public void setTcamCapacity(int cap) {
+        this.TcamCapacity = cap;
+    }
     @Override
     public int hashCode() {
         return ID.hashCode();
