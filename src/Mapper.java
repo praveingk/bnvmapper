@@ -7,6 +7,7 @@ import VirtualTopo.VirtHostLink;
 import VirtualTopo.VirtSwitchPort;
 import VirtualTopo.VirtTopo;
 import gurobi.*;
+import sun.plugin.javascript.navig.Array;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -161,7 +162,35 @@ public class Mapper {
 
             /* Constraint 6 : All vSwitch Ports, must be from same physical switch-ports */
 
-            
+            for (int i=0;i<virtualTopo.getSwitches().size();i++) {
+                String st = "SameSwitch-"+i;
+                GRBQuadExpr sameSwitch = new GRBQuadExpr();
+                ArrayList<VirtSwitchPort>  virtSwitchPorts = virtualTopo.getSwitches().get(i).getSwitchPorts();
+                for (int port1 = 0; port1< virtSwitchPorts.size(); port1++) {
+                    for (int port2=0; port2< virtSwitchPorts.size();port2++) {
+                        if (port1 == port2) continue;
+                        int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
+                        int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
+                        ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getSwitchPorts();
+                        for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
+                            for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
+                                if (pport1 == pport2) continue;
+                                int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
+                                int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport2));
+                                //System.out.println("X ")
+                                sameSwitch.addTerm(isSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
+                                        switchPortMapper[virtport1Index][phyport1Index],
+                                        switchPortMapper[virtport2Index][phyport2Index]);
+                            }
+                        }
+                    }
+                }
+                int switchPorts = virtSwitchPorts.size();
+                System.out.println("Size of switch port = "+ switchPorts);
+                int totalIter = (switchPorts * (switchPorts -1));
+                System.out.println("No. to total = "+ totalIter);
+                model.addQConstr(sameSwitch, GRB.EQUAL, totalIter, st);
+            }
 
 
 
@@ -200,6 +229,13 @@ public class Mapper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private double isSameSwitch(PhySwitchPort phyport1, PhySwitchPort phyport2) {
+        if (phyport1.getParentSwitch().equals(phyport2.getParentSwitch())) {
+            return 1.0;
+        }
+        return 0.0;
     }
 
     private Double isDirectlyConnected(PhySwitchPort phySwitchPort, PhyHost phyHost) {
