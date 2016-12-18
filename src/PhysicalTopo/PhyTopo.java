@@ -5,7 +5,6 @@ import VirtualTopo.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 
 /**

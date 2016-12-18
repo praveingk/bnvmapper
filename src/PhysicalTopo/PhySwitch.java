@@ -29,6 +29,10 @@ public class PhySwitch {
     public void setTcamCapacity(int cap) {
         this.TcamCapacity = cap;
     }
+
+    public int getTCAMCapacity() {
+        return TcamCapacity;
+    }
     public boolean contains(PhySwitchPort switchPort) {
         return switchPorts.contains(switchPort);
     }

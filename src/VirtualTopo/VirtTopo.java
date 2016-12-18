@@ -36,7 +36,16 @@ public class VirtTopo {
         return hostLinks;
     }
 
+    public void setTCAMCaps() {
+        for (int i=0;i< this.Switches.size();i++) {
+            VirtSwitch mySwitch = this.Switches.get(i);
 
+            int indivTcam = Math.round(mySwitch.getTCAMCapacity() / mySwitch.getSwitchPorts().size());
+            for (int j=0;j< mySwitch.getSwitchPorts().size();j++) {
+                mySwitch.getSwitchPorts().get(j).setTCAM(indivTcam);
+            }
+        }
+    }
     public void loadVirtTopology (String phyTopoFile) {
         try {
             BufferedReader br = new BufferedReader((new FileReader(phyTopoFile)));

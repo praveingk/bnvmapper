@@ -9,6 +9,7 @@ public class VirtSwitchPort {
     private String ID;
     private VirtSwitch parentSwitch = null;
     String hc = new String();
+    int TCAM;
     public VirtSwitchPort(String ID, VirtSwitch parentSwitch) {
         this.ID = ID;
         this.parentSwitch = parentSwitch;
@@ -37,5 +38,12 @@ public class VirtSwitchPort {
     }
     public String toString() {
         return "VSP:"+ID;
+    }
+
+    public void setTCAM(int TCAM) {
+        this.TCAM = TCAM;
+    }
+    public int getTCAM() {
+        return TCAM;
     }
 }

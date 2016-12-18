@@ -35,6 +35,9 @@ public class VirtSwitch extends VirtNode {
         System.out.println(this.switchPorts.toString());
     }
 
+    public int getTCAMCapacity() {
+        return TcamCapacity;
+    }
     public void setTcamCapacity(int cap) {
         this.TcamCapacity = cap;
     }

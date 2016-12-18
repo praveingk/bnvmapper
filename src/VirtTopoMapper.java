@@ -24,6 +24,7 @@ public class VirtTopoMapper {
         VirtTopo virtualTopo = new VirtTopo();
         virtualTopo.loadVirtTopology(virtTopoFile);
 
+
         /* Load it to the Mapper */
         Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
         myMapper.allocate();

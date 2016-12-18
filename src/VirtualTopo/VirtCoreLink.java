@@ -1,7 +1,7 @@
 package VirtualTopo;
 
 import Utils.LinkType;
-import jdk.nashorn.internal.objects.Global;
+
 
 /**
  * Created by pravein on 15/12/16.
