@@ -129,6 +129,7 @@ public class VirtTopo {
                         break;
                 }
             }
+            setTCAMCaps();
         } catch (Exception e) {
             e.printStackTrace();
         }

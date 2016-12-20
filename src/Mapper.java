@@ -197,19 +197,23 @@ public class Mapper {
             for (int i=0;i < physicalTopo.getSwitches().size();i++) {
                 String st = "PhysicalSwitchTcam-"+i;
                 GRBLinExpr switchTcam = new GRBLinExpr();
+                //System.out.println("phys switch "+ physicalTopo.getSwitches().get(i).toString());
                 ArrayList<PhySwitchPort> phySwitchPorts = physicalTopo.getSwitches().get(i).getSwitchPorts();
                 for (int j=0;j< phySwitchPorts.size();j++) {
                     int phyPortIndex = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(j));
-
                     for (int virtPortIndex =0; virtPortIndex < virtualTopo.getSwitchPorts().size(); virtPortIndex++) {
                         switchTcam.addTerm(virtualTopo.getSwitchPorts().get(virtPortIndex).getTCAM(), switchPortMapper[virtPortIndex][phyPortIndex]);
                     }
                 }
-                model.addConstr(switchTcam, GRB.LESS_EQUAL, physicalTopo.getSwitches().get(i).getTCAMCapacity());
+                model.addConstr(switchTcam, GRB.LESS_EQUAL, physicalTopo.getSwitches().get(i).getTCAMCapacity(), st);
             }
 
             model.update();
+
+
             /* Set Objective */
+            /* Objective : Use many physical switches as possible, to maximize the availability of TCAM */
+
 
             model.write("Mapper.lp");
 
