@@ -76,15 +76,15 @@ public class Mapper {
             }
 
             /* Constraint 3: Each Physical switch-port should be used only once. */
-            GRBLinExpr[] physswitchPortPlacement = new GRBLinExpr[physicalTopo.getSwitchPorts().size()];
-            for (int i=0;i< physicalTopo.getSwitchPorts().size();i++) {
-                String st = "phySwitchPortPlacement-" + i;
-                physswitchPortPlacement[i] = new GRBLinExpr();
-                for (int j = 0; j < virtualTopo.getSwitchPorts().size(); j++) {
-                    physswitchPortPlacement[i].addTerm(1.0, switchPortMapper[j][i]);
-                }
-                model.addConstr(physswitchPortPlacement[i], GRB.LESS_EQUAL, 1, st);
-            }
+//            GRBLinExpr[] physswitchPortPlacement = new GRBLinExpr[physicalTopo.getSwitchPorts().size()];
+//            for (int i=0;i< physicalTopo.getSwitchPorts().size();i++) {
+//                String st = "phySwitchPortPlacement-" + i;
+//                physswitchPortPlacement[i] = new GRBLinExpr();
+//                for (int j = 0; j < virtualTopo.getSwitchPorts().size(); j++) {
+//                    physswitchPortPlacement[i].addTerm(1.0, switchPortMapper[j][i]);
+//                }
+//                model.addConstr(physswitchPortPlacement[i], GRB.LESS_EQUAL, 1, st);
+//            }
 
 
             /* Constraint 3: Each Physical switch-port should be used only once. */
@@ -208,11 +208,33 @@ public class Mapper {
                 model.addConstr(switchTcam, GRB.LESS_EQUAL, physicalTopo.getSwitches().get(i).getTCAMCapacity(), st);
             }
 
-            model.update();
 
 
             /* Set Objective */
             /* Objective : Use many physical switches as possible, to maximize the availability of TCAM */
+            GRBQuadExpr obj = new GRBQuadExpr();
+            for (int i=0;i< virtualTopo.getCoreLinks().size();i++) {
+                String st = "Objective";
+                VirtSwitchPort []virtSwitchPorts = virtualTopo.getCoreLinks().get(i).getEndPoints();
+                int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[0]);
+                int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[1]);
+                ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getSwitchPorts();
+                for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
+                    for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
+                        if (pport1 == pport2) continue;
+                        int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
+                        int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport2));
+                        //System.out.println("X ")
+                        obj.addTerm(isSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
+                                switchPortMapper[virtport1Index][phyport1Index],
+                                switchPortMapper[virtport2Index][phyport2Index]);
+                    }
+                }
+            }
+
+            model.setObjective(obj, GRB.MINIMIZE);
+
+            model.update();
 
 
             model.write("Mapper.lp");
