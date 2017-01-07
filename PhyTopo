@@ -14,8 +14,8 @@ H:pc5b
 H:pc6b
 H:pc7b
 H:pc8b
-S:SwitchA
-S:SwitchB
+S:SwitchA:3000
+S:SwitchB:3000
 HL:pc1a:SwitchA/1:1
 HL:pc2a:SwitchA/2:1
 HL:pc3a:SwitchA/3:1
