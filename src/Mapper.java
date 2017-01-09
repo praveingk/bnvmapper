@@ -121,14 +121,14 @@ public class Mapper {
                 model.addQConstr(hostLinkPlacement, GRB.EQUAL, 1.0, st);
             }
 
-            /* Constraint 6 : Satisfy virtual link mapping to physical link constraint */
+            /* Constraint 5 : Satisfy virtual link mapping to physical link constraint */
             for (int i=0;i< virtualTopo.getCoreLinks().size();i++) {
                 String st = "PortPort-"+i;
                 GRBQuadExpr coreLinkPlacement = new GRBQuadExpr();
                 VirtSwitchPort [] virtendPoints = virtualTopo.getCoreLinks().get(i).getEndPoints();
                 int virtendPoint1Index = virtualTopo.getSwitchPorts().indexOf(virtendPoints[0]);
                 int virtendPoint2Index = virtualTopo.getSwitchPorts().indexOf(virtendPoints[1]);
-                for (int j=0; j < virtualTopo.getCoreLinks().size();j++) {
+                for (int j=0; j < physicalTopo.getCoreLinks().size();j++) {
                     PhySwitchPort []endPoints = physicalTopo.getCoreLinks().get(j).getEndPoints();
                     int endPoint1Index = physicalTopo.getSwitchPorts().indexOf(endPoints[0]);
                     int endPoint2Index = physicalTopo.getSwitchPorts().indexOf(endPoints[1]);
@@ -140,7 +140,7 @@ public class Mapper {
             }
 
 
-            /* Constraint 5 : Link Bandwidth constraints */
+            /* Constraint 6 : Link Bandwidth constraints */
 
             for (int i=0;i < physicalTopo.getCoreLinks().size();i++) {
                 String st = "CoreLink-"+i;
@@ -160,7 +160,7 @@ public class Mapper {
                 model.addQConstr(coreLinkBandwidth, GRB.LESS_EQUAL, physicalTopo.getCoreLinks().get(i).getCapacity(), st);
             }
 
-            /* Constraint 6 : All vSwitch Ports, must be from same physical switch-ports */
+            /* Constraint 7 : All vSwitch Ports, must be from same physical switch-ports */
 
             for (int i=0;i<virtualTopo.getSwitches().size();i++) {
                 String st = "SameSwitch-"+i;
