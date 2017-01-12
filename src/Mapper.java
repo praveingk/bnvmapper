@@ -87,15 +87,16 @@ public class Mapper {
 //            }
 
 
-            /* Constraint 3: Each Physical switch-port should be used only once. */
+            /* Constraint 3: Each Physical switch-host should be used as per its VM limits. */
             GRBLinExpr[] physhostPlacement = new GRBLinExpr[physicalTopo.getHosts().size()];
             for (int i=0;i< physicalTopo.getHosts().size();i++) {
                 String st = "phyHostPlacement-" + i;
+                PhyHost phyHost = physicalTopo.getHosts().get(i);
                 physhostPlacement[i] = new GRBLinExpr();
                 for (int j = 0; j < virtualTopo.getHosts().size(); j++) {
                     physhostPlacement[i].addTerm(1.0, hostMapper[j][i]);
                 }
-                model.addConstr(physhostPlacement[i], GRB.LESS_EQUAL, 1, st);
+                model.addConstr(physhostPlacement[i], GRB.LESS_EQUAL, phyHost.getVMCap(), st);
             }
 
 
@@ -174,7 +175,8 @@ public class Mapper {
                         ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getSwitchPorts();
                         for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
                             for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
-                                if (pport1 == pport2) continue;
+                                if (pport2 == pport1) continue;
+
                                 int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
                                 int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport2));
                                 //System.out.println("X ")
@@ -189,7 +191,7 @@ public class Mapper {
                 System.out.println("Size of switch port = "+ switchPorts);
                 int totalIter = (switchPorts * (switchPorts -1));
                 System.out.println("No. to total = "+ totalIter);
-                model.addQConstr(sameSwitch, GRB.EQUAL, totalIter, st);
+                //model.addQConstr(sameSwitch, GRB.EQUAL, totalIter, st);
             }
 
             /* Constraint 7 : Make sure physical switch TCAM capacity is not violated. */
@@ -296,6 +298,7 @@ public class Mapper {
         }
 
         for (int i=0;i<virtualTopo.getHosts().size() ;i++) {
+            System.out.println(virtualTopo.getHosts().get(i).toString());
             for (int j=0;j< physicalTopo.getHosts().size();j++) {
                 if (hostMapper[i][j].get(GRB.DoubleAttr.X) == 1.0) {
                     System.out.println(virtualTopo.getHosts().get(i).toString() +" Mapped to "+ physicalTopo.getHosts().get(j).toString());

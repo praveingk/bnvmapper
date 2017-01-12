@@ -7,6 +7,8 @@ public class PhyHost {
     private String ID;
     String hc = new String();
 
+    int VMCap;
+
     public PhyHost(String ID) {
         this.ID = ID;
     }
@@ -29,5 +31,13 @@ public class PhyHost {
     }
     public String toString() {
         return "H:"+ID;
+    }
+
+    public void setVMCap(int VMs) {
+        this.VMCap = VMs;
+    }
+
+    public int getVMCap() {
+        return this.VMCap;
     }
 }

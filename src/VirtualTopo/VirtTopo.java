@@ -53,6 +53,10 @@ public class VirtTopo {
             int hostLinkNum = 0;
             int coreLinkNum = 0;
             while ((line = br.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    /* Ignore Comments */
+                    continue;
+                }
                 String []tokens = line.split(":");
                 String type = tokens[0];
                 switch(type) {

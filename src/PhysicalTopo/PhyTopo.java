@@ -46,12 +46,17 @@ public class PhyTopo {
             int hostLinkNum = 0;
             int coreLinkNum = 0;
             while ((line = br.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    /* Ignore Comments */
+                    continue;
+                }
                 String []tokens = line.split(":");
                 String type = tokens[0];
                 switch(type) {
                     case "H":
                         String hostname = tokens[1];
                         PhyHost ph = new PhyHost(hostname);
+                        ph.setVMCap(1);
                         Hosts.add(ph);
                         HostMapper.put(hostname, ph);
                         System.out.println(ph.toString());
