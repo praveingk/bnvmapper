@@ -9,7 +9,9 @@ import VirtualTopo.VirtTopo;
 import gurobi.*;
 import sun.plugin.javascript.navig.Array;
 
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +30,15 @@ public class Mapper {
 
     public void allocate () {
         GRBEnv env;
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("ModelVirt.txt","UTF-8");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         try {
 
             env = new GRBEnv();
@@ -220,7 +231,8 @@ public class Mapper {
                 VirtSwitchPort []virtSwitchPorts = virtualTopo.getCoreLinks().get(i).getEndPoints();
                 int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[0]);
                 int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[1]);
-                ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getSwitchPorts();
+                ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getCoreSwitchPorts();
+                System.out.println(phySwitchPorts.size());
                 for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
                     for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
                         if (pport1 == pport2) continue;
@@ -230,6 +242,8 @@ public class Mapper {
                         obj.addTerm(isSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
                                 switchPortMapper[virtport1Index][phyport1Index],
                                 switchPortMapper[virtport2Index][phyport2Index]);
+                        writer.println(virtport1Index+","+virtport2Index+","+phyport1Index+","+phyport2Index);
+
                     }
                 }
             }

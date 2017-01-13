@@ -17,7 +17,7 @@ public class PhyTopo {
 
     private ArrayList<PhyCoreLink> coreLinks = new ArrayList<>();
     private ArrayList<PhyHostLink> hostLinks = new ArrayList<>();
-
+    private ArrayList<PhySwitchPort> coreSwitchPorts = new ArrayList<>();
     private HashMap<String, PhyHost> HostMapper = new HashMap<>();
     private HashMap<String, PhySwitch> SwitchMapper = new HashMap<>();
 
@@ -38,6 +38,21 @@ public class PhyTopo {
         return hostLinks;
     }
 
+    public void findCoreSwitchPorts() {
+        for (int i=0;i<coreLinks.size();i++) {
+            PhySwitchPort[] psp = coreLinks.get(i).getEndPoints();
+            if (!coreSwitchPorts.contains(psp[0])) {
+                coreSwitchPorts.add(psp[0]);
+            }
+            if (!coreSwitchPorts.contains(psp[1])) {
+                coreSwitchPorts.add(psp[1]);
+            }
+        }
+    }
+
+    public ArrayList<PhySwitchPort> getCoreSwitchPorts() {
+        return coreSwitchPorts;
+    }
 
     public void loadPhyTopology (String phyTopoFile) {
         try {
@@ -127,6 +142,7 @@ public class PhyTopo {
                         break;
                 }
             }
+            findCoreSwitchPorts();
         } catch (Exception e) {
             e.printStackTrace();
         }

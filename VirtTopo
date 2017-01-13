@@ -1,15 +1,8 @@
+# Tenant 1
 H:n1
 H:n2
-H:n3
-H:n4
 S:Switch1:100
 S:Switch2:100
-S:Switch3:100
-S:Switch4:100
 HL:n1:Switch1/1:1
-HL:n2:Switch1/2:1
-HL:n3:Switch4/1:1
-HL:n4:Switch4/2:1
-CL:Switch1/3:Switch2/1:1
-CL:Switch2/2:Switch3/1:1
-CL:Switch3/2:Switch4/3:1
+HL:n2:Switch2/1:1
+CL:Switch1/2:Switch2/2:1

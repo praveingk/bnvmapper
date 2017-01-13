@@ -1,0 +1,38 @@
+# Tenant 1
+H:n1
+H:n2
+H:n3
+H:n4
+S:Switch1:100
+S:Switch2:100
+S:Switch3:100
+S:Switch4:100
+HL:n1:Switch1/1:1
+HL:n2:Switch1/2:1
+HL:n3:Switch4/1:1
+HL:n4:Switch4/2:1
+CL:Switch1/3:Switch2/1:1
+CL:Switch2/2:Switch3/1:1
+CL:Switch3/2:Switch4/3:1
+# Tenant 2
+H:pc1
+H:pc2
+H:pc3
+H:pc4
+S:Switch10:100
+S:Switch11:100
+HL:pc1:Switch10/1:1
+HL:pc2:Switch10/2:1
+HL:pc3:Switch11/1:1
+HL:pc4:Switch11/2:1
+CL:Switch10/3:Switch11/3:1
+# Tenant 3
+H:pcA
+H:pcB
+H:pcC
+S:Switch20:100
+S:Switch21:100
+HL:pcA:Switch20/1:1
+HL:pcB:Switch20/2:1
+HL:pcC:Switch21/1:1
+CL:Switch20/3:Switch21/2:1
