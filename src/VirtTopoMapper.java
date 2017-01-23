@@ -10,17 +10,18 @@ public class VirtTopoMapper {
          * Usage : VirtTopoMapper physicalTopoFile virtTopofile
          */
 
-        if (args.length < 2) {
-            System.out.println("Usage : VirtTopoMapper physicalTopoFile virtTopofile ");
+        if (args.length < 3) {
+            System.out.println("Usage : VirtTopoMapper physicalTopoFile virtTopofile loopports");
             return;
         }
 
 
         String phyTopoFile = args[0];
         String virtTopoFile = args[1];
+        int loop = Integer.parseInt(args[2]);
 
         PhyTopo physicalTopo = new PhyTopo();
-        physicalTopo.loadPhyTopology(phyTopoFile);
+        physicalTopo.loadPhyTopology(phyTopoFile, loop);
         VirtTopo virtualTopo = new VirtTopo();
         virtualTopo.loadVirtTopology(virtTopoFile);
 

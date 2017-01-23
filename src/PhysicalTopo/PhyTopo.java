@@ -54,7 +54,50 @@ public class PhyTopo {
         return coreSwitchPorts;
     }
 
-    public void loadPhyTopology (String phyTopoFile) {
+    public void enableAllLinks() {
+        for (int i = 0; i < coreLinks.size(); i++) {
+            coreLinks.get(i).enableLink();
+        }
+    }
+
+    public void disableAllLinks() {
+        for (int i = 0; i < coreLinks.size(); i++) {
+            coreLinks.get(i).disableLink();
+        }
+    }
+
+    public void setLoopbackCount(int loop) {
+        HashMap<String,Integer> SwitchMap = new HashMap<>();
+        this.disableAllLinks();
+        int dis = 0;
+
+        for (int i=0;i< coreLinks.size();i++) {
+            PhySwitchPort[] switchPorts = coreLinks.get(i).getEndPoints();
+            PhySwitch sw1 = switchPorts[0].getParentSwitch();
+            PhySwitch sw2 = switchPorts[1].getParentSwitch();
+            System.out.println(coreLinks.get(i).isEnabled());
+            if (!sw1.equals(sw2)) {
+                /* Physical Core link */
+                coreLinks.get(i).enableLink();
+                continue;
+            }
+            /* Must be a loop-back link */
+            Integer count = SwitchMap.get(sw1.getID());
+            if (count == null)
+                count =0;
+            if (count < loop) {
+                /* Already disable enough loop ports */
+                coreLinks.get(i).enableLink();
+                System.out.println("enabling link " + coreLinks.get(i).toString());
+                dis++;
+                count++;
+                SwitchMap.put(sw1.getID(),count);
+            }
+
+        }
+    }
+
+    public void loadPhyTopology (String phyTopoFile, int loop) {
         try {
             BufferedReader br = new BufferedReader((new FileReader(phyTopoFile)));
             String line;
@@ -143,6 +186,7 @@ public class PhyTopo {
                 }
             }
             findCoreSwitchPorts();
+            setLoopbackCount(loop);
         } catch (Exception e) {
             e.printStackTrace();
         }

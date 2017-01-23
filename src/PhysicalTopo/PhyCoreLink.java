@@ -14,12 +14,26 @@ public class PhyCoreLink {
     PhySwitchPort []endPoints = new PhySwitchPort[2];
     String hc;
     LinkType linkType;
+    boolean isEnable;
     public PhyCoreLink(String ID, PhySwitchPort sp1, PhySwitchPort sp2) {
         this.ID = ID;
         endPoints[0] = sp1;
         endPoints[1] = sp2;
         hc = endPoints[0]+"-"+endPoints[1];
         setLinkType();
+        isEnable = false;
+    }
+
+    public void disableLink() {
+        isEnable = false;
+    }
+
+    public void enableLink() {
+        isEnable = true;
+    }
+
+    public boolean isEnabled() {
+        return isEnable;
     }
 
     private void setLinkType() {

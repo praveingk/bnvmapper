@@ -141,6 +141,9 @@ public class Mapper {
                 int virtendPoint1Index = virtualTopo.getSwitchPorts().indexOf(virtendPoints[0]);
                 int virtendPoint2Index = virtualTopo.getSwitchPorts().indexOf(virtendPoints[1]);
                 for (int j=0; j < physicalTopo.getCoreLinks().size();j++) {
+                    if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
+                        continue;
+                    }
                     PhySwitchPort []endPoints = physicalTopo.getCoreLinks().get(j).getEndPoints();
                     int endPoint1Index = physicalTopo.getSwitchPorts().indexOf(endPoints[0]);
                     int endPoint2Index = physicalTopo.getSwitchPorts().indexOf(endPoints[1]);
@@ -155,9 +158,12 @@ public class Mapper {
             /* Constraint 6 : Link Bandwidth constraints */
 
             for (int i=0;i < physicalTopo.getCoreLinks().size();i++) {
+                if (!physicalTopo.getCoreLinks().get(i).isEnabled()) {
+                    continue;
+                }
                 String st = "CoreLink-"+i;
                 GRBQuadExpr coreLinkBandwidth = new GRBQuadExpr();
-                PhySwitchPort []endPoints = physicalTopo.getCoreLinks().get(i).getEndPoints();
+                    PhySwitchPort []endPoints = physicalTopo.getCoreLinks().get(i).getEndPoints();
                 int endPoint1Index = physicalTopo.getSwitchPorts().indexOf(endPoints[0]);
                 int endPoint2Index = physicalTopo.getSwitchPorts().indexOf(endPoints[1]);
 
@@ -185,7 +191,9 @@ public class Mapper {
                         int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
                         ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getSwitchPorts();
                         for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
-                            for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
+                            int pport2 = pport1+1;
+                            if (pport2 >= phySwitchPorts.size())
+                                break;
                                 if (pport2 == pport1) continue;
 
                                 int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
@@ -194,7 +202,7 @@ public class Mapper {
                                 sameSwitch.addTerm(isSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
                                         switchPortMapper[virtport1Index][phyport1Index],
                                         switchPortMapper[virtport2Index][phyport2Index]);
-                            }
+
                         }
                     }
                 }
@@ -225,30 +233,33 @@ public class Mapper {
 
             /* Set Objective */
             /* Objective : Use many physical switches as possible, to maximize the availability of TCAM */
-            GRBQuadExpr obj = new GRBQuadExpr();
-            for (int i=0;i< virtualTopo.getCoreLinks().size();i++) {
-                String st = "Objective";
-                VirtSwitchPort []virtSwitchPorts = virtualTopo.getCoreLinks().get(i).getEndPoints();
-                int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[0]);
-                int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[1]);
-                ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getCoreSwitchPorts();
-                System.out.println(phySwitchPorts.size());
-                for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
-                    for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
-                        if (pport1 == pport2) continue;
-                        int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
-                        int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport2));
-                        //System.out.println("X ")
-                        obj.addTerm(isSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
-                                switchPortMapper[virtport1Index][phyport1Index],
-                                switchPortMapper[virtport2Index][phyport2Index]);
-                        writer.println(virtport1Index+","+virtport2Index+","+phyport1Index+","+phyport2Index);
-
-                    }
-                }
-            }
-
-            model.setObjective(obj, GRB.MINIMIZE);
+//            GRBQuadExpr obj = new GRBQuadExpr();
+//            for (int i=0;i< virtualTopo.getCoreLinks().size();i++) {
+//                String st = "Objective";
+//                VirtSwitchPort []virtSwitchPorts = virtualTopo.getCoreLinks().get(i).getEndPoints();
+//                int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[0]);
+//                int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[1]);
+//                ArrayList<PhySwitchPort>  phySwitchPorts = physicalTopo.getCoreSwitchPorts();
+//                System.out.println(phySwitchPorts.size());
+//                for (int pport1 = 0; pport1< phySwitchPorts.size(); pport1++) {
+//                    //for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
+//                    int pport2 = pport1+1;
+//                    if (pport2 >= phySwitchPorts.size())
+//                        break;
+//                        if (pport1 == pport2) continue;
+//                        int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
+//                        int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport2));
+//                        //System.out.println("X ")
+//                        obj.addTerm(isSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
+//                                switchPortMapper[virtport1Index][phyport1Index],
+//                                switchPortMapper[virtport2Index][phyport2Index]);
+//                        writer.println(virtport1Index+","+virtport2Index+","+phyport1Index+","+phyport2Index);
+//
+//                    //}
+//                }
+//            }
+//
+//            model.setObjective(obj, GRB.MINIMIZE);
 
             model.update();
 

@@ -3,6 +3,12 @@ H:n1
 H:n2
 S:Switch1:100
 S:Switch2:100
+S:Switch3:100
+S:Switch4:100
+S:Switch5:100
 HL:n1:Switch1/1:1
-HL:n2:Switch2/1:1
-CL:Switch1/2:Switch2/2:1
+HL:n2:Switch5/2:1
+CL:Switch1/2:Switch2/1:1
+CL:Switch2/2:Switch3/1:1
+CL:Switch3/2:Switch4/1:1
+CL:Switch4/2:Switch5/1:1
