@@ -19,11 +19,16 @@ public class VirtTopoMapper {
         String phyTopoFile = args[0];
         String virtTopoFile = args[1];
         int loop = Integer.parseInt(args[2]);
-
         PhyTopo physicalTopo = new PhyTopo();
         physicalTopo.loadPhyTopology(phyTopoFile, loop);
+
         VirtTopo virtualTopo = new VirtTopo();
-        virtualTopo.loadVirtTopology(virtTopoFile);
+        if (virtTopoFile.contains("FatTree")) {
+            String [] tops = virtTopoFile.split(":");
+            virtualTopo.loadFatTreeTopo(Integer.parseInt(tops[1]));
+        } else {
+            virtualTopo.loadVirtTopology(virtTopoFile);
+        }
 
 
         /* Load it to the Mapper */

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by pravein on 15/12/16.
@@ -45,6 +46,93 @@ public class VirtTopo {
                 mySwitch.getSwitchPorts().get(j).setTCAM(indivTcam);
             }
         }
+    }
+
+
+    public void addEdge(VirtSwitch Switch1, VirtSwitch Switch2, int Bandwidth) {
+        int curPort1 = Switch1.getSwitchPorts().size();
+        int curPort2 = Switch2.getSwitchPorts().size();
+
+        VirtSwitchPort Switch1Port = new VirtSwitchPort(Switch1.getID()+curPort1, Switch1);
+        VirtSwitchPort Switch2Port = new VirtSwitchPort(Switch2.getID()+curPort2, Switch2);
+        int linkNum = coreLinks.size();
+        VirtCoreLink coreLink = new VirtCoreLink("link"+linkNum, Switch1Port, Switch2Port);
+        coreLinks.add(coreLink);
+
+    }
+    public  void loadFatTreeTopo(int degree) {
+
+        System.out.println("Loading FatTree with degree "+ degree);
+        List<VirtSwitch> coreSwitches = new ArrayList<VirtSwitch>(degree);
+        List<VirtSwitch> edgeSwitches = new ArrayList<VirtSwitch>();
+
+        int SwitchRuleSize = 3000;
+		/* Create Core Switches */
+        int coresNum = (degree / 2) * (degree / 2); // (k/2)^2
+        System.out.println("Creating Core Switches : ");
+        for (int i = 0; i < coresNum; i++) {
+            VirtSwitch vertex = new VirtSwitch("Switch"+i);
+            vertex.setTcamCapacity(SwitchRuleSize);
+            Switches.add(vertex);
+            SwitchMapper.put(vertex.getID(), vertex);
+            coreSwitches.add(vertex);
+            System.out.println(i);
+
+        }
+
+        int switch_pr = coreSwitches.size();
+		/* Create Pods */
+        System.out.println("Creating Pods : ");
+        for (int i = 0; i < degree; i++) {
+            System.out.println("Pod " + i);
+            List<VirtSwitch> podSwitches = new ArrayList<VirtSwitch>(degree);
+            //pod_prefix = ipod_prefix * (i+1);
+            //edge_prefix = iedge_prefix *(i+1);
+            for (int j = 0; j < degree / 2; j++) {
+                VirtSwitch aggSw = new VirtSwitch("Switch"+switch_pr++);//(pod_prefix + j);
+                aggSw.setTcamCapacity(SwitchRuleSize);
+                Switches.add(aggSw);
+                SwitchMapper.put(aggSw.getID(), aggSw);
+                podSwitches.add(aggSw);
+                System.out.println("AGG " + aggSw.getID());
+
+				/* Create Link from core to Pods */
+                for (int t = 0; t < degree / 2; t++) {
+                    addEdge(aggSw, coreSwitches.get(j * degree / 2 + t), 1);
+                    addEdge(coreSwitches.get(j * degree / 2 + t), aggSw, 1);
+                }
+            }
+
+            for (int j = 0; j < degree / 2; j++) {
+                VirtSwitch edgesw = new VirtSwitch("Switch"+switch_pr++);//(edge_prefix + j);
+                edgesw.setTcamCapacity(SwitchRuleSize);
+                Switches.add(edgesw);
+                SwitchMapper.put(edgesw.getID(), edgesw);
+                edgeSwitches.add(edgesw);
+                System.out.println("AGG2 " + edgesw.getID());
+				/* Intra - Pod Links */
+                for (int k = 0; k < degree / 2; k++) {
+                    System.out.println("Creating Link bwt " + podSwitches.get(k).getID() + " and " + edgesw.getID());
+                    addEdge(podSwitches.get(k), edgesw, 1);
+                    addEdge(edgesw, podSwitches.get(k), 1);
+                }
+				/*
+				for (int k = 0 ; k < degree/2 ; k++) {
+					BaseVertex edgeSw = new Vertex(edge_prefix + k);
+					vertexList.add(edgeSw);
+					idVertexIndex.put(edgeSw.getId(), edgeSw);
+					System.out.println("Edge Switch : "+ edgeSw.getId());
+					addEdge(edgeSw.getId(), agg2Sw.getId(), 1);
+					System.out.println("Creating Link bwt "+ edgeSw.getId() + " and " +agg2Sw.getId());
+				}*/
+            }
+            int hostID = 1;
+            for (i=0;i<edgeSwitches.size();i++) {
+                VirtHost host1 = new VirtHost("Host"+ hostID);
+            }
+
+        }
+
     }
     public void loadVirtTopology (String phyTopoFile) {
         try {
