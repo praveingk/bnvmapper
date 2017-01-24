@@ -88,7 +88,7 @@ public class PhyTopo {
             if (count < loop) {
                 /* Already disable enough loop ports */
                 coreLinks.get(i).enableLink();
-                System.out.println("enabling link " + coreLinks.get(i).toString());
+                //System.out.println("enabling link " + coreLinks.get(i).toString());
                 dis++;
                 count++;
                 SwitchMap.put(sw1.getID(),count);

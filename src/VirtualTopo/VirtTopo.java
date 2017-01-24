@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by pravein on 15/12/16.
@@ -49,16 +50,71 @@ public class VirtTopo {
     }
 
 
-    public void addEdge(VirtSwitch Switch1, VirtSwitch Switch2, int Bandwidth) {
+    public void addEdge(VirtSwitch Switch1, VirtSwitch Switch2, Double Bandwidth) {
         int curPort1 = Switch1.getSwitchPorts().size();
         int curPort2 = Switch2.getSwitchPorts().size();
 
-        VirtSwitchPort Switch1Port = new VirtSwitchPort(Switch1.getID()+curPort1, Switch1);
-        VirtSwitchPort Switch2Port = new VirtSwitchPort(Switch2.getID()+curPort2, Switch2);
+        VirtSwitchPort Switch1Port = new VirtSwitchPort(Switch1.getID()+"/"+curPort1, Switch1);
+        VirtSwitchPort Switch2Port = new VirtSwitchPort(Switch2.getID()+"/"+curPort2, Switch2);
+        Switch1.addSwitchPort(Switch1Port);
+        Switch2.addSwitchPort(Switch2Port);
+        switchPorts.add(Switch1Port);
+        switchPorts.add(Switch2Port);
         int linkNum = coreLinks.size();
-        VirtCoreLink coreLink = new VirtCoreLink("link"+linkNum, Switch1Port, Switch2Port);
+        VirtCoreLink coreLink = new VirtCoreLink("clink"+linkNum, Switch1Port, Switch2Port);
+        coreLink.setBandWidth(Bandwidth);
         coreLinks.add(coreLink);
 
+    }
+
+    public void addEdge(VirtSwitch Switch1, VirtHost host, Double Bandwidth) {
+        int curPort = Switch1.getSwitchPorts().size();
+
+
+        VirtSwitchPort Switch1Port = new VirtSwitchPort(Switch1.getID()+"/"+curPort, Switch1);
+        Switch1.addSwitchPort(Switch1Port);
+        switchPorts.add(Switch1Port);
+        int linkNum = hostLinks.size();
+        VirtHostLink hostLink = new VirtHostLink("hlink"+linkNum, Switch1Port, host);
+        hostLink.setBandWidth(Bandwidth);
+        hostLinks.add(hostLink);
+
+    }
+
+    public void loadRandomGraphTopo(int numSwitches, int numLinks) {
+        int SwitchRuleSize = 100;
+        System.out.println("Creating a random graph with "+ numSwitches +" and link : "+ numLinks);
+        ArrayList<String> links = new ArrayList<>();
+        for (int i=0;i< numSwitches; i++) {
+            VirtSwitch mySwitch = new VirtSwitch("Switch"+i);
+            mySwitch.setTcamCapacity(SwitchRuleSize);
+            Switches.add(mySwitch);
+            SwitchMapper.put(mySwitch.getID(), mySwitch);
+            System.out.println(mySwitch.toString());
+        }
+        Random r = new Random();
+        for (int i=0;i< numLinks;i++) {
+            while(true) {
+                String switch1 = "Switch" + r.nextInt(numSwitches);
+                String switch2 = "Switch" + r.nextInt(numSwitches);
+                String linkholder = switch1 + switch2;
+                String linkholder2 = switch2+ switch1;
+                if (switch1.equals(switch2)) {
+                    continue;
+                }
+                if (links.contains(linkholder) || links.contains(linkholder2)) {
+                    continue;
+                }
+                links.add(linkholder);
+                links.add(linkholder2);
+                if (SwitchMapper.get(switch1) == null) {
+                    System.out.println(switch1+"  is null");
+                }
+                addEdge(SwitchMapper.get(switch1), SwitchMapper.get(switch2), 1.0);
+                System.out.println("Created link between "+ switch1+ " and "+ switch2);
+                break;
+            }
+        }
     }
     public  void loadFatTreeTopo(int degree) {
 
@@ -66,10 +122,10 @@ public class VirtTopo {
         List<VirtSwitch> coreSwitches = new ArrayList<VirtSwitch>(degree);
         List<VirtSwitch> edgeSwitches = new ArrayList<VirtSwitch>();
 
-        int SwitchRuleSize = 3000;
+        int SwitchRuleSize = 100;
 		/* Create Core Switches */
         int coresNum = (degree / 2) * (degree / 2); // (k/2)^2
-        System.out.println("Creating Core Switches : ");
+        //System.out.println("Creating Core Switches : ");
         for (int i = 0; i < coresNum; i++) {
             VirtSwitch vertex = new VirtSwitch("Switch"+i);
             vertex.setTcamCapacity(SwitchRuleSize);
@@ -82,9 +138,9 @@ public class VirtTopo {
 
         int switch_pr = coreSwitches.size();
 		/* Create Pods */
-        System.out.println("Creating Pods : ");
+        //System.out.println("Creating Pods : ");
         for (int i = 0; i < degree; i++) {
-            System.out.println("Pod " + i);
+            //System.out.println("Pod " + i);
             List<VirtSwitch> podSwitches = new ArrayList<VirtSwitch>(degree);
             //pod_prefix = ipod_prefix * (i+1);
             //edge_prefix = iedge_prefix *(i+1);
@@ -94,12 +150,12 @@ public class VirtTopo {
                 Switches.add(aggSw);
                 SwitchMapper.put(aggSw.getID(), aggSw);
                 podSwitches.add(aggSw);
-                System.out.println("AGG " + aggSw.getID());
+                //System.out.println("AGG " + aggSw.getID());
 
 				/* Create Link from core to Pods */
                 for (int t = 0; t < degree / 2; t++) {
-                    addEdge(aggSw, coreSwitches.get(j * degree / 2 + t), 1);
-                    addEdge(coreSwitches.get(j * degree / 2 + t), aggSw, 1);
+                    addEdge(aggSw, coreSwitches.get(j * degree / 2 + t), 1.0);
+                    addEdge(coreSwitches.get(j * degree / 2 + t), aggSw, 1.0);
                 }
             }
 
@@ -109,12 +165,12 @@ public class VirtTopo {
                 Switches.add(edgesw);
                 SwitchMapper.put(edgesw.getID(), edgesw);
                 edgeSwitches.add(edgesw);
-                System.out.println("AGG2 " + edgesw.getID());
+                //System.out.println("AGG2 " + edgesw.getID());
 				/* Intra - Pod Links */
                 for (int k = 0; k < degree / 2; k++) {
-                    System.out.println("Creating Link bwt " + podSwitches.get(k).getID() + " and " + edgesw.getID());
-                    addEdge(podSwitches.get(k), edgesw, 1);
-                    addEdge(edgesw, podSwitches.get(k), 1);
+                    //System.out.println("Creating Link bwt " + podSwitches.get(k).getID() + " and " + edgesw.getID());
+                    addEdge(podSwitches.get(k), edgesw, 1.0);
+                    addEdge(edgesw, podSwitches.get(k), 1.0);
                 }
 				/*
 				for (int k = 0 ; k < degree/2 ; k++) {
@@ -126,13 +182,27 @@ public class VirtTopo {
 					System.out.println("Creating Link bwt "+ edgeSw.getId() + " and " +agg2Sw.getId());
 				}*/
             }
-            int hostID = 1;
-            for (i=0;i<edgeSwitches.size();i++) {
-                VirtHost host1 = new VirtHost("Host"+ hostID);
-            }
 
         }
+        int hostID = 1;
+        for (int i=0;i<edgeSwitches.size();i++) {
+            VirtHost host1 = new VirtHost("Host"+ hostID);
+            Hosts.add(host1);
+            HostMapper.put(host1.getID(), host1);
+            hostID++;
+            VirtHost host2 = new VirtHost("Host"+ hostID);
+            Hosts.add(host2);
+            HostMapper.put(host2.getID(), host2);
+            hostID++;
+            //System.out.println("Creating hosts "+ host1.getID() + " and "+ host2.getID());
+            addEdge(edgeSwitches.get(i), host1, 1.0);
+            addEdge(edgeSwitches.get(i), host2, 1.0);
+            //System.out.println("Creating Link bwt " + edgeSwitches.get(i).getID() + " and " + host1.getID());
+            //System.out.println("Creating Link bwt " + edgeSwitches.get(i).getID() + " and " + host2.getID());
 
+        }
+        System.out.println("Total HostLinks = "+ hostLinks.size());
+        System.out.println("Total CoreLinks = "+ coreLinks.size());
     }
     public void loadVirtTopology (String phyTopoFile) {
         try {
