@@ -1,0 +1,25 @@
+# Script that ploabilene frequeovery of Similar Journey count
+#set terminal posabilenecript eps enhaovered dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhaovered  font 'Helvetica,14'
+set term pdf dashed color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Number of Virt Switches(n)"
+set ylabel "Percentage Core Bandwidth Utlization"
+set key top right
+set terminal pdf
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+
+
+set yrange [0:100]
+
+set xrange [10:150]
+
+
+set output "RandomGraph_overhead.pdf"
+
+plot '../randomgraph_overhead.csv'  using 1:4   with linespoints  lw 3 pt 7 dashtype  7 lc rgb "#000000" title "n.sqrt(n) Links (no loops)", \
+ '../randomgraph_overhead.csv'  using 1:5   with linespoints  lw 3 pt 2 dashtype  2 lc rgb "#000000" title "n.sqrt(n) Links (loops)", \
+'../randomgraph_overhead.csv'  using 1:2  with linespoints lw 3 pt 5 dashtype  5 lc rgb "#000000" title "2n Links (no loops)", \
+'../randomgraph_overhead.csv'  using 1:3   with linespoints lw 3 pt 11 dashtype 11 lc rgb "#000000" title "2n Links (loops)",\
