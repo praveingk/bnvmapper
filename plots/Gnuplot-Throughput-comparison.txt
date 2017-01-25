@@ -1,0 +1,23 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Time (in sec)"
+set ylabel "Percentage Bandwidth"
+set terminal pdf
+set key center right
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+
+
+set yrange [0:100]
+
+set xrange [1:60]
+
+
+set output "virt_vs_hw_throughput.pdf"
+
+plot 'virt_traffic_log.csv'  using 1:3  with lines lw 3 lc rgb "#FF0000" title "Virtual Switch Emulation", \
+ 'hw_traffic_log.csv'  using 1:3  with lines lw 3 lc rgb "#0000FF" title "Bare-metal Switch Emulation"

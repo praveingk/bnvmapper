@@ -1,0 +1,24 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Number of Virt Switches"
+set ylabel "Percentage Successful Mapping"
+set terminal pdf
+set key off
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+
+
+set yrange [0:100]
+
+set xrange [10:150]
+
+
+set output "loops_2n.pdf"
+
+plot 'loops_2n.csv'  using 1:2  with lines lw 3 lc rgb "#FF0000", \
+# 'randomgraphmapper_gen.csv'  using 5:4  with lines lw 3 lc rgb "#0000FF" title "2n (12 loops)"
+# 'randomgraphmapper_gen.csv'  using 8:7  with lines lw 3 lc rgb "#F64500" title "sqrt(n)*n (no loops)", \
