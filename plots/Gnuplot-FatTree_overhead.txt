@@ -18,8 +18,8 @@ set xrange [2:8]
 
 set xtics 2
 
-set output "RandomGraph_overhead.pdf"
+set output "FatTree_overhead.pdf"
 
-plot '../randomgraph_overhead.csv'  using 1:2   with linespoints  lw 3 pt 7 dashtype  7 lc rgb "#000000" title "No loops", \
- '../randomgraph_overhead.csv'  using 1:3   with linespoints  lw 3 pt 2 dashtype  2 lc rgb "#000000" title "With loops", \
+plot 'fattree_overhead.csv'  using 1:2   with linespoints  lw 3 pt 7 dashtype  7 lc rgb "#000000" title "No loops", \
+ 'fattree_overhead.csv'  using 1:3   with linespoints  lw 3 pt 2 dashtype  2 lc rgb "#000000" title "With loops", \
 
