@@ -5,7 +5,7 @@ set term pdf dashed color enhanced  font 'Helvetica,17'
 # Parameters
 set xlabel "Number of Virt Switches(n)"
 set ylabel "Percentage Core Bandwidth Utlization"
-set key top right
+set key center right
 set terminal pdf
 set datafile separator ","
 set grid ytics lc rgb "#000000" lw 1 lt 0
