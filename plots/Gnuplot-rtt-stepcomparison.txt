@@ -1,0 +1,35 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Time (in sec)"
+set ylabel "Round Trip Time (in ms)"
+set terminal pdf
+set key top left
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+
+
+set yrange [0:30]
+
+set xrange [1:60]
+
+# Arrow properties
+# Arrow line type
+arrowLineType = 3
+# Arrow line width
+arrowLineWidth = 1
+# Arrow line color
+arrowLineColor = 'black'
+
+set output "ping_virt_vs_hw_throughput.pdf"
+
+
+#set arrow from 20,0 to 20,5 nohead lt arrowLineType lw arrowLineWidth lc rgb arrowLineColor
+
+#set arrow from 40,0 to 40,5 nohead lt arrowLineType lw arrowLineWidth lc rgb arrowLineColor
+
+plot 'ping_virt_step.csv'  using 1:2  with lines lw 3 dashtype 7 lc rgb "#FF0000" title "Virtual Switch Emulation", \
+ 'ping_bnv_step.csv'  using 1:2  with lines lw 3 dashtype 11 lc rgb "#0000FF" title "Physical Switch Emulation"
