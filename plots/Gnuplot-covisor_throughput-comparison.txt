@@ -4,7 +4,7 @@
 set term pdf color enhanced  font 'Helvetica,17'
 # Parameters
 set xlabel "Time (in sec)"
-set ylabel "Throughput (in Gb)"
+set ylabel "Throughput (in Gbps)"
 set terminal pdf
 set key bottom right
 set datafile separator ","
@@ -19,5 +19,6 @@ set xrange [1:60]
 
 set output "3node_2switch_throughput.pdf"
 
-plot '3hosts_2switch_throughput.csv'  using 1:5  smooth cspline lw 3 dashtype 3 lc rgb "#FF0000" title "Virtual Switch Emulation", \
- '3hosts_2switch_throughput_covisor.csv'  using 1:5  smooth cspline lw 3 dashtype 11 lc rgb "#0000FF" title "Physical Switch Emulation"
+ plot '3hosts_2switch_throughput_covisor.csv'  using 1:5  smooth cspline lw 3 dashtype 7 lc rgb "#FF0000" title "CoVisor Switch Emulation" , \
+ '3hosts_2switch_throughput.csv'  using 1:5  smooth cspline lw 3 dashtype 11 lc rgb "#0000FF" title "Physical Switch Emulation"
+

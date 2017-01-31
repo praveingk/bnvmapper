@@ -5,6 +5,7 @@ set term pdf color enhanced  font 'Helvetica,17'
 # Parameters
 set xlabel "Time (in sec)"
 set ylabel "Throughput percentage"
+set y2label "Tenant Capacity of the Network"
 set terminal pdf
 set key off
 set datafile separator ","
@@ -13,7 +14,7 @@ set grid xtics lc rgb "#000000" lw 1 lt 0
 
 
 set yrange [0:100]
-
+set y2range [0:100]
 set xrange [0:3600]
 
 set xtics 400
@@ -29,8 +30,9 @@ arrowLineColor = 'red'
 
 set output "BNV_Throughput_eval.pdf"
 
-set arrow from 1800,0 to 1800,100 nohead lt arrowLineType lw arrowLineWidth lc rgb arrowLineColor
+#set arrow from 1800,0 to 1800,100 nohead lt arrowLineType lw arrowLineWidth lc rgb arrowLineColor
 
-set arrow from 3000,0 to 3000,100 nohead lt arrowLineType lw arrowLineWidth lc rgb arrowLineColor
+#set arrow from 3000,0 to 3000,100 nohead lt arrowLineType lw arrowLineWidth lc rgb arrowLineColor
 
-plot 'bnv_throughput_eval.csv'  using 1:(($2/1024.0)*100)  with lines lw 1 lc rgb "#000000"
+plot 'bnv_throughput_eval.csv'  using 1:(($2/1024.0)*100)  with lines lw 1 lc rgb "#000000", \
+   'bnv_throughput_eval.csv'  using 1:3  with lines lw 3 dashtype 7 lc rgb "#FF0000" axes x1y2
