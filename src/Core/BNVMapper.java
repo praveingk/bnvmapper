@@ -1,3 +1,6 @@
+package Core;
+
+
 import PhysicalTopo.PhyTopo;
 import VirtualTopo.VirtTopo;
 import gurobi.GRB;
@@ -9,15 +12,15 @@ import java.io.PrintWriter;
 /**
  * Created by pravein on 13/12/16.
  */
-public class VirtTopoMapper {
+public class BNVMapper {
     public static void main(String [] args) throws Exception {
         /*
-         * Usage : VirtTopoMapper physicalTopoFile virtTopofile
+         * Usage : Core.Mapper.BNVMapper physicalTopoFile virtTopofile
          */
         PrintWriter pw = new PrintWriter(new FileOutputStream(new File("randomgraphmapper.csv"),true));
 
         if (args.length < 3) {
-            System.out.println("Usage : VirtTopoMapper physicalTopoFile virtTopofile loopports");
+            System.out.println("Usage : BNVMapper physicalTopoFile virtTopofile loopports <Optional : Update file> ");
             return;
         }
 
@@ -45,12 +48,28 @@ public class VirtTopoMapper {
         }
 
 
-        /* Load it to the Mapper */
+        /* Load it to the Core.Mapper */
 
         Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
         int status = myMapper.allocate();
         pw.close();
+
+
+        if (args.length > 3) {
+            System.out.println("--------------------------Update Virt Topology------------------------");
+            String updVirtTopoFile = args[3];
+            updateTenantMapping(updVirtTopoFile, myMapper);
+        }
+
+        System.exit(status);
     }
+
+    private static void updateTenantMapping(String updVirtTopoFile, Mapper myMapper) {
+        VirtTopo updVirtTopo = new VirtTopo();
+        updVirtTopo.loadVirtTopology(updVirtTopoFile);
+        myMapper.updateMapping(updVirtTopo);
+    }
+
     public static void CreateFatTreeMapper(String phyTopoFile, PrintWriter pw) {
         int maxLoops = 12;
         for (int loop=0; loop <= maxLoops ;loop++) {
@@ -127,3 +146,4 @@ public class VirtTopoMapper {
         }
     }
 }
+
