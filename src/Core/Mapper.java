@@ -381,6 +381,7 @@ public class Mapper {
                     break;
                 }
             }
+            System.out.println("ovx ovx");
             for (int i = 0; i < virtualTopo.getSwitchPorts().size(); i++) {
                 for (int j = 0; j < physicalTopo.getSwitchPorts().size(); j++) {
                     if (switchPortMapper[i][j].get(GRB.DoubleAttr.X) == 1.0) {
@@ -389,6 +390,7 @@ public class Mapper {
                     }
                 }
             }
+
             System.out.println("End Nodes");
             System.out.println("Edges:");
             for (int i=0;i<virtualTopo.getHostLinks().size();i++) {
@@ -397,7 +399,7 @@ public class Mapper {
                 ph = hostMapping.get(vhl.getHostPort());
                 PhySwitchPort psp  = null;
                 psp = switchPortMapping.get(vhl.getSwitchPort());
-                System.out.println("linksimple/"+vhl.getID()+"/"+vhl.getHostPort().getID()+":0,"+vhl.getSwitchPort().getID()+":1 direct link-"+ph.getID()+":eth3-"+psp.getID()+":eth0");
+                System.out.println("linksimple/"+vhl.getID()+"/"+vhl.getHostPort().getID()+":0,"+vhl.getSwitchPort().getID()+":1 direct link-"+ph.getID()+":eth3-"+psp.getID()+":eth0 ("+ph.getID()+"/eth3,eth0)" + " link-"+ph.getID()+":eth3-"+psp.getID()+":eth0 ("+ph.getID()+"/eth3,eth0)");
             }
             for (int i=0;i<virtualTopo.getCoreLinks().size();i++) {
                 VirtCoreLink vcl = virtualTopo.getCoreLinks().get(i);
@@ -405,7 +407,7 @@ public class Mapper {
                 psp1 = switchPortMapping.get(vcl.getEndPoints()[0]);
                 PhySwitchPort psp2 = null;
                 psp2 = switchPortMapping.get(vcl.getEndPoints()[1]);
-                System.out.println("linksimple/"+vcl.getID()+"/"+vcl.getEndPoints()[0].getID()+":0,"+vcl.getEndPoints()[1].getID()+":1 direct link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0");
+                System.out.println("linksimple/"+vcl.getID()+"/"+vcl.getEndPoints()[0].getID()+":0,"+vcl.getEndPoints()[1].getID()+":1 direct link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)" + " link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)");
 
             }
             String exptswitch = switchCon.get(ofctrl.getID().substring(ofctrl.getID().length()-1));
