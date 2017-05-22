@@ -407,7 +407,7 @@ public class Mapper {
                 psp1 = switchPortMapping.get(vcl.getEndPoints()[0]);
                 PhySwitchPort psp2 = null;
                 psp2 = switchPortMapping.get(vcl.getEndPoints()[1]);
-                System.out.println("linksimple/"+vcl.getID()+"/"+vcl.getEndPoints()[0].getID()+":0,"+vcl.getEndPoints()[1].getID()+":1 direct link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)" + " link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)");
+                System.out.println("linksimple/"+vcl.getID()+"/"+vcl.getEndPoints()[0].getID()+":1,"+vcl.getEndPoints()[1].getID()+":1 direct link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)" + " link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)");
 
             }
             String exptswitch = switchCon.get(ofctrl.getID().substring(ofctrl.getID().length()-1));
