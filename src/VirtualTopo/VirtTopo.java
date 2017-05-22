@@ -1,6 +1,7 @@
 package VirtualTopo;
 
 import PhysicalTopo.*;
+import Utils.LinkType;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 /**
  * Created by pravein on 15/12/16.
  */
@@ -21,6 +21,7 @@ public class VirtTopo {
 
     private HashMap<String, VirtHost> HostMapper = new HashMap<>();
     private HashMap<String, VirtSwitch> SwitchMapper = new HashMap<>();
+    private HashMap<String, VirtSwitchPort> SwitchPortMapper = new HashMap<>();
 
     public ArrayList<VirtHost> getHosts() {
         return Hosts;
@@ -79,6 +80,13 @@ public class VirtTopo {
         hostLink.setBandWidth(Bandwidth);
         hostLinks.add(hostLink);
 
+    }
+
+    public int indexOf(VirtSwitchPort mySwitchPort) {
+        if (!switchPorts.contains(mySwitchPort)) {
+            return -1;
+        }
+        return switchPorts.indexOf(mySwitchPort);
     }
 
     public void loadRandomGraphTopo(int numSwitches, int numLinks) {
@@ -204,8 +212,126 @@ public class VirtTopo {
         System.out.println("Total HostLinks = "+ hostLinks.size());
         System.out.println("Total CoreLinks = "+ coreLinks.size());
     }
+
+
+    public boolean isNCLHost(String name) {
+        if (name.contains("pc")) return true;
+        return false;
+    }
+
+    public boolean isNCLSwitch(String name) {
+        if (name.contains("ofswitch")) return true;
+        return false;
+    }
+
+    public boolean isNCLSwitchPort(String name) {
+        if (name.contains("ofcore") || name.contains("ofedge")) return true;
+        return false;
+    }
+
+    public void loadVirtTopologyNCL (String phyTopoFile) {
+        System.out.println("Loading Virtual Topology..");
+        try {
+            BufferedReader br = new BufferedReader((new FileReader(phyTopoFile)));
+            String line;
+            int hostLinkNum = 0;
+            int coreLinkNum = 0;
+            int connectedIndex = 13;
+            int linkIndex = 5;
+
+            // Need One More pass for reading the switches and Ports
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    /* Ignore Comments */
+                    continue;
+                }
+                String[] tokens = line.split(" ");
+                String type = tokens[0];
+                if (type.equals("link") ) {
+                    String linkName = tokens[1].split("/")[1];
+                    if (isNCLSwitch(linkName)) {
+                        VirtSwitch ps = new VirtSwitch(linkName);
+                        ps.setTcamCapacity(100);
+                        Switches.add(ps);
+                        SwitchMapper.put(linkName, ps);
+                        String members = tokens[1].split("/")[2];
+                        String[] switchPortsS = members.split(",");
+                        System.out.println(ps.toString());
+                        for (int i = 0; i < switchPortsS.length; i++) {
+                            VirtSwitchPort vsp = new VirtSwitchPort(switchPortsS[i].split(":")[0], ps);
+                            SwitchPortMapper.put(switchPortsS[i].split(":")[0], vsp);
+                            ps.addSwitchPort(vsp);
+                            switchPorts.add(vsp);
+                            System.out.println(vsp.toString());
+                        }
+
+                    }
+                }
+            }
+            br = new BufferedReader((new FileReader(phyTopoFile)));
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    /* Ignore Comments */
+                    continue;
+                }
+                String[] tokens = line.split(" ");
+                String type = tokens[0];
+                String nodeType = tokens[2];
+                if (type.equals("node")) {
+                    // Could be Host, Switch-Port or Switch
+                    if (isNCLHost(nodeType)) {
+                        // Its a Host
+                        String hostname = tokens[1];
+                        VirtHost ph = new VirtHost(hostname);
+                        Hosts.add(ph);
+                        HostMapper.put(hostname, ph);
+                        System.out.println(ph.toString());
+                    }
+                } else if (type.equals("link")) {
+
+                    String linkName = tokens[1].split("/")[1];
+                    //System.out.println("link "+ linkName);
+                    if (!isNCLSwitch(linkName)) {
+                        String members = tokens[1].split("/")[2];
+                        String[] switchPorts = members.split(",");
+                        String node1 = switchPorts[0].split(":")[0];
+                        String node2 = switchPorts[1].split(":")[0];
+                        //System.out.println(node1 +", "+ node2 );
+                        if (HostMapper.containsKey(node1)) {
+                            VirtHost host = HostMapper.get(node1);
+                            VirtSwitchPort vsp = SwitchPortMapper.get(node2);
+                            VirtHostLink vhl = new VirtHostLink(linkName, vsp, host);
+                            System.out.println(vhl.toString());
+                            vhl.setBandWidth(1.0);
+                            hostLinks.add(vhl);
+                        } else if (HostMapper.containsKey(node2)) {
+                            VirtHost host = HostMapper.get(node2);
+                            VirtSwitchPort vsp = SwitchPortMapper.get(node1);
+                            VirtHostLink vhl = new VirtHostLink(linkName, vsp, host);
+                            System.out.println(vhl.toString());
+                            vhl.setBandWidth(1.0);
+                            hostLinks.add(vhl);
+                        } else {
+                            VirtSwitchPort vsp1 = SwitchPortMapper.get(node1);
+                            VirtSwitchPort vsp2 = SwitchPortMapper.get(node2);
+                            if (vsp1 ==null || vsp2 == null) continue;
+                            VirtCoreLink vcl = new VirtCoreLink(linkName, vsp1, vsp2);
+                            coreLinks.add(vcl);
+                            vcl.setBandWidth(1.0);
+                            System.out.println(vcl.toString());
+
+                        }
+                    }
+                }
+            }
+            setTCAMCaps();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void loadVirtTopology (String phyTopoFile) {
         try {
+            System.out.println("Loading Virtual Topology..");
             BufferedReader br = new BufferedReader((new FileReader(phyTopoFile)));
             String line;
             int hostLinkNum = 0;

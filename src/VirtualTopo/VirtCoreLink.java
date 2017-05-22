@@ -49,4 +49,9 @@ public class VirtCoreLink {
     public double getBandwidth() {
         return bandWidth;
     }
+
+
+    public String getID(){
+        return ID;
+    }
 }

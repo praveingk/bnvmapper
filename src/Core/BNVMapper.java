@@ -20,17 +20,25 @@ public class BNVMapper {
         PrintWriter pw = new PrintWriter(new FileOutputStream(new File("randomgraphmapper.csv"),true));
 
         if (args.length < 3) {
-            System.out.println("Usage : BNVMapper physicalTopoFile virtTopofile loopports <Optional : Update file> ");
+            System.out.println("Usage : BNVMapper <\"bnvirt\"/\"ncl\"> physicalTopoFile virtTopofile loopports <Optional : Update file> ");
             return;
         }
 
 
-
-        String phyTopoFile = args[0];
-        String virtTopoFile = args[1];
-        int loop = Integer.parseInt(args[2]);
+        Global.environment = args[0];
+        String phyTopoFile = args[1];
+        String virtTopoFile = args[2];
+        /* Default to 12 */
+        int loop = 12;
+        if (args.length > 3) {
+            loop = Integer.parseInt(args[3]);
+        }
         PhyTopo physicalTopo = new PhyTopo();
-        physicalTopo.loadPhyTopology(phyTopoFile, loop);
+        if (Global.environment.equals("bnvirt")) {
+            physicalTopo.loadPhyTopology(phyTopoFile, loop);
+        } else if (Global.environment.equals("ncl")){
+            physicalTopo.loadPhyTopologyNCL(phyTopoFile);
+        }
 
         VirtTopo virtualTopo = new VirtTopo();
 
@@ -44,7 +52,11 @@ public class BNVMapper {
             return;
         }
         else {
-            virtualTopo.loadVirtTopology(virtTopoFile);
+            if (Global.environment.equals("bnvirt")) {
+                virtualTopo.loadVirtTopology(virtTopoFile);
+            } else {
+                virtualTopo.loadVirtTopologyNCL(virtTopoFile);
+            }
         }
 
 
@@ -55,7 +67,7 @@ public class BNVMapper {
         pw.close();
 
 
-        if (args.length > 3) {
+        if (args.length > 4) {
             System.out.println("--------------------------Update Virt Topology------------------------");
             String updVirtTopoFile = args[3];
             updateTenantMapping(updVirtTopoFile, myMapper);
@@ -65,9 +77,13 @@ public class BNVMapper {
     }
 
     private static void updateTenantMapping(String updVirtTopoFile, Mapper myMapper) {
-        VirtTopo updVirtTopo = new VirtTopo();
-        updVirtTopo.loadVirtTopology(updVirtTopoFile);
-        myMapper.updateMapping(updVirtTopo);
+        try {
+            VirtTopo updVirtTopo = new VirtTopo();
+            updVirtTopo.loadVirtTopology(updVirtTopoFile);
+            myMapper.updateMapping(updVirtTopo);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void CreateFatTreeMapper(String phyTopoFile, PrintWriter pw) {

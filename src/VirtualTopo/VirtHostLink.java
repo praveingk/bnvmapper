@@ -34,9 +34,14 @@ public class VirtHostLink {
         return hostPort;
     }
 
+    public String getID(){
+        return ID;
+    }
+
     public VirtSwitchPort getSwitchPort() {
         return switchPort;
     }
+
     public String toString() {
         return this.hostPort+"<->"+ this.switchPort;
     }
