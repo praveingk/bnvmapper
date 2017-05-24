@@ -238,7 +238,6 @@ public class VirtTopo {
             int coreLinkNum = 0;
             int connectedIndex = 13;
             int linkIndex = 5;
-
             // Need One More pass for reading the switches and Ports
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("#")) {
@@ -250,10 +249,15 @@ public class VirtTopo {
                 if (type.equals("link") ) {
                     String linkName = tokens[1].split("/")[1];
                     if (isNCLSwitch(linkName)) {
-                        VirtSwitch ps = new VirtSwitch(linkName);
-                        ps.setTcamCapacity(100);
-                        Switches.add(ps);
-                        SwitchMapper.put(linkName, ps);
+                        VirtSwitch ps = null;
+                        if (SwitchMapper.containsKey(linkName)) {
+                            ps = SwitchMapper.get(linkName);
+                        } else {
+                            ps = new VirtSwitch(linkName);
+                            ps.setTcamCapacity(100);
+                            Switches.add(ps);
+                            SwitchMapper.put(linkName, ps);
+                        }
                         String members = tokens[1].split("/")[2];
                         String[] switchPortsS = members.split(",");
                         System.out.println(ps.toString());
