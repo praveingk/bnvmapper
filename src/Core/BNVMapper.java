@@ -19,8 +19,8 @@ public class BNVMapper {
          */
         PrintWriter pw = new PrintWriter(new FileOutputStream(new File("randomgraphmapper.csv"),true));
 
-        if (args.length < 3) {
-            System.out.println("Usage : BNVMapper <\"bnvirt\"/\"ncl\"> physicalTopoFile virtTopofile loopports <Optional : Update file> ");
+        if (args.length < 4) {
+            System.out.println("Usage : BNVMapper <\"bnvirt\"/\"ncl\"> physicalTopoFile virtTopofile <optimal/safe> loopports <Optional : Update file>  ");
             return;
         }
 
@@ -28,10 +28,11 @@ public class BNVMapper {
         Global.environment = args[0];
         String phyTopoFile = args[1];
         String virtTopoFile = args[2];
+        String type = args[3];
         /* Default to 12 */
         int loop = 12;
-        if (args.length > 3) {
-            loop = Integer.parseInt(args[3]);
+        if (args.length > 4) {
+            loop = Integer.parseInt(args[4]);
         }
         PhyTopo physicalTopo = new PhyTopo();
         if (Global.environment.equals("bnvirt")) {
@@ -63,13 +64,21 @@ public class BNVMapper {
         /* Load it to the Core.Mapper */
 
         Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
-        int status = myMapper.allocate();
+        System.out.println("-----------------------------------------------");
+        int status = 0;
+        if (type.equals("safe")) {
+            System.out.println("Using Safe allocation.");
+            status = myMapper.allocateSafe();
+        } else if (type.equals("optimal")) {
+            System.out.println("Using Optimal allocation.");
+            status = myMapper.allocateOptimal();
+        }
         pw.close();
 
 
-        if (args.length > 4) {
+        if (args.length > 5) {
             System.out.println("--------------------------Update Virt Topology------------------------");
-            String updVirtTopoFile = args[3];
+            String updVirtTopoFile = args[5];
             updateTenantMapping(updVirtTopoFile, myMapper);
         }
 
@@ -97,7 +106,7 @@ public class BNVMapper {
                 VirtTopo virtualTopo = new VirtTopo();
                 virtualTopo.loadFatTreeTopo(degree);
                 Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
-                int status = myMapper.allocate();
+                int status = myMapper.allocateOptimal();
                 System.out.println("Trying FatTree" +degree + "with "+ loop + "loops");
                 if (status == GRB.OPTIMAL) {
                     pw.println(loop+","+degree);
@@ -127,7 +136,7 @@ public class BNVMapper {
                     VirtTopo virtualTopo = new VirtTopo();
                     virtualTopo.loadRandomGraphTopo(switches, links);
                     Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
-                    int status = myMapper.allocate();
+                    int status = myMapper.allocateOptimal();
                     if (status == GRB.OPTIMAL) {
                         pw.println(loop + "," + switches + "," + links);
                         System.out.println("Success!!!");
@@ -143,7 +152,7 @@ public class BNVMapper {
                     VirtTopo virtualTopo = new VirtTopo();
                     virtualTopo.loadRandomGraphTopo(switches, links);
                     Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
-                    int status = myMapper.allocate();
+                    int status = myMapper.allocateOptimal();
                     if (status == GRB.OPTIMAL) {
                         pw.println(loop + "," + switches + "," + links);
                         System.out.println("Success!!!");
