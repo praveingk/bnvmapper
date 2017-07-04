@@ -25,6 +25,7 @@ public class Mapper {
     HashMap<VirtSwitchPort, PhySwitchPort> switchPortMapping = new HashMap<>();
 
     HashMap<String, String> switchCon = new HashMap<>();
+    HashMap<String, String> sdnswitchCon = new HashMap<>();
 
     public Mapper(VirtTopo virtualTopo, PhyTopo physicalTopo) {
         this.virtualTopo = virtualTopo;
@@ -33,6 +34,10 @@ public class Mapper {
         switchCon.put("d", "HPClus1Expt");
         switchCon.put("a", "HPClus2Expt");
         switchCon.put("b", "HPClus3Expt");
+        sdnswitchCon.put("c", "HPClus4SDN");
+        sdnswitchCon.put("d", "HPClus1SDN");
+        sdnswitchCon.put("a", "HPClus2SDN");
+        sdnswitchCon.put("b", "HPClus3SDN");
     }
 
     public int allocateOptimal() {
@@ -733,6 +738,7 @@ public class Mapper {
         return 0.0;
     }
 
+
     private void printAndStoreSolution(GRBVar[][] switchPortMapper, GRBVar[][] hostMapper) throws Exception {
         if (Global.environment.equals("ncl")) {
             ArrayList<PhyHost> reservedNodes = new ArrayList<>();
@@ -787,7 +793,8 @@ public class Mapper {
             }
             String exptswitch = switchCon.get(ofctrl.getID().substring(ofctrl.getID().length()-1));
 
-            System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 intraswitch link-"+ofctrl.getID()+":eth1-"+exptswitch+":(null) ("+ofctrl.getID()+"/eth1,(null)) link-ovx:eth1-"+exptswitch+":Ten-GigabitEthernet1/0/48 (ovx/eth1,Ten-GigabitEthernet1/0/48)");
+            System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 intraswitch link-"+ofctrl.getID()+":eth1-"+exptswitch+":(null) ("+ofctrl.getID()+"/eth0,(null)) link-HPCore1:"+exptswitch+" (HPCore1/(null),(null)) link-ovx:eth0-HPCore1:Bridge-Aggregation1 (ovx/eth0,Bridge-Aggregation1))");
+
 
             for (int i=0;i<virtualTopo.getSwitches().size();i++) {
                 VirtSwitch vs = virtualTopo.getSwitches().get(i);
@@ -797,23 +804,27 @@ public class Mapper {
                 if (vswitchPorts.size() > 2) {
                     linkType = "linklan";
                     for (int j=0;j<vswitchPorts.size();j++) {
+                        String sdnswitch = switchCon.get(ofctrl.getID().substring(vswitchPorts.get(j).getID().length()-1));
+
                         System.out.print(linkType+"/"+vs.getID()+"/");
                         System.out.print(vswitchPorts.get(j).getID()+":0");
                         System.out.print(" direct ");
-                        System.out.print("link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-HPClus4SDN:(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null)) link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-HPClus4SDN:(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null))" );
+                        System.out.print("link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-"+sdnswitch+"(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null)) link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-"+ sdnswitch+ ":(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null))" );
                         System.out.println();
                     }
                     continue;
                 }
                 System.out.print(linkType+"/"+vs.getID()+"/");
                 for (int j=0;j<vswitchPorts.size();j++) {
+                    String sdnswitch = switchCon.get(ofctrl.getID().substring(vswitchPorts.get(j).getID().length()-1));
                     if (j!=0) { System.out.print(","); }
                     System.out.print(vswitchPorts.get(j).getID()+":0");
                 }
                 System.out.print(" intraswitch ");
 
                 for (int j=0;j<vswitchPorts.size();j++) {
-                    System.out.print("link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-HPClus4SDN:(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null)) ");
+                    String sdnswitch = switchCon.get(ofctrl.getID().substring(vswitchPorts.get(j).getID().length()-1));
+                    System.out.print("link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-"+ sdnswitch + ":(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null)) ");
                 }
                 System.out.println();
             }
