@@ -214,7 +214,7 @@ public class PhyTopo {
                                 //System.out.println(" Connected to "+ switchPort);
                                 PhySwitchPort psp = SwitchPortMapper.get(switchPort);
                                 if (psp == null) break;
-                                String linkID = "CoreLink"+hostLinkNum++;
+                                String linkID = "CoreLink"+coreLinkNum++;
                                 PhyCoreLink pcl = new PhyCoreLink(linkID, psp, SwitchPortMapper.get(linkEndPoint));
                                 pcl.setCapacity((double)1);
                                 coreLinks.add(pcl);

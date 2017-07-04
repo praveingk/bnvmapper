@@ -507,6 +507,9 @@ public class Mapper {
                     coreLinkPlacement.addTerm(1.0,
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
+                    coreLinkPlacement.addTerm(1.0,
+                            switchPortMapper[virtendPoint1Index][endPoint2Index],
+                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
                 }
                 model.addQConstr(coreLinkPlacement, GRB.EQUAL, 1.0, st);
             }
