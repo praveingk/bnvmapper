@@ -41,6 +41,7 @@ public class PhyTopo {
         return hostLinks;
     }
 
+    public String ncl_environment = "STAGING";
 
     public void findCoreSwitchPorts() {
         for (int i=0;i<coreLinks.size();i++) {
@@ -146,6 +147,11 @@ public class PhyTopo {
                 if (line.startsWith("#")) {
                     /* Ignore Comments */
                     continue;
+                }
+
+                if (line.contains("HPCore1")) {
+                    ncl_environment = "PRODUCTION";
+                    System.out.println("Identified Environment as Production!");
                 }
                 String []tokens = line.split(" ");
                 String type = tokens[0];

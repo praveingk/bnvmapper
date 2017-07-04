@@ -164,6 +164,9 @@ public class Mapper {
                     coreLinkPlacement.addTerm(1.0,
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
+                    coreLinkPlacement.addTerm(1.0,
+                            switchPortMapper[virtendPoint1Index][endPoint2Index],
+                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
                 }
                 model.addQConstr(coreLinkPlacement, GRB.EQUAL, 1.0, st);
             }
@@ -202,6 +205,7 @@ public class Mapper {
                             coreLinkBandwidth.addTerm(1,
                                     switchPortMapper[virtport1Index][endPoint1Index],
                                     switchPortMapper[virtport2Index][endPoint2Index]);
+
                         }
                     }
                 }
@@ -341,9 +345,9 @@ public class Mapper {
                             obj.addTerm(1.0,
                                     switchPortMapper[virtport1Index][phyport1Index],
                                     switchPortMapper[virtport2Index][phyport2Index]);
-                            obj.addTerm(1.0,
-                                    switchPortMapper[virtport1Index][phyport2Index],
-                                    switchPortMapper[virtport2Index][phyport1Index]);
+                            //obj.addTerm(1.0,
+                            //        switchPortMapper[virtport1Index][phyport2Index],
+                            //        switchPortMapper[virtport2Index][phyport1Index]);
                         }
                     }
                 }
@@ -512,9 +516,9 @@ public class Mapper {
                     coreLinkPlacement.addTerm(1.0,
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
-                    coreLinkPlacement.addTerm(1.0,
-                            switchPortMapper[virtendPoint1Index][endPoint2Index],
-                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
+                    //coreLinkPlacement.addTerm(1.0,
+                    //        switchPortMapper[virtendPoint1Index][endPoint2Index],
+                    //        switchPortMapper[virtendPoint2Index][endPoint1Index]);
                 }
                 model.addQConstr(coreLinkPlacement, GRB.EQUAL, 1.0, st);
             }
@@ -792,9 +796,12 @@ public class Mapper {
 
             }
             String exptswitch = switchCon.get(ofctrl.getID().substring(ofctrl.getID().length()-1));
-
-            System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 intraswitch link-"+ofctrl.getID()+":eth1-"+exptswitch+":(null) ("+ofctrl.getID()+"/eth0,(null)) link-HPCore1:"+exptswitch+" (HPCore1/(null),(null)) link-ovx:eth0-HPCore1:Bridge-Aggregation1 (ovx/eth0,Bridge-Aggregation1))");
-
+            // Need to find a better way of handling production/ staging env
+            if (physicalTopo.ncl_environment.equals("PRODUCTION")) {
+                System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 intraswitch link-" + ofctrl.getID() + ":eth0-" + exptswitch + ":(null) (" + ofctrl.getID() + "/eth0,(null)) link-HPCore1:" + exptswitch + " (HPCore1/(null),(null)) link-ovx:eth0-HPCore1:Bridge-Aggregation1 (ovx/eth0,Bridge-Aggregation1)");
+            } else {
+                System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:1 intraswitch link-" + ofctrl.getID() + ":eth0-" + exptswitch + ":(null) (" + ofctrl.getID() + "/eth0,(null)) link-ovx:eth1-" + exptswitch + ":Ten-GigabitEthernet1/0/48 (ovx/eth1,Ten-GigabitEthernet1/0/48)");
+            }
 
             for (int i=0;i<virtualTopo.getSwitches().size();i++) {
                 VirtSwitch vs = virtualTopo.getSwitches().get(i);
@@ -804,7 +811,8 @@ public class Mapper {
                 if (vswitchPorts.size() > 2) {
                     linkType = "linklan";
                     for (int j=0;j<vswitchPorts.size();j++) {
-                        String sdnswitch = switchCon.get(ofctrl.getID().substring(vswitchPorts.get(j).getID().length()-1));
+                        String physwitch = switchPortMapping.get(vswitchPorts.get(j)).getID();
+                        String sdnswitch = sdnswitchCon.get(physwitch.substring(physwitch.length()-1));
 
                         System.out.print(linkType+"/"+vs.getID()+"/");
                         System.out.print(vswitchPorts.get(j).getID()+":0");
@@ -816,14 +824,16 @@ public class Mapper {
                 }
                 System.out.print(linkType+"/"+vs.getID()+"/");
                 for (int j=0;j<vswitchPorts.size();j++) {
-                    String sdnswitch = switchCon.get(ofctrl.getID().substring(vswitchPorts.get(j).getID().length()-1));
                     if (j!=0) { System.out.print(","); }
                     System.out.print(vswitchPorts.get(j).getID()+":0");
                 }
                 System.out.print(" intraswitch ");
 
                 for (int j=0;j<vswitchPorts.size();j++) {
-                    String sdnswitch = switchCon.get(ofctrl.getID().substring(vswitchPorts.get(j).getID().length()-1));
+                    String physwitch = switchPortMapping.get(vswitchPorts.get(j)).getID();
+                    //System.out.println(switchPortMapping.get(vswitchPorts.get(j)).getID());
+                    //System.out.println(physwitch.substring(physwitch.length()-1));
+                    String sdnswitch = sdnswitchCon.get(physwitch.substring(physwitch.length()-1));
                     System.out.print("link-"+switchPortMapping.get(vswitchPorts.get(j)).getID()+":eth1-"+ sdnswitch + ":(null) ("+switchPortMapping.get(vswitchPorts.get(j)).getID()+"/eth1,null)) ");
                 }
                 System.out.println();
