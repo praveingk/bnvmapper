@@ -20,6 +20,7 @@ public class PhyTopo {
     private ArrayList<PhyCoreLink> backboneLinks = new ArrayList<>();
     private ArrayList<PhyHostLink> hostLinks = new ArrayList<>();
     private ArrayList<PhySwitchPort> coreSwitchPorts = new ArrayList<>();
+    private ArrayList<PhySwitchPort> sdncoreSwitchPorts = new ArrayList<>();
     private HashMap<String, PhyHost> HostMapper = new HashMap<>();
     private HashMap<String, PhySwitch> SwitchMapper = new HashMap<>();
     private HashMap<String, PhySwitchPort> SwitchPortMapper = new HashMap<>();
@@ -81,8 +82,10 @@ public class PhyTopo {
             PhySwitch sw2 = switchPorts[1].getParentSwitch();
             if (!sw1.equals(sw2)) {
                 /* Physical Core link */
-                backboneLinks.add(coreLinks.get(i));
-                System.out.println("Backbone link : "+ coreLinks.get(i).toString());
+                if (!backboneLinks.contains(coreLinks.get(i))) {
+                    backboneLinks.add(coreLinks.get(i));
+                    System.out.println("Backbone link : " + coreLinks.get(i).toString());
+                }
             }
         }
 
@@ -97,11 +100,12 @@ public class PhyTopo {
             PhySwitchPort[] switchPorts = coreLinks.get(i).getEndPoints();
             PhySwitch sw1 = switchPorts[0].getParentSwitch();
             PhySwitch sw2 = switchPorts[1].getParentSwitch();
+            System.out.println("CORElink :"+ coreLinks.get(i).toString());
             if (!sw1.equals(sw2)) {
                 /* Physical Core link */
                 coreLinks.get(i).enableLink();
                 backboneLinks.add(coreLinks.get(i));
-                System.out.println("Backbone link : "+ coreLinks.get(i).toString());
+                System.out.println("Backbone link : "+i+" "+ coreLinks.get(i).toString());
                 continue;
             }
             /* Must be a loop-back link */
@@ -132,6 +136,11 @@ public class PhyTopo {
 
     public boolean isNCLSwitchPort(String name) {
         if (name.contains("ofport")) return true;
+        return false;
+    }
+
+    public boolean isSDNCORE(String name) {
+        if (name.contains("sdncore")) return true;
         return false;
     }
     public void loadPhyTopologyNCL (String phyTopoFile) {
@@ -194,7 +203,7 @@ public class PhyTopo {
                     }
                 } else if (type.equals("link")) {
                     String linkEndPoint = tokens[1].substring(linkIndex).split(":")[0];
-                    //System.out.println("Link "+ linkEndPoint);
+                    System.out.println("Link "+ linkEndPoint);
                     if (isNCLHost(linkEndPoint)) {
                         // Host Links
                         for (int i=2;i<tokens.length;i++) {
@@ -217,7 +226,7 @@ public class PhyTopo {
                             if (isNCLSwitchPort(tokens[i])) {
                                 String switchPort = tokens[i].split(":")[0];
                                 if (switchPort.equals(linkEndPoint)) continue;
-                                //System.out.println(" Connected to "+ switchPort);
+                                System.out.println(" Connected to "+ switchPort+ " token ="+ i);
                                 PhySwitchPort psp = SwitchPortMapper.get(switchPort);
                                 if (psp == null) break;
                                 String linkID = "CoreLink"+coreLinkNum++;
@@ -225,9 +234,17 @@ public class PhyTopo {
                                 pcl.setCapacity((double)1);
                                 coreLinks.add(pcl);
                                 if (pcl.linkType == LinkType.CORE) {
-                                    pcl.setCapacity((double)10);
+                                    linkID = "CoreLink"+coreLinkNum++;
+                                    PhyCoreLink pclrev = new PhyCoreLink(linkID, SwitchPortMapper.get(linkEndPoint), psp);
+                                    pcl.setCapacity((double)7);
+                                    pclrev.setCapacity((double)7);
+                                    coreLinks.add(pclrev);
+                                    System.out.println(pclrev.toString());
                                 }
                                 System.out.println(pcl.toString());
+                                break;
+                            } else if (isSDNCORE(tokens[i])) {
+                                sdncoreSwitchPorts.add(SwitchPortMapper.get(linkEndPoint));
                                 break;
                             }
                         }
@@ -235,10 +252,26 @@ public class PhyTopo {
 
                 }
             }
+            for (int i=0; i< sdncoreSwitchPorts.size();i++) {
+                for (int j=0;j < sdncoreSwitchPorts.size();j++) {
+                    if (sdncoreSwitchPorts.get(i).equals(sdncoreSwitchPorts.get(j))) continue;
+                    String linkID = "CoreLink"+coreLinkNum++;
+                    PhyCoreLink pcl = new PhyCoreLink(linkID, sdncoreSwitchPorts.get(i), sdncoreSwitchPorts.get(j));
+                    pcl.setCapacity((double)7);
+                    if (!coreLinks.contains(pcl))
+                        coreLinks.add(pcl);
+                    linkID = "CoreLink"+coreLinkNum++;
+                    PhyCoreLink pclrev = new PhyCoreLink(linkID, sdncoreSwitchPorts.get(j), sdncoreSwitchPorts.get(i));
+                    pclrev.setCapacity((double)7);
+                    if (!coreLinks.contains(pclrev))
+                        coreLinks.add(pclrev);
+
+                }
+            }
             findCoreSwitchPorts();
-            /* This is fixed to 12 loopbacks per switch*/
+            /* This is fixed to 12 loopbacks per switch */
             setLoopbackCount(12);
-            populateBackboneLinks();
+            //populateBackboneLinks();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -325,6 +358,13 @@ public class PhyTopo {
                             pcl.setCapacity(cap);
                             coreLinks.add(pcl);
                             System.out.println(pcl.toString());
+                            if (pcl.linkType == LinkType.CORE) {
+                                PhyCoreLink pclrev = new PhyCoreLink(linkID, psp2, psp1);
+                                pcl.setCapacity(cap/2);
+                                pclrev.setCapacity(cap/2);
+                                coreLinks.add(pclrev);
+                                System.out.println(pclrev.toString());
+                            }
                         } else {
                             System.out.println("Error in Line :"+ line + " Cannot find Mapping!");
                         }
@@ -333,7 +373,7 @@ public class PhyTopo {
             }
             findCoreSwitchPorts();
             setLoopbackCount(loop);
-            populateBackboneLinks();
+            //populateBackboneLinks();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -59,9 +59,9 @@ public class PhyCoreLink {
             return true;
         }
         /* Also the reverse, Since the link is duplex by design */
-        if (this.endPoints[0].equals(compareVCL.endPoints[1]) && this.endPoints[1].equals(compareVCL.endPoints[0])){
-            return true;
-        }
+//        if (this.endPoints[0].equals(compareVCL.endPoints[1]) && this.endPoints[1].equals(compareVCL.endPoints[0])){
+//            return true;
+//        }
         return false;
     }
     public String toString() {

@@ -164,9 +164,9 @@ public class Mapper {
                     coreLinkPlacement.addTerm(1.0,
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
-                    coreLinkPlacement.addTerm(1.0,
-                            switchPortMapper[virtendPoint1Index][endPoint2Index],
-                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
+//                    coreLinkPlacement.addTerm(1.0,
+//                            switchPortMapper[virtendPoint1Index][endPoint2Index],
+//                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
                 }
                 model.addQConstr(coreLinkPlacement, GRB.EQUAL, 1.0, st);
             }
@@ -192,6 +192,9 @@ public class Mapper {
                     coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(j).getBandwidth(),
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
+//                    coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(j).getBandwidth(),
+//                            switchPortMapper[virtendPoint1Index][endPoint2Index],
+//                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
                 }
                 /* Link B/w for intra-switch links */
 
@@ -205,6 +208,9 @@ public class Mapper {
                             coreLinkBandwidth.addTerm(1,
                                     switchPortMapper[virtport1Index][endPoint1Index],
                                     switchPortMapper[virtport2Index][endPoint2Index]);
+//                            coreLinkBandwidth.addTerm(1,
+//                                    switchPortMapper[virtport1Index][endPoint2Index],
+//                                    switchPortMapper[virtport2Index][endPoint1Index]);
 
                         }
                     }
@@ -323,9 +329,9 @@ public class Mapper {
                     obj.addTerm(1.0,
                                 switchPortMapper[virtport1Index][phyport1Index],
                                 switchPortMapper[virtport2Index][phyport2Index]);
-                    obj.addTerm(1.0,
-                            switchPortMapper[virtport1Index][phyport2Index],
-                            switchPortMapper[virtport2Index][phyport1Index]);
+//                    obj.addTerm(1.0,
+//                            switchPortMapper[virtport1Index][phyport2Index],
+//                            switchPortMapper[virtport2Index][phyport1Index]);
                 }
             }
 
@@ -516,12 +522,14 @@ public class Mapper {
                     coreLinkPlacement.addTerm(1.0,
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
-                    //coreLinkPlacement.addTerm(1.0,
-                    //        switchPortMapper[virtendPoint1Index][endPoint2Index],
-                    //        switchPortMapper[virtendPoint2Index][endPoint1Index]);
+//                  coreLinkPlacement.addTerm(1.0,
+//                            switchPortMapper[virtendPoint1Index][endPoint2Index],
+//                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
+
                 }
                 model.addQConstr(coreLinkPlacement, GRB.EQUAL, 1.0, st);
             }
+
 
 
             /* Constraint 6 : Link Bandwidth constraints */
@@ -544,22 +552,28 @@ public class Mapper {
                     coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(j).getBandwidth(),
                             switchPortMapper[virtendPoint1Index][endPoint1Index],
                             switchPortMapper[virtendPoint2Index][endPoint2Index]);
+//                    coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(j).getBandwidth(),
+//                            switchPortMapper[virtendPoint1Index][endPoint2Index],
+//                            switchPortMapper[virtendPoint2Index][endPoint1Index]);
                 }
                 /* Link B/w for intra-switch links */
 
-                for (int j=0;j < virtualTopo.getSwitches().size();j++) {
-                    ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(j).getSwitchPorts();
-                    for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
-                        for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
-                            if (port1 == port2) continue;
-                            int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
-                            int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
-                            coreLinkBandwidth.addTerm(1,
-                                    switchPortMapper[virtport1Index][endPoint1Index],
-                                    switchPortMapper[virtport2Index][endPoint2Index]);
-                        }
-                    }
-                }
+//                for (int j=0;j < virtualTopo.getSwitches().size();j++) {
+//                    ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(j).getSwitchPorts();
+//                    for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
+//                        for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
+//                            if (port1 == port2) continue;
+//                            int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
+//                            int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
+//                            coreLinkBandwidth.addTerm(1,
+//                                    switchPortMapper[virtport1Index][endPoint1Index],
+//                                    switchPortMapper[virtport2Index][endPoint2Index]);
+////                            coreLinkBandwidth.addTerm(1,
+////                                    switchPortMapper[virtport1Index][endPoint2Index],
+////                                    switchPortMapper[virtport2Index][endPoint1Index]);
+//                        }
+//                    }
+//                }
 
 
                 model.addQConstr(coreLinkBandwidth, GRB.LESS_EQUAL, physicalTopo.getCoreLinks().get(i).getCapacity(), st);
@@ -674,9 +688,9 @@ public class Mapper {
                     obj.addTerm(1.0,
                             switchPortMapper[virtport1Index][phyport1Index],
                             switchPortMapper[virtport2Index][phyport2Index]);
-                    obj.addTerm(1.0,
-                            switchPortMapper[virtport1Index][phyport2Index],
-                            switchPortMapper[virtport2Index][phyport1Index]);
+//                    obj.addTerm(1.0,
+//                            switchPortMapper[virtport1Index][phyport2Index],
+//                            switchPortMapper[virtport2Index][phyport1Index]);
                 }
             }
 
@@ -798,9 +812,9 @@ public class Mapper {
             String exptswitch = switchCon.get(ofctrl.getID().substring(ofctrl.getID().length()-1));
             // Need to find a better way of handling production/ staging env
             if (physicalTopo.ncl_environment.equals("PRODUCTION")) {
-                System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 intraswitch link-" + ofctrl.getID() + ":eth0-" + exptswitch + ":(null) (" + ofctrl.getID() + "/eth0,(null)) link-HPCore1:" + exptswitch + " (HPCore1/(null),(null)) link-ovx:eth0-HPCore1:Bridge-Aggregation1 (ovx/eth0,Bridge-Aggregation1)");
+                System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 interswitch link-" + ofctrl.getID() + ":eth0-" + exptswitch + ":(null) (" + ofctrl.getID() + "/eth0,(null)) link-HPCore1:" + exptswitch + " (HPCore1/(null),(null)) link-ovx:eth0-HPCore1:Bridge-Aggregation1 (ovx/eth0,Bridge-Aggregation1)");
             } else {
-                System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:1 intraswitch link-" + ofctrl.getID() + ":eth0-" + exptswitch + ":(null) (" + ofctrl.getID() + "/eth0,(null)) link-ovx:eth1-" + exptswitch + ":Ten-GigabitEthernet1/0/48 (ovx/eth1,Ten-GigabitEthernet1/0/48)");
+                System.out.println("linksimple/ofc-ovxlink/ofctrl:0,ovx:0 intraswitch link-" + ofctrl.getID() + ":eth0-" + exptswitch + ":(null) (" + ofctrl.getID() + "/eth0,(null)) link-ovx:eth1-" + exptswitch + ":Ten-GigabitEthernet1/0/48 (ovx/eth1,Ten-GigabitEthernet1/0/48)");
             }
 
             for (int i=0;i<virtualTopo.getSwitches().size();i++) {
