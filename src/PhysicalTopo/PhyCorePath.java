@@ -21,4 +21,22 @@ public class PhyCorePath {
     public Double getCapacity() {
         return Capacity;
     }
+
+    @Override
+    public int hashCode() {
+        return attachPoint.hashCode();
+    }
+    @Override
+    public boolean equals(Object arg) {
+        PhyCorePath comparePCP = (PhyCorePath) arg;
+        if (this.attachPoint.equals(comparePCP.attachPoint)){
+            return true;
+        }
+
+        return false;
+    }
+    public String toString() {
+        return  "("+ this.attachPoint+")";
+    }
+
 }

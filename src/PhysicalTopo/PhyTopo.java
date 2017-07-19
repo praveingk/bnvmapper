@@ -128,6 +128,17 @@ public class PhyTopo {
             System.out.println("CORElink :"+ coreLinks.get(i).toString());
             if (!sw1.equals(sw2)) {
                 /* Physical Core link */
+                PhyCorePath pcp1 = new PhyCorePath(switchPorts[0],coreLinks.get(i).getCapacity());
+                PhyCorePath pcp2 = new PhyCorePath(switchPorts[0],coreLinks.get(i).getCapacity());
+                if (!corePaths.contains(pcp1)) {
+                    System.out.println("Adding Core Path "+ pcp1.toString());
+                    corePaths.add(pcp1);
+                }
+                if (!corePaths.contains(pcp2)) {
+                    System.out.println("Adding Core Path "+ pcp2.toString());
+
+                    corePaths.add(pcp2);
+                }
                 coreLinks.get(i).enableLink();
                 backboneLinks.add(coreLinks.get(i));
                 System.out.println("Backbone link : "+i+" "+ coreLinks.get(i).toString());
