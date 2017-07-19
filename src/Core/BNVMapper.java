@@ -44,11 +44,11 @@ public class BNVMapper {
         VirtTopo virtualTopo = new VirtTopo();
 
         if (virtTopoFile.contains("RandomGraph")) {
-            CreateRandomGraphMapper(phyTopoFile, pw);
+            CreateRandomGraphMapper(phyTopoFile, type, pw);
             pw.close();
             return;
         }  else if (virtTopoFile.contains("FatTree")){
-            CreateFatTreeMapper(phyTopoFile, pw);
+            CreateFatTreeMapper(physicalTopo, type, pw);
             pw.close();
             return;
         }
@@ -72,6 +72,15 @@ public class BNVMapper {
         } else if (type.equals("optimal")) {
             System.out.println("Using Optimal allocation.");
             status = myMapper.allocateOptimal();
+        } else if (type.equals("fast")) {
+            System.out.println("Using Fast allocation.");
+            status = myMapper.allocateFastSafe();
+        } else if (type.equals("fastopt")) {
+            System.out.println("Using Fast allocation.");
+            status = myMapper.allocateFastOpt();
+        } else if (type.equals("fastpath")) {
+            System.out.println("Using Fast allocation.");
+            status = myMapper.allocateFastSafePaths();
         }
         pw.close();
 
@@ -95,33 +104,61 @@ public class BNVMapper {
         }
     }
 
-    public static void CreateFatTreeMapper(String phyTopoFile, PrintWriter pw) {
+    public static void CreateFatTreeMapper(PhyTopo physicalTopo, String type, PrintWriter pw) {
         int maxLoops = 12;
-        for (int loop=0; loop <= maxLoops ;loop++) {
-            PhyTopo physicalTopo = new PhyTopo();
-            physicalTopo.loadPhyTopology(phyTopoFile, loop);
-            System.out.println("Starting with "+ loop +" loopbacks...");
-
-            for (int degree = 0; ; degree+=2) {
-                VirtTopo virtualTopo = new VirtTopo();
-                virtualTopo.loadFatTreeTopo(degree);
-                Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
-                int status = myMapper.allocateOptimal();
-                System.out.println("Trying FatTree" +degree + "with "+ loop + "loops");
-                if (status == GRB.OPTIMAL) {
-                    pw.println(loop+","+degree);
-                    System.out.println("Success!!!");
-
-                } else {
-                    System.out.println("Failed!!!");
-                    break;
-                }
-            }
+        int degree = 4;
+        VirtTopo virtualTopo = new VirtTopo();
+        virtualTopo.loadFatTreeTopo(degree);
+        Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
+        int status = -1;
+        if (type.equals("safe")) {
+            System.out.println("Using Safe allocation.");
+            status = myMapper.allocateSafe();
+        } else if (type.equals("optimal")) {
+            System.out.println("Using Optimal allocation.");
+            status = myMapper.allocateOptimal();
+        } else if (type.equals("fast")) {
+            System.out.println("Using Fast allocation.");
+            status = myMapper.allocateFastSafe();
+        } else if (type.equals("fastopt")) {
+            System.out.println("Using Fast allocation.");
+            status = myMapper.allocateFastOpt();
+        } else if (type.equals("fastpath")) {
+            System.out.println("Using Fast allocation.");
+            status = myMapper.allocateFastSafePaths();
         }
+        if (status == GRB.OPTIMAL) {
+            System.out.println("Success!!!");
+
+        } else {
+            System.out.println("Failed!!!");
+        }
+        /* Below code needs to be enabled to try and embed various fat tree degrees to the substrate network */
+//        for (int loop=12; loop <= maxLoops ;loop++) {
+//            PhyTopo physicalTopo = new PhyTopo();
+//            physicalTopo.loadPhyTopology(phyTopoFile, loop);
+//            System.out.println("Starting with "+ loop +" loopbacks...");
+//
+//            for (int degree = 0; ; degree+=2) {
+//                VirtTopo virtualTopo = new VirtTopo();
+//                virtualTopo.loadFatTreeTopo(degree);
+//                Mapper myMapper = new Mapper(virtualTopo, physicalTopo);
+//                int status = myMapper.allocateOptimal();
+//                System.out.println("Trying FatTree" +degree + "with "+ loop + "loops");
+//                if (status == GRB.OPTIMAL) {
+//                    pw.println(loop+","+degree);
+//                    System.out.println("Success!!!");
+//
+//                } else {
+//                    System.out.println("Failed!!!");
+//                    break;
+//                }
+//            }
+//        }
     }
 
 
-    public static void CreateRandomGraphMapper (String phyTopoFile, PrintWriter pw) {
+    public static void CreateRandomGraphMapper (String phyTopoFile, String type, PrintWriter pw) {
         int maxLoops = 12;
         for (int loop = 12; loop <= maxLoops; loop+=12) {
             PhyTopo physicalTopo = new PhyTopo();

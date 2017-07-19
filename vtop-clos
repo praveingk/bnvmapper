@@ -1,0 +1,102 @@
+node cs1p1 ofcore   already_reserved:.2
+node cs1p2 ofcore   already_reserved:.2
+node cs1p3 ofcore   already_reserved:.2
+node cs1p4 ofcore   already_reserved:.2
+node cs2p1 ofcore   already_reserved:.2
+node cs2p2 ofcore   already_reserved:.2
+node cs2p3 ofcore   already_reserved:.2
+node cs2p4 ofcore   already_reserved:.2
+node cs3p1 ofcore   already_reserved:.2
+node cs3p2 ofcore   already_reserved:.2
+node cs3p3 ofcore   already_reserved:.2
+node cs3p4 ofcore   already_reserved:.2
+node node1 pc   already_reserved:.2
+node node2 pc   already_reserved:.2
+node node3 pc   already_reserved:.2
+node node4 pc   already_reserved:.2
+node node5 pc   already_reserved:.2
+node node6 pc   already_reserved:.2
+node node7 pc   already_reserved:.2
+node node8 pc   already_reserved:.2
+node ofctrl ofcontrol   already_reserved:.2
+node ovx ovxctl   already_reserved:.2
+node pod1switch1p1 ofedge   already_reserved:.2
+node pod1switch1p2 ofedge   already_reserved:.2
+node pod1switch1p3 ofcore   already_reserved:.2
+node pod1switch1p4 ofcore   already_reserved:.2
+node pod1switch1p5 ofcore   already_reserved:.2
+node pod1switch2p1 ofedge   already_reserved:.2
+node pod1switch2p2 ofedge   already_reserved:.2
+node pod1switch2p3 ofcore   already_reserved:.2
+node pod1switch2p4 ofcore   already_reserved:.2
+node pod1switch2p5 ofcore   already_reserved:.2
+node pod2switch1p1 ofedge   already_reserved:.2
+node pod2switch1p2 ofedge   already_reserved:.2
+node pod2switch1p3 ofcore   already_reserved:.2
+node pod2switch1p4 ofcore   already_reserved:.2
+node pod2switch1p5 ofcore   already_reserved:.2
+node pod2switch2p1 ofedge   already_reserved:.2
+node pod2switch2p2 ofedge   already_reserved:.2
+node pod2switch2p3 ofcore   already_reserved:.2
+node pod2switch2p4 ofcore   already_reserved:.2
+node pod2switch2p5 ofcore   already_reserved:.2
+link linksimple/link1/node1:0,pod1switch1p1:1 node1 pod1switch1p1 1000000 0 0 ethernet
+link linksimple/link10/cs1p1:1,pod1switch1p3:1 cs1p1 pod1switch1p3 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link11/cs2p1:1,pod1switch1p4:1 cs2p1 pod1switch1p4 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link12/cs3p1:1,pod1switch1p5:1 cs3p1 pod1switch1p5 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link13/cs1p2:1,pod1switch2p3:1 cs1p2 pod1switch2p3 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link14/cs2p2:1,pod1switch2p4:1 cs2p2 pod1switch2p4 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link15/cs3p2:1,pod1switch2p5:1 cs3p2 pod1switch2p5 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link16/cs1p3:1,pod2switch1p3:1 cs1p3 pod2switch1p3 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link17/cs2p3:1,pod2switch1p4:1 cs2p3 pod2switch1p4 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link18/cs3p3:1,pod2switch1p5:1 cs3p3 pod2switch1p5 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link19/cs1p4:1,pod2switch2p3:1 cs1p4 pod2switch2p3 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link2/node2:0,pod1switch1p2:1 node2 pod1switch1p2 1000000 0 0 ethernet
+link linksimple/link20/cs2p4:1,pod2switch2p4:1 cs2p4 pod2switch2p4 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link21/cs3p4:1,pod2switch2p5:1 cs3p4 pod2switch2p5 1000000 0 0 ethernet fixsrciface:eth0 fixdstiface:eth0
+link linksimple/link3/node3:0,pod1switch2p1:1 node3 pod1switch2p1 1000000 0 0 ethernet
+link linksimple/link4/node4:0,pod1switch2p2:1 node4 pod1switch2p2 1000000 0 0 ethernet
+link linksimple/link5/node5:0,pod2switch1p1:1 node5 pod2switch1p1 1000000 0 0 ethernet
+link linksimple/link6/node6:0,pod2switch1p2:1 node6 pod2switch1p2 1000000 0 0 ethernet
+link linksimple/link7/node7:0,pod2switch2p1:1 node7 pod2switch2p1 1000000 0 0 ethernet
+link linksimple/link8/node8:0,pod2switch2p2:1 node8 pod2switch2p2 1000000 0 0 ethernet
+link linksimple/ofc-ovxlink/ofctrl:0,ovx:0 ofctrl ovx 10000000 0 0 ethernet
+node lan/ofswitchcs1 lan
+link linklan/ofswitchcs1/cs1p1:0 cs1p1 lan/ofswitchcs1 1000000 0 0 ethernet
+link linklan/ofswitchcs1/cs1p2:0 cs1p2 lan/ofswitchcs1 1000000 0 0 ethernet
+link linklan/ofswitchcs1/cs1p3:0 cs1p3 lan/ofswitchcs1 1000000 0 0 ethernet
+link linklan/ofswitchcs1/cs1p4:0 cs1p4 lan/ofswitchcs1 1000000 0 0 ethernet
+node lan/ofswitchcs2 lan
+link linklan/ofswitchcs2/cs2p1:0 cs2p1 lan/ofswitchcs2 1000000 0 0 ethernet
+link linklan/ofswitchcs2/cs2p2:0 cs2p2 lan/ofswitchcs2 1000000 0 0 ethernet
+link linklan/ofswitchcs2/cs2p3:0 cs2p3 lan/ofswitchcs2 1000000 0 0 ethernet
+link linklan/ofswitchcs2/cs2p4:0 cs2p4 lan/ofswitchcs2 1000000 0 0 ethernet
+node lan/ofswitchcs3 lan
+link linklan/ofswitchcs3/cs3p1:0 cs3p1 lan/ofswitchcs3 1000000 0 0 ethernet
+link linklan/ofswitchcs3/cs3p2:0 cs3p2 lan/ofswitchcs3 1000000 0 0 ethernet
+link linklan/ofswitchcs3/cs3p3:0 cs3p3 lan/ofswitchcs3 1000000 0 0 ethernet
+link linklan/ofswitchcs3/cs3p4:0 cs3p4 lan/ofswitchcs3 1000000 0 0 ethernet
+node lan/ofswitchpod1switch1 lan
+link linklan/ofswitchpod1switch1/pod1switch1p1:0 pod1switch1p1 lan/ofswitchpod1switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch1/pod1switch1p2:0 pod1switch1p2 lan/ofswitchpod1switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch1/pod1switch1p3:0 pod1switch1p3 lan/ofswitchpod1switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch1/pod1switch1p4:0 pod1switch1p4 lan/ofswitchpod1switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch1/pod1switch1p5:0 pod1switch1p5 lan/ofswitchpod1switch1 1000000 0 0 ethernet
+node lan/ofswitchpod1switch2 lan
+link linklan/ofswitchpod1switch2/pod1switch2p1:0 pod1switch2p1 lan/ofswitchpod1switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch2/pod1switch2p2:0 pod1switch2p2 lan/ofswitchpod1switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch2/pod1switch2p3:0 pod1switch2p3 lan/ofswitchpod1switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch2/pod1switch2p4:0 pod1switch2p4 lan/ofswitchpod1switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod1switch2/pod1switch2p5:0 pod1switch2p5 lan/ofswitchpod1switch2 1000000 0 0 ethernet
+node lan/ofswitchpod2switch1 lan
+link linklan/ofswitchpod2switch1/pod2switch1p1:0 pod2switch1p1 lan/ofswitchpod2switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch1/pod2switch1p2:0 pod2switch1p2 lan/ofswitchpod2switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch1/pod2switch1p3:0 pod2switch1p3 lan/ofswitchpod2switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch1/pod2switch1p4:0 pod2switch1p4 lan/ofswitchpod2switch1 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch1/pod2switch1p5:0 pod2switch1p5 lan/ofswitchpod2switch1 1000000 0 0 ethernet
+node lan/ofswitchpod2switch2 lan
+link linklan/ofswitchpod2switch2/pod2switch2p1:0 pod2switch2p1 lan/ofswitchpod2switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch2/pod2switch2p2:0 pod2switch2p2 lan/ofswitchpod2switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch2/pod2switch2p3:0 pod2switch2p3 lan/ofswitchpod2switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch2/pod2switch2p4:0 pod2switch2p4 lan/ofswitchpod2switch2 1000000 0 0 ethernet
+link linklan/ofswitchpod2switch2/pod2switch2p5:0 pod2switch2p5 lan/ofswitchpod2switch2 1000000 0 0 ethernet

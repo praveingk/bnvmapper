@@ -2,10 +2,12 @@ package PhysicalTopo;
 
 import Utils.LinkType;
 import VirtualTopo.*;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,9 +23,12 @@ public class PhyTopo {
     private ArrayList<PhyHostLink> hostLinks = new ArrayList<>();
     private ArrayList<PhySwitchPort> coreSwitchPorts = new ArrayList<>();
     private ArrayList<PhySwitchPort> sdncoreSwitchPorts = new ArrayList<>();
+    private HashSet<PhySwitchPortPair> diffSwitchPorts = new HashSet<>();
     private HashMap<String, PhyHost> HostMapper = new HashMap<>();
     private HashMap<String, PhySwitch> SwitchMapper = new HashMap<>();
     private HashMap<String, PhySwitchPort> SwitchPortMapper = new HashMap<>();
+    private ArrayList<PhyCorePath> corePaths = new ArrayList<>();
+
 
 
     public ArrayList<PhyHost> getHosts() {
@@ -41,7 +46,7 @@ public class PhyTopo {
     public ArrayList<PhyHostLink> getHostLinks() {
         return hostLinks;
     }
-
+    public ArrayList<PhyCorePath> getCorePaths() { return corePaths; }
     public String ncl_environment = "STAGING";
 
     public void findCoreSwitchPorts() {
@@ -54,14 +59,34 @@ public class PhyTopo {
                 coreSwitchPorts.add(psp[1]);
             }
         }
+
     }
 
+    public void findDiffSwitchPorts() {
+        for (int i=0;i<Switches.size();i++) {
+            for (int j=0;j<Switches.size();j++) {
+                if (Switches.get(i).equals(Switches.get(j))) continue;
+                ArrayList<PhySwitchPort> switch1Ports = Switches.get(i).getSwitchPorts();
+                ArrayList<PhySwitchPort> switch2Ports = Switches.get(j).getSwitchPorts();
+                for (PhySwitchPort port1 : switch1Ports) {
+                    for (PhySwitchPort port2 : switch2Ports) {
+                        diffSwitchPorts.add(new PhySwitchPortPair(port1,port2));
+                    }
+                }
+            }
+        }
+        //System.out.println("Printing Diff SwitchPorts : Total = "+ diffSwitchPorts.size());
+//        for (PhySwitchPortPair diffSwitchPort :diffSwitchPorts) {
+//            System.out.println(diffSwitchPort.toString());
+//        }
+    }
     public ArrayList<PhySwitchPort> getCoreSwitchPorts() {
         return coreSwitchPorts;
     }
 
     public ArrayList<PhyCoreLink> getBackboneLinks() { return backboneLinks; }
 
+    public HashSet<PhySwitchPortPair> getDiffSwitchPorts() { return diffSwitchPorts; }
     public void enableAllLinks() {
         for (int i = 0; i < coreLinks.size(); i++) {
             coreLinks.get(i).enableLink();
@@ -143,6 +168,7 @@ public class PhyTopo {
         if (name.contains("sdncore")) return true;
         return false;
     }
+
     public void loadPhyTopologyNCL (String phyTopoFile) {
         System.out.println("Loading Physical Topology..");
         try {
@@ -236,8 +262,8 @@ public class PhyTopo {
                                 if (pcl.linkType == LinkType.CORE) {
                                     linkID = "CoreLink"+coreLinkNum++;
                                     PhyCoreLink pclrev = new PhyCoreLink(linkID, SwitchPortMapper.get(linkEndPoint), psp);
-                                    pcl.setCapacity((double)7);
-                                    pclrev.setCapacity((double)7);
+                                    pcl.setCapacity((double)10);
+                                    pclrev.setCapacity((double)10);
                                     coreLinks.add(pclrev);
                                     System.out.println(pclrev.toString());
                                 }
@@ -245,6 +271,8 @@ public class PhyTopo {
                                 break;
                             } else if (isSDNCORE(tokens[i])) {
                                 sdncoreSwitchPorts.add(SwitchPortMapper.get(linkEndPoint));
+                                PhyCorePath pcp = new PhyCorePath(SwitchPortMapper.get(linkEndPoint), (double)10);
+                                corePaths.add(pcp);
                                 break;
                             }
                         }
@@ -257,18 +285,19 @@ public class PhyTopo {
                     if (sdncoreSwitchPorts.get(i).equals(sdncoreSwitchPorts.get(j))) continue;
                     String linkID = "CoreLink"+coreLinkNum++;
                     PhyCoreLink pcl = new PhyCoreLink(linkID, sdncoreSwitchPorts.get(i), sdncoreSwitchPorts.get(j));
-                    pcl.setCapacity((double)7);
+                    pcl.setCapacity((double)10);
                     if (!coreLinks.contains(pcl))
                         coreLinks.add(pcl);
                     linkID = "CoreLink"+coreLinkNum++;
                     PhyCoreLink pclrev = new PhyCoreLink(linkID, sdncoreSwitchPorts.get(j), sdncoreSwitchPorts.get(i));
-                    pclrev.setCapacity((double)7);
+                    pclrev.setCapacity((double)10);
                     if (!coreLinks.contains(pclrev))
                         coreLinks.add(pclrev);
 
                 }
             }
             findCoreSwitchPorts();
+            findDiffSwitchPorts();
             /* This is fixed to 12 loopbacks per switch */
             setLoopbackCount(12);
             //populateBackboneLinks();
@@ -372,6 +401,7 @@ public class PhyTopo {
                 }
             }
             findCoreSwitchPorts();
+            findDiffSwitchPorts();
             setLoopbackCount(loop);
             //populateBackboneLinks();
         } catch (Exception e) {
