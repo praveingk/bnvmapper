@@ -10,6 +10,7 @@ public class PhySwitch {
     private ArrayList<PhySwitchPort> switchPorts = new ArrayList<>();
     String hc = new String();
     private int TcamCapacity;
+    private PhyCorePath corePath;
     public PhySwitch(String ID) {
         this.ID = ID;
     }
@@ -55,5 +56,14 @@ public class PhySwitch {
     }
     public String toString() {
         return "PS:"+ID;
+    }
+
+    public void addCorePath(PhyCorePath corePath) {
+        this.corePath = corePath;
+        System.out.println("IN Switch : "+ this.ID +  " Adding Core Path " + corePath.toString());
+
+    }
+    public PhyCorePath getCorePath() {
+        return corePath;
     }
 }

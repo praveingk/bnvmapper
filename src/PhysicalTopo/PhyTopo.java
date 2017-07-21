@@ -129,15 +129,18 @@ public class PhyTopo {
             if (!sw1.equals(sw2)) {
                 /* Physical Core link */
                 PhyCorePath pcp1 = new PhyCorePath(switchPorts[0],coreLinks.get(i).getCapacity());
-                PhyCorePath pcp2 = new PhyCorePath(switchPorts[0],coreLinks.get(i).getCapacity());
+                PhyCorePath pcp2 = new PhyCorePath(switchPorts[1],coreLinks.get(i).getCapacity());
                 if (!corePaths.contains(pcp1)) {
                     System.out.println("Adding Core Path "+ pcp1.toString());
                     corePaths.add(pcp1);
+                    sw1.addCorePath(pcp1);
+
                 }
                 if (!corePaths.contains(pcp2)) {
                     System.out.println("Adding Core Path "+ pcp2.toString());
 
                     corePaths.add(pcp2);
+                    sw2.addCorePath(pcp2);
                 }
                 coreLinks.get(i).enableLink();
                 backboneLinks.add(coreLinks.get(i));
@@ -284,6 +287,7 @@ public class PhyTopo {
                                 sdncoreSwitchPorts.add(SwitchPortMapper.get(linkEndPoint));
                                 PhyCorePath pcp = new PhyCorePath(SwitchPortMapper.get(linkEndPoint), (double)10);
                                 corePaths.add(pcp);
+                                SwitchPortMapper.get(linkEndPoint).getParentSwitch().addCorePath(pcp);
                                 break;
                             }
                         }
