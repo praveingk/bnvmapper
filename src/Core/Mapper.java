@@ -78,10 +78,10 @@ public class Mapper {
                 }
             }
 
-            for (int i=0;i< virtualTopo.getSwitchPorts().size();i++) {
-                for (int j=0;j< virtualTopo.getSwitchPorts().size();j++) {
-                    for (int k=0;k<physicalTopo.getCorePaths().size();k++) {
-                        String st = "Z[" + i + "," + j +","+ k+ "]";
+            for (int i = 0; i < virtualTopo.getSwitchPorts().size(); i++) {
+                for (int j = 0; j < virtualTopo.getSwitchPorts().size(); j++) {
+                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
+                        String st = "Z[" + i + "," + j + "," + k + "]";
 
                         backBoneLinkMapper[i][j][k] = model.addVar(0.0, 1.0, 0.0, GRB.BINARY, st);
                     }
@@ -141,7 +141,7 @@ public class Mapper {
             /* Constraint 4: Each Virtual switch-port which would be connected to a host should have a direct-link */
             for (int i = 0; i < virtualTopo.getHostLinks().size(); i++) {
                 String st = "PortHost-" + i;
-                System.out.println("hllll "+virtualTopo.getHostLinks().get(i).toString());
+                System.out.println("hllll " + virtualTopo.getHostLinks().get(i).toString());
                 GRBQuadExpr hostLinkPlacement = new GRBQuadExpr();
                 VirtHost myHost = virtualTopo.getHostLinks().get(i).getHostPort();
                 VirtSwitchPort mySwitchPort = virtualTopo.getHostLinks().get(i).getSwitchPort();
@@ -212,7 +212,7 @@ public class Mapper {
                 }
                 /* Link B/w for intra-switch links */
 
-                for (int j=0;j < virtualTopo.getSwitches().size();j++) {
+                for (int j = 0; j < virtualTopo.getSwitches().size(); j++) {
                     ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(j).getSwitchPorts();
                     for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
                         for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
@@ -236,74 +236,93 @@ public class Mapper {
 
 
             /* Constraint 7 : Making sure backbone Mapper is added for all switch port mappings which use the backbone link */
-            ArrayList<PhyCorePath> corePaths = physicalTopo.getCorePaths();
-            ArrayList<VirtSwitchPort> virSwitchPorts = virtualTopo.getSwitchPorts();
-            for (int port1 = 0; port1 < virSwitchPorts.size(); port1++) {
-                for (int port2 = 0; port2 < virSwitchPorts.size(); port2++) {
-                    if (port1 == port2) continue;
-                    int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virSwitchPorts.get(port1));
-                    int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virSwitchPorts.get(port2));
-                    HashSet<PhySwitchPortPair> diffPorts = physicalTopo.getDiffSwitchPorts();
-                    for (PhySwitchPortPair diffPort : diffPorts) {
-                        int phyport1Index = physicalTopo.getSwitchPorts().indexOf(diffPort.getEndPoints()[0]);
-                        int phyport2Index = physicalTopo.getSwitchPorts().indexOf(diffPort.getEndPoints()[1]);
+//            ArrayList<PhyCorePath> corePaths = physicalTopo.getCorePaths();
+//            ArrayList<VirtSwitchPort> virSwitchPorts = virtualTopo.getSwitchPorts();
+//            for (int port1 = 0; port1 < virSwitchPorts.size(); port1++) {
+//                for (int port2 = 0; port2 < virSwitchPorts.size(); port2++) {
+//                    if (port1 == port2) continue;
+//                    int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virSwitchPorts.get(port1));
+//                    int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virSwitchPorts.get(port2));
+//                    HashSet<PhySwitchPortPair> diffPorts = physicalTopo.getDiffSwitchPorts();
+//                    for (PhySwitchPortPair diffPort : diffPorts) {
+//                        int phyport1Index = physicalTopo.getSwitchPorts().indexOf(diffPort.getEndPoints()[0]);
+//                        int phyport2Index = physicalTopo.getSwitchPorts().indexOf(diffPort.getEndPoints()[1]);
+//
+//                        /* find which core-paths are affected.*/
+//                        PhyCorePath corePath1 = diffPort.getEndPoints()[0].getParentSwitch().getCorePath();
+//                        PhyCorePath corePath2 = diffPort.getEndPoints()[0].getParentSwitch().getCorePath();
+//                        int corePath1Index = corePaths.indexOf(corePath1);
+//                        int corePath2Index = corePaths.indexOf(corePath2);
+//                        GRBVar[] corePath1Mapper = new GRBVar[2];
+//                        GRBVar[] corePath2Mapper = new GRBVar[2];
+//                        corePath1Mapper[0] = switchPortMapper[virtport1Index][phyport1Index];
+//                        corePath1Mapper[1] = switchPortMapper[virtport2Index][phyport2Index];
+//                        corePath2Mapper[0] = switchPortMapper[virtport1Index][phyport1Index];
+//                        corePath2Mapper[1] = switchPortMapper[virtport2Index][phyport2Index];
+//
+//                        model.addGenConstrOr(backBoneLinkMapper[virtport1Index][virtport2Index][corePath1Index], corePath1Mapper, "CorePathClause[" + virtport1Index +
+//                                "," + virtport2Index + "," + corePath1Index + "]");
+//                        model.addGenConstrOr(backBoneLinkMapper[virtport1Index][virtport2Index][corePath1Index], corePath2Mapper, "CorePathClause[" + virtport1Index +
+//                                "," + virtport2Index + "," + corePath2Index + "]");
+//                    }
+//                }
+//            }
+            GRBQuadExpr[][][] backBone = new GRBQuadExpr[virtualTopo.getSwitchPorts().size()][virtualTopo.getSwitchPorts().size()][physicalTopo.getBackboneLinks().size()];
+            for (int i = 0; i < virtualTopo.getSwitchPorts().size(); i++) {
+                for (int j = 0; j < virtualTopo.getSwitchPorts().size(); j++) {
+                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
 
-                        /* find which core-paths are affected.*/
-                        PhyCorePath corePath1 = diffPort.getEndPoints()[0].getParentSwitch().getCorePath();
-                        PhyCorePath corePath2 = diffPort.getEndPoints()[0].getParentSwitch().getCorePath();
-                        int corePath1Index = corePaths.indexOf(corePath1);
-                        int corePath2Index = corePaths.indexOf(corePath2);
-                        GRBVar[] corePath1Mapper = new GRBVar[2];
-                        GRBVar[] corePath2Mapper = new GRBVar[2];
-                        corePath1Mapper[0] = switchPortMapper[virtport1Index][phyport1Index];
-                        corePath1Mapper[1] = switchPortMapper[virtport2Index][phyport2Index];
-                        corePath2Mapper[0] = switchPortMapper[virtport1Index][phyport1Index];
-                        corePath2Mapper[1] = switchPortMapper[virtport2Index][phyport2Index];
-                        model.addGenConstrOr(backBoneLinkMapper[virtport1Index][virtport2Index][corePath1Index], corePath1Mapper, "CorePathClause ["+virtport1Index+
-                        ","+virtport2Index+","+corePath1Index+"]");
-                        model.addGenConstrOr(backBoneLinkMapper[virtport1Index][virtport2Index][corePath1Index], corePath2Mapper, "CorePathClause ["+virtport1Index+
-                                ","+virtport2Index+","+corePath2Index+"]");
+                        backBone[i][j][k] = new GRBQuadExpr();
+                    }
+                }
+            }
+            ArrayList<PhyCorePath> corePaths = physicalTopo.getCorePaths();
+            for (int i = 0; i < virtualTopo.getSwitches().size(); i++) {
+                String st = "backBone-" + i;
+                ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(i).getSwitchPorts();
+                for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
+                    for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
+                        if (port1 == port2) continue;
+                        int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
+                        int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
+                        HashSet<PhySwitchPortPair> diffPorts = physicalTopo.getDiffSwitchPorts();
+                        for (PhySwitchPortPair diffPort : diffPorts) {
+                            int phyport1Index = physicalTopo.getSwitchPorts().indexOf(diffPort.getEndPoints()[0]);
+                            int phyport2Index = physicalTopo.getSwitchPorts().indexOf(diffPort.getEndPoints()[1]);
+                            PhyCorePath corePath1 = diffPort.getEndPoints()[0].getParentSwitch().getCorePath();
+                            PhyCorePath corePath2 = diffPort.getEndPoints()[0].getParentSwitch().getCorePath();
+                            int corePath1Index = corePaths.indexOf(corePath1);
+                            int corePath2Index = corePaths.indexOf(corePath2);
+                            backBone[virtport1Index][virtport2Index][corePath1Index].addTerm(1,
+                                    switchPortMapper[virtport1Index][phyport1Index],
+                                    switchPortMapper[virtport2Index][phyport2Index]);
+                            backBone[virtport1Index][virtport2Index][corePath2Index].addTerm(1,
+                                    switchPortMapper[virtport1Index][phyport1Index],
+                                    switchPortMapper[virtport2Index][phyport2Index]);
+
+                        }
+
+                    }
+                }
+                //System.out.println("Size of switch port = " + switchPorts);
+                System.out.println("Iter : " + i);
+                for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
+                    for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
+                        if (port1 == port2) continue;
+                        int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
+                        int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
+                        for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
+                            st = "Z[" + virtport1Index + "," + virtport2Index + "," + k + "]";
+
+                            model.addQConstr(backBone[virtport1Index][virtport2Index][k], GRB.EQUAL, backBoneLinkMapper[virtport1Index][virtport2Index][k], st);
                         }
                     }
                 }
+            }
+
 
             /* Constraint 7 : All vSwitch Ports, must be from same physical switch-ports */
 
-//            for (int i = 0; i < virtualTopo.getSwitches().size(); i++) {
-//                String st = "SameSwitch-" + i;
-//                GRBQuadExpr sameSwitch = new GRBQuadExpr();
-//                ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(i).getSwitchPorts();
-//                for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
-//                    for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
-//                        if (port1 == port2) continue;
-//                        int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
-//                        int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
-//                        ArrayList<PhySwitchPort> phySwitchPorts = physicalTopo.getSwitchPorts();
-//                        for (int pport1 = 0; pport1 < phySwitchPorts.size(); pport1++) {
-//                            for (int pport2 = 0; pport2 < phySwitchPorts.size(); pport2++) {
-//                                //int pport2 = pport1 + 1;
-//                                if (pport2 >= phySwitchPorts.size())
-//                                    break;
-//                                if (pport2 == pport1) continue;
-//                                int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport1));
-//                                int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(pport2));
-//                                //System.out.println("X ")
-//                                if (isNotSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)) == 1.0) {
-//                                    //System.out.println("Diff Switch : " + phySwitchPorts.get(pport1) + " and " + phySwitchPorts.get(pport2));
-//                                }
-//                                sameSwitch.addTerm(isNotSameSwitch(phySwitchPorts.get(pport1), phySwitchPorts.get(pport2)),
-//                                        switchPortMapper[virtport1Index][phyport1Index],
-//                                        switchPortMapper[virtport2Index][phyport2Index]);
-//                            }
-//                        }
-//                    }
-//                }
-//                int switchPorts = virtSwitchPorts.size();
-//                //System.out.println("Size of switch port = " + switchPorts);
-//                int totalIter = switchPorts;
-//                System.out.println("No. to total = " + totalIter);
-//                model.addQConstr(sameSwitch, GRB.EQUAL, 0, st);
-//            }
 
             /* Constraint 8 : Make sure physical switch TCAM capacity is not violated. */
 
@@ -361,47 +380,59 @@ public class Mapper {
               * 1) Inter-Switch
               * 2) Intra-Switch
               */
-            GRBQuadExpr obj = new GRBQuadExpr();
-
-            //  First Inter-Switch
-            for (int i=0;i< physicalTopo.getBackboneLinks().size();i++) {
-                PhyCoreLink backboneLink = physicalTopo.getBackboneLinks().get(i);
-                PhySwitchPort []phySwitchPorts = backboneLink.getEndPoints();
-                int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[0]);
-                int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[1]);
-                for (int j=0;j< virtualTopo.getCoreLinks().size();j++) {
-                    VirtSwitchPort []virtSwitchPorts = virtualTopo.getCoreLinks().get(j).getEndPoints();
-                    int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[0]);
-                    int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[1]);
-                    obj.addTerm(1.0,
-                                switchPortMapper[virtport1Index][phyport1Index],
-                                switchPortMapper[virtport2Index][phyport2Index]);
+//            GRBQuadExpr obj = new GRBQuadExpr();
+//
+//            //  First Inter-Switch
+//            for (int i=0;i< physicalTopo.getBackboneLinks().size();i++) {
+//                PhyCoreLink backboneLink = physicalTopo.getBackboneLinks().get(i);
+//                PhySwitchPort []phySwitchPorts = backboneLink.getEndPoints();
+//                int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[0]);
+//                int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[1]);
+//                for (int j=0;j< virtualTopo.getCoreLinks().size();j++) {
+//                    VirtSwitchPort []virtSwitchPorts = virtualTopo.getCoreLinks().get(j).getEndPoints();
+//                    int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[0]);
+//                    int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts[1]);
 //                    obj.addTerm(1.0,
-//                            switchPortMapper[virtport1Index][phyport2Index],
-//                            switchPortMapper[virtport2Index][phyport1Index]);
-                }
-            }
+//                                switchPortMapper[virtport1Index][phyport1Index],
+//                                switchPortMapper[virtport2Index][phyport2Index]);
+////                    obj.addTerm(1.0,
+////                            switchPortMapper[virtport1Index][phyport2Index],
+////                            switchPortMapper[virtport2Index][phyport1Index]);
+//                }
+//            }
+//
+//            // Second Intra-Switch
+//            for (int i=0;i< physicalTopo.getBackboneLinks().size();i++) {
+//                PhyCoreLink backboneLink = physicalTopo.getBackboneLinks().get(i);
+//                PhySwitchPort[] phySwitchPorts = backboneLink.getEndPoints();
+//                int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[0]);
+//                int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[1]);
+//                for (int j=0; j < virtualTopo.getSwitches().size();j++) {
+//                    ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(j).getSwitchPorts();
+//                    for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
+//                        for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
+//                            if (port1 == port2) continue;
+//                            int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
+//                            int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
+//                            obj.addTerm(1.0,
+//                                    switchPortMapper[virtport1Index][phyport1Index],
+//                                    switchPortMapper[virtport2Index][phyport2Index]);
+//                            //obj.addTerm(1.0,
+//                            //        switchPortMapper[virtport1Index][phyport2Index],
+//                            //        switchPortMapper[virtport2Index][phyport1Index]);
+//                        }
+//                    }
+//                }
+//            }
 
-            // Second Intra-Switch
-            for (int i=0;i< physicalTopo.getBackboneLinks().size();i++) {
-                PhyCoreLink backboneLink = physicalTopo.getBackboneLinks().get(i);
-                PhySwitchPort[] phySwitchPorts = backboneLink.getEndPoints();
-                int phyport1Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[0]);
-                int phyport2Index = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts[1]);
-                for (int j=0; j < virtualTopo.getSwitches().size();j++) {
-                    ArrayList<VirtSwitchPort> virtSwitchPorts = virtualTopo.getSwitches().get(j).getSwitchPorts();
-                    for (int port1 = 0; port1 < virtSwitchPorts.size(); port1++) {
-                        for (int port2 = 0; port2 < virtSwitchPorts.size(); port2++) {
-                            if (port1 == port2) continue;
-                            int virtport1Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port1));
-                            int virtport2Index = virtualTopo.getSwitchPorts().indexOf(virtSwitchPorts.get(port2));
-                            obj.addTerm(1.0,
-                                    switchPortMapper[virtport1Index][phyport1Index],
-                                    switchPortMapper[virtport2Index][phyport2Index]);
-                            //obj.addTerm(1.0,
-                            //        switchPortMapper[virtport1Index][phyport2Index],
-                            //        switchPortMapper[virtport2Index][phyport1Index]);
-                        }
+            /*
+             * Alternate Objective : Minimize the number backbone links used.
+             */
+            GRBLinExpr obj = new GRBLinExpr();
+            for (int i = 0; i < virtualTopo.getSwitchPorts().size(); i++) {
+                for (int j = 0; j < virtualTopo.getSwitchPorts().size(); j++) {
+                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
+                        obj.addTerm(1.0, backBoneLinkMapper[i][j][k]);
                     }
                 }
             }
@@ -1194,7 +1225,7 @@ public class Mapper {
 
 
 
-    public int allocateSafeBetter() {
+    public int allocateSafeLinearize() {
         GRBEnv env;
         PrintWriter writer = null;
         try {
@@ -1214,6 +1245,8 @@ public class Mapper {
 
             switchPortMapper = new GRBVar[virtualTopo.getSwitchPorts().size()][physicalTopo.getSwitchPorts().size()];
             hostMapper = new GRBVar[virtualTopo.getHosts().size()][physicalTopo.getHosts().size()];
+
+
 
             for (int i = 0; i < virtualTopo.getSwitchPorts().size(); i++) {
                 for (int j = 0; j < physicalTopo.getSwitchPorts().size(); j++) {
