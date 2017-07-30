@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class VirtSwitch extends VirtNode {
     private String ID;
     private ArrayList<VirtSwitchPort> switchPorts = new ArrayList<>();
+    private ArrayList<VirtCoreLink> coreLinks = new ArrayList<>();
+    private ArrayList<VirtHostLink> hostLinks = new ArrayList<>();
     String hc = new String();
     private int TcamCapacity;
     public VirtSwitch(String ID) {
@@ -55,5 +57,23 @@ public class VirtSwitch extends VirtNode {
     }
     public String toString() {
         return "VS:"+ID;
+    }
+
+    public ArrayList<VirtCoreLink> getCoreLinks(){
+        return coreLinks;
+    }
+
+    public ArrayList<VirtHostLink> getHostLinks() {
+        return hostLinks;
+    }
+
+    public void addCoreLink(VirtCoreLink vcl ) {
+        if (!coreLinks.contains(vcl))
+            coreLinks.add(vcl);
+    }
+
+    public void addHostLink(VirtHostLink vhl) {
+        if (!hostLinks.contains(vhl))
+            hostLinks.add(vhl);
     }
 }

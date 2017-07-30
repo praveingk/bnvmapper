@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class PhySwitch {
     private String ID;
     private ArrayList<PhySwitchPort> switchPorts = new ArrayList<>();
+    private ArrayList<PhyCoreLink> coreLinks = new ArrayList<>();
+    private ArrayList<PhyHostLink> hostLinks = new ArrayList<>();
     String hc = new String();
     private int TcamCapacity;
     private PhyCorePath corePath;
@@ -65,5 +67,23 @@ public class PhySwitch {
     }
     public PhyCorePath getCorePath() {
         return corePath;
+    }
+
+    public ArrayList<PhyCoreLink> getCoreLinks(){
+        return coreLinks;
+    }
+
+    public ArrayList<PhyHostLink> getHostLinks() {
+        return hostLinks;
+    }
+
+    public void addCoreLink(PhyCoreLink vcl ) {
+        if (!coreLinks.contains(vcl))
+            coreLinks.add(vcl);
+    }
+
+    public void addHostLink(PhyHostLink phl) {
+        if (!hostLinks.contains(phl))
+            hostLinks.add(phl);
     }
 }

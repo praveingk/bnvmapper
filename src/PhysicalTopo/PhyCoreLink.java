@@ -64,6 +64,13 @@ public class PhyCoreLink {
 //        }
         return false;
     }
+
+    public boolean isRev(PhyCoreLink comparePCL) {
+        if (this.endPoints[0].equals(comparePCL.endPoints[1]) && this.endPoints[1].equals(comparePCL.endPoints[0])){
+            return true;
+        }
+        return false;
+    }
     public String toString() {
         return this.linkType +"("+ this.Capacity+")"+ ": " + this.endPoints[0]+"<->"+ this.endPoints[1];
     }
@@ -74,4 +81,5 @@ public class PhyCoreLink {
     public double getCapacity() {
         return this.Capacity;
     }
+
 }

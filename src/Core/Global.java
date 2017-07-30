@@ -5,4 +5,5 @@ package Core;
  */
 public class Global {
     public static String environment;
+    public static int duplex;
 }

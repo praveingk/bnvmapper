@@ -1,5 +1,6 @@
 package VirtualTopo;
 
+import PhysicalTopo.PhyCoreLink;
 import Utils.LinkType;
 
 
@@ -11,6 +12,7 @@ public class VirtCoreLink {
     Double bandWidth; /* In Gbps */
     VirtSwitchPort []endPoints = new VirtSwitchPort[2];
     String hc;
+    boolean isRev = false;
     public VirtCoreLink(String ID, VirtSwitchPort sp1, VirtSwitchPort sp2) {
         this.ID = ID;
         endPoints[0] = sp1;
@@ -18,6 +20,13 @@ public class VirtCoreLink {
         hc = endPoints[0]+"-"+endPoints[1];
     }
 
+    public void setIsRev() {
+        this.isRev = true;
+    }
+
+    public boolean isRev() {
+        return this.isRev;
+    }
     public VirtSwitchPort[] getEndPoints() {
         return endPoints;
     }
@@ -33,6 +42,13 @@ public class VirtCoreLink {
             return true;
         }
         /* Also the reverse, Since the link is duplex by design */
+        /* COndition relaxed for link mapper */
+//        if (this.endPoints[0].equals(compareVCL.endPoints[1]) && this.endPoints[1].equals(compareVCL.endPoints[0])){
+//            return true;
+//        }
+        return false;
+    }
+    public boolean isRev(VirtCoreLink compareVCL) {
         if (this.endPoints[0].equals(compareVCL.endPoints[1]) && this.endPoints[1].equals(compareVCL.endPoints[0])){
             return true;
         }

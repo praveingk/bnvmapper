@@ -1,5 +1,6 @@
 package VirtualTopo;
 
+import Core.Global;
 import PhysicalTopo.*;
 import Utils.LinkType;
 
@@ -39,6 +40,8 @@ public class VirtTopo {
         return hostLinks;
     }
 
+    public ArrayList<VirtLinkPair> coreLinkPairs = new ArrayList<>();
+
     public void setTCAMCaps() {
         for (int i=0;i< this.Switches.size();i++) {
             VirtSwitch mySwitch = this.Switches.get(i);
@@ -65,7 +68,16 @@ public class VirtTopo {
         VirtCoreLink coreLink = new VirtCoreLink("clink"+linkNum, Switch1Port, Switch2Port);
         coreLink.setBandWidth(Bandwidth);
         coreLinks.add(coreLink);
+        Switch1Port.getParentSwitch().addCoreLink(coreLink);
 
+        if (Global.duplex == 1) {
+            linkNum++;
+            VirtCoreLink coreLinkRev = new VirtCoreLink("clink"+linkNum, Switch2Port, Switch1Port);
+            coreLinkRev.setIsRev();
+            coreLinkRev.setBandWidth(Bandwidth);
+            coreLinks.add(coreLinkRev);
+            Switch2Port.getParentSwitch().addCoreLink(coreLinkRev);
+        }
     }
 
     public void addEdge(VirtSwitch Switch1, VirtHost host, Double Bandwidth) {
@@ -79,6 +91,7 @@ public class VirtTopo {
         VirtHostLink hostLink = new VirtHostLink("hlink"+linkNum, Switch1Port, host);
         hostLink.setBandWidth(Bandwidth);
         hostLinks.add(hostLink);
+        Switch1Port.getParentSwitch().addHostLink(hostLink);
 
     }
 
@@ -228,7 +241,33 @@ public class VirtTopo {
         if (name.contains("ofcore") || name.contains("ofedge")) return true;
         return false;
     }
-
+    public void groupAllLinkPairs() {
+        for (VirtCoreLink pcl1 : coreLinks) {
+            for (VirtCoreLink pcl2 : coreLinks) {
+                if (pcl1.isRev(pcl2)) {
+                    VirtLinkPair plp = new VirtLinkPair(pcl1, pcl2);
+                    if (!coreLinkPairs.contains(plp))
+                        coreLinkPairs.add(plp);
+                }
+            }
+        }
+        System.out.println("Core link pairs..");
+        for (VirtLinkPair vcl : coreLinkPairs) {
+            System.out.println(vcl.toString());
+        }
+    }
+    public ArrayList<VirtLinkPair> getCoreLinkPairs() {
+        return coreLinkPairs;
+    }
+    public void dumpLinks() {
+        System.out.println("Dumping Links..:");
+        for (VirtSwitch mySwitch : Switches) {
+            System.out.println(mySwitch.toString());
+            System.out.println(mySwitch.getHostLinks().toString());
+            System.out.println(mySwitch.getCoreLinks().toString());
+            System.out.println("-----------------------------------");
+        }
+    }
     public void loadVirtTopologyNCL (String phyTopoFile) {
         System.out.println("Loading Virtual Topology..");
         try {
@@ -308,6 +347,7 @@ public class VirtTopo {
                             System.out.println(vhl.toString());
                             vhl.setBandWidth(1.0);
                             hostLinks.add(vhl);
+                            vsp.getParentSwitch().addHostLink(vhl);
                         } else if (HostMapper.containsKey(node2)) {
                             VirtHost host = HostMapper.get(node2);
                             VirtSwitchPort vsp = SwitchPortMapper.get(node1);
@@ -315,6 +355,7 @@ public class VirtTopo {
                             System.out.println(vhl.toString());
                             vhl.setBandWidth(1.0);
                             hostLinks.add(vhl);
+                            vsp.getParentSwitch().addHostLink(vhl);
                         } else {
                             VirtSwitchPort vsp1 = SwitchPortMapper.get(node1);
                             VirtSwitchPort vsp2 = SwitchPortMapper.get(node2);
@@ -323,12 +364,23 @@ public class VirtTopo {
                             coreLinks.add(vcl);
                             vcl.setBandWidth(1.0);
                             System.out.println(vcl.toString());
-
+                            vsp1.getParentSwitch().addCoreLink(vcl);
+                            /* Below code is only for link mapper */
+                            if (Global.duplex == 1) {
+                                VirtCoreLink vclrev = new VirtCoreLink(linkName, vsp2, vsp1);
+                                vclrev.setIsRev();
+                                coreLinks.add(vclrev);
+                                vclrev.setBandWidth(1.0);
+                                System.out.println(vclrev.toString());
+                                vsp2.getParentSwitch().addCoreLink(vclrev);
+                            }
                         }
                     }
                 }
             }
             setTCAMCaps();
+            dumpLinks();
+            groupAllLinkPairs();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -385,6 +437,7 @@ public class VirtTopo {
                             phl.setBandWidth(cap);
                             hostLinks.add(phl);
                             System.out.println(phl.toString());
+                            psp.getParentSwitch().addHostLink(phl);
                         } else {
                             System.out.println("Error in Line :"+ line + " Cannot find Mapping!");
                         }
@@ -415,6 +468,15 @@ public class VirtTopo {
                             pcl.setBandWidth(cap);
                             coreLinks.add(pcl);
                             System.out.println(pcl.toString());
+                            psp1.getParentSwitch().addCoreLink(pcl);
+                            /* Do not use the below in case of switch-port based mappings */
+                            if (Global.duplex == 1) {
+                                VirtCoreLink pclrev = new VirtCoreLink(linkID, psp2, psp1);
+                                pclrev.setBandWidth(cap);
+                                coreLinks.add(pclrev);
+                                System.out.println(pclrev.toString());
+                                psp2.getParentSwitch().addCoreLink(pclrev);
+                            }
                         } else {
                             System.out.println("Error in Line :"+ line + " Cannot find Mapping!");
                         }
@@ -422,6 +484,8 @@ public class VirtTopo {
                 }
             }
             setTCAMCaps();
+            dumpLinks();
+            groupAllLinkPairs();
         } catch (Exception e) {
             e.printStackTrace();
         }

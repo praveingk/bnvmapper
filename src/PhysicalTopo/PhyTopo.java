@@ -1,5 +1,6 @@
 package PhysicalTopo;
 
+import Core.Global;
 import Utils.LinkType;
 import VirtualTopo.*;
 
@@ -29,7 +30,7 @@ public class PhyTopo {
     private HashMap<String, PhySwitchPort> SwitchPortMapper = new HashMap<>();
     private ArrayList<PhyCorePath> corePaths = new ArrayList<>();
 
-
+    private ArrayList<PhyLinkPair> coreLinkPairs = new ArrayList<>();
 
     public ArrayList<PhyHost> getHosts() {
         return Hosts;
@@ -99,6 +100,24 @@ public class PhyTopo {
         }
     }
 
+    public void groupAllLinkPairs() {
+        for (PhyCoreLink pcl1 : coreLinks) {
+            for (PhyCoreLink pcl2 : coreLinks) {
+                if (pcl1.isRev(pcl2)) {
+                    PhyLinkPair plp = new PhyLinkPair(pcl1, pcl2);
+                    if (!coreLinkPairs.contains(plp))
+                        coreLinkPairs.add(plp);
+                }
+            }
+        }
+        System.out.println("Core link pairs..");
+        for (PhyLinkPair vcl : coreLinkPairs) {
+            System.out.println(vcl.toString());
+        }
+    }
+    public ArrayList<PhyLinkPair> getCoreLinkPairs() {
+        return coreLinkPairs;
+    }
     public void populateBackboneLinks() {
 
         for (int i=0;i< coreLinks.size();i++) {
@@ -183,6 +202,15 @@ public class PhyTopo {
         return false;
     }
 
+    public void dumpLinks() {
+        System.out.println("Dumping Links..:");
+        for (PhySwitch mySwitch : Switches) {
+            System.out.println(mySwitch.toString());
+            System.out.println(mySwitch.getHostLinks().toString());
+            System.out.println(mySwitch.getCoreLinks().toString());
+            System.out.println("-----------------------------------");
+        }
+    }
     public void loadPhyTopologyNCL (String phyTopoFile) {
         System.out.println("Loading Physical Topology..");
         try {
@@ -256,6 +284,7 @@ public class PhyTopo {
                                 PhyHostLink phl = new PhyHostLink(linkID, psp, HostMapper.get(linkEndPoint));
                                 phl.setCapacity((double)1);
                                 hostLinks.add(phl);
+                                psp.getParentSwitch().addHostLink(phl);
                                 System.out.println(phl.toString());
                                 break;
                             }
@@ -272,14 +301,28 @@ public class PhyTopo {
                                 String linkID = "CoreLink"+coreLinkNum++;
                                 PhyCoreLink pcl = new PhyCoreLink(linkID, psp, SwitchPortMapper.get(linkEndPoint));
                                 pcl.setCapacity((double)1);
+                                psp.getParentSwitch().addCoreLink(pcl);
                                 coreLinks.add(pcl);
                                 if (pcl.linkType == LinkType.CORE) {
                                     linkID = "CoreLink"+coreLinkNum++;
                                     PhyCoreLink pclrev = new PhyCoreLink(linkID, SwitchPortMapper.get(linkEndPoint), psp);
                                     pcl.setCapacity((double)10);
                                     pclrev.setCapacity((double)10);
+                                    SwitchPortMapper.get(linkEndPoint).getParentSwitch().addCoreLink(pclrev);
                                     coreLinks.add(pclrev);
                                     System.out.println(pclrev.toString());
+                                } else {
+                                    //SwitchPortMapper.get(linkEndPoint).getParentSwitch().addCoreLink(pcl);
+                                    // This should be done for Link Mapper
+                                    if (Global.duplex == 1) {
+                                        linkID = "CoreLink" + coreLinkNum++;
+                                        PhyCoreLink pclrev = new PhyCoreLink(linkID, SwitchPortMapper.get(linkEndPoint), psp);
+                                        pclrev.setCapacity((double) 1);
+                                        SwitchPortMapper.get(linkEndPoint).getParentSwitch().addCoreLink(pclrev);
+                                        coreLinks.add(pclrev);
+                                        System.out.println(pclrev.toString());
+                                    }
+
                                 }
                                 System.out.println(pcl.toString());
                                 break;
@@ -303,11 +346,13 @@ public class PhyTopo {
                     pcl.setCapacity((double)10);
                     if (!coreLinks.contains(pcl))
                         coreLinks.add(pcl);
+                    sdncoreSwitchPorts.get(i).getParentSwitch().addCoreLink(pcl);
                     linkID = "CoreLink"+coreLinkNum++;
                     PhyCoreLink pclrev = new PhyCoreLink(linkID, sdncoreSwitchPorts.get(j), sdncoreSwitchPorts.get(i));
                     pclrev.setCapacity((double)10);
                     if (!coreLinks.contains(pclrev))
                         coreLinks.add(pclrev);
+                    sdncoreSwitchPorts.get(j).getParentSwitch().addCoreLink(pclrev);
 
                 }
             }
@@ -315,6 +360,7 @@ public class PhyTopo {
             findDiffSwitchPorts();
             /* This is fixed to 12 loopbacks per switch */
             setLoopbackCount(12);
+            groupAllLinkPairs();
             //populateBackboneLinks();
         } catch (Exception e) {
             e.printStackTrace();
@@ -371,6 +417,7 @@ public class PhyTopo {
                             PhyHostLink phl = new PhyHostLink(linkID, psp, host);
                             phl.setCapacity(cap);
                             hostLinks.add(phl);
+                            psp.getParentSwitch().addHostLink(phl);
                             System.out.println(phl.toString());
                         } else {
                             System.out.println("Error in Line :"+ line + " Cannot find Mapping!");
@@ -401,13 +448,26 @@ public class PhyTopo {
                             PhyCoreLink pcl = new PhyCoreLink(linkID, psp1, psp2);
                             pcl.setCapacity(cap);
                             coreLinks.add(pcl);
+                            psp1.getParentSwitch().addCoreLink(pcl);
                             System.out.println(pcl.toString());
                             if (pcl.linkType == LinkType.CORE) {
+                                linkID = "CoreLink"+coreLinkNum++;
                                 PhyCoreLink pclrev = new PhyCoreLink(linkID, psp2, psp1);
-                                pcl.setCapacity(cap/2);
-                                pclrev.setCapacity(cap/2);
+                                pcl.setCapacity(cap);
+                                pclrev.setCapacity(cap);
                                 coreLinks.add(pclrev);
+                                psp2.getParentSwitch().addCoreLink(pclrev);
                                 System.out.println(pclrev.toString());
+                            } else {
+                                /* Below only link Mapper */
+                                if (Global.duplex == 1) {
+                                    linkID = "CoreLink" + coreLinkNum++;
+                                    PhyCoreLink pclrev = new PhyCoreLink(linkID, psp2, psp1);
+                                    pclrev.setCapacity(cap);
+                                    coreLinks.add(pclrev);
+                                    psp2.getParentSwitch().addCoreLink(pclrev);
+                                    System.out.println(pclrev.toString());
+                                }
                             }
                         } else {
                             System.out.println("Error in Line :"+ line + " Cannot find Mapping!");
@@ -418,6 +478,8 @@ public class PhyTopo {
             findCoreSwitchPorts();
             findDiffSwitchPorts();
             setLoopbackCount(loop);
+            dumpLinks();
+            groupAllLinkPairs();
             //populateBackboneLinks();
         } catch (Exception e) {
             e.printStackTrace();

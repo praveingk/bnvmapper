@@ -29,6 +29,11 @@ public class BNVMapper {
         String phyTopoFile = args[1];
         String virtTopoFile = args[2];
         String type = args[3];
+        if (type.equals("linksafe")) {
+            Global.duplex = 1;
+        } else {
+            Global.duplex = 0;
+        }
         /* Default to 12 */
         int loop = 12;
         if (args.length > 4) {
@@ -81,6 +86,12 @@ public class BNVMapper {
         } else if (type.equals("fastpath")) {
             System.out.println("Using Fast allocation.");
             status = myMapper.allocateFastSafePaths();
+        } else if (type.equals("safelinear")) {
+            System.out.println("Using safe linear allocation.");
+            status = myMapper.allocateSafeLinearize();
+        } else if (type.equals("linksafe")) {
+            System.out.println("Using link safe  allocation.");
+            status = myMapper.allocateLinkSafe();
         }
         pw.close();
 
