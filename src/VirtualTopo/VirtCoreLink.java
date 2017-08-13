@@ -13,6 +13,7 @@ public class VirtCoreLink {
     VirtSwitchPort []endPoints = new VirtSwitchPort[2];
     String hc;
     boolean isRev = false;
+    int TCAM;
     public VirtCoreLink(String ID, VirtSwitchPort sp1, VirtSwitchPort sp2) {
         this.ID = ID;
         endPoints[0] = sp1;
@@ -24,6 +25,12 @@ public class VirtCoreLink {
         this.isRev = true;
     }
 
+    public void setTCAM(int TCAM) {
+        this.TCAM = TCAM;
+    }
+    public int getTCAM() {
+        return TCAM;
+    }
     public boolean isRev() {
         return this.isRev;
     }

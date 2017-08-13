@@ -359,7 +359,7 @@ public class PhyTopo {
             findCoreSwitchPorts();
             findDiffSwitchPorts();
             /* This is fixed to 12 loopbacks per switch */
-            setLoopbackCount(12);
+            setLoopbackCount(24);
             groupAllLinkPairs();
             //populateBackboneLinks();
         } catch (Exception e) {

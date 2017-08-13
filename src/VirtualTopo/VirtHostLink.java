@@ -9,6 +9,7 @@ public class VirtHostLink {
     VirtSwitchPort switchPort;
     VirtHost hostPort;
     String hc;
+    int TCAM;
     public VirtHostLink(String ID, VirtSwitchPort sp, VirtHost host) {
         this.ID = ID;
         this.switchPort = sp;
@@ -30,6 +31,12 @@ public class VirtHostLink {
         return false;
     }
 
+    public void setTCAM(int TCAM) {
+        this.TCAM = TCAM;
+    }
+    public int getTCAM() {
+        return TCAM;
+    }
     public VirtHost getHostPort(){
         return hostPort;
     }

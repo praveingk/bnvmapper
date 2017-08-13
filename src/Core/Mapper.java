@@ -831,18 +831,18 @@ public class Mapper {
             backplaneMapper = new GRBVar[virtualTopo.getSwitches().size()][physicalTopo.getSwitches().size()];
 
             for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
-                System.out.println("i="+ i +" link = "+ virtualTopo.getCoreLinks().get(i));
+                //System.out.println("i="+ i +" link = "+ virtualTopo.getCoreLinks().get(i));
                 for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
                     String st = "X[" + i + "," + j + "]";
-                    System.out.println("j="+ j +" link = "+ physicalTopo.getCoreLinks().get(j));
+                    //System.out.println("j="+ j +" link = "+ physicalTopo.getCoreLinks().get(j));
                     corelinkMapper[i][j] = model.addVar(0.0, 1.0, 0.0, GRB.BINARY, st);
                 }
             }
             for (int i = 0; i < virtualTopo.getHostLinks().size(); i++) {
-                System.out.println("i="+ i +" link = "+ virtualTopo.getHostLinks().get(i));
+               // System.out.println("i="+ i +" link = "+ virtualTopo.getHostLinks().get(i));
                 for (int j = 0; j < physicalTopo.getHostLinks().size(); j++) {
                     String st = "Y[" + i + "," + j + "]";
-                    System.out.println("j="+ j +" link = "+ physicalTopo.getHostLinks().get(j));
+                    //System.out.println("j="+ j +" link = "+ physicalTopo.getHostLinks().get(j));
                     hostlinkMapper[i][j] = model.addVar(0.0, 1.0, 0.0, GRB.BINARY, st);
                 }
             }
@@ -862,6 +862,9 @@ public class Mapper {
                 String st = "CorelinkPlacement-" + i;
                 corelinkPlacement[i] = new GRBLinExpr();
                 for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+                    if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
+                        continue;
+                    }
                     corelinkPlacement[i].addTerm(1.0, corelinkMapper[i][j]);
                 }
                 model.addConstr(corelinkPlacement[i], GRB.EQUAL, 1, st);
@@ -883,10 +886,12 @@ public class Mapper {
             /* Constraint 3 : Core Link Bandwidth constraints */
 
             for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+
                 if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
                     continue;
                 }
                 String st = "CoreLinkBW-" + j;
+               // System.out.println(st);
                 GRBLinExpr coreLinkBandwidth = new GRBLinExpr();
 
                 /* Link B/W for core-links */
@@ -972,21 +977,28 @@ public class Mapper {
                 }
                 model.addQConstr(revLink, GRB.EQUAL, 1.0, st);
             }
-            /* Constraint 8 : Make sure physical switch TCAM capacity is not violated. */
+            /* Constraint 7 : Make sure physical switch TCAM capacity is not violated. */
 
-//            for (int i = 0; i < physicalTopo.getSwitches().size(); i++) {
-//                String st = "PhysicalSwitchTcam-" + i;
-//                GRBLinExpr switchTcam = new GRBLinExpr();
-//                //System.out.println("phys switch "+ physicalTopo.getSwitches().get(i).toString());
-//                ArrayList<PhySwitchPort> phySwitchPorts = physicalTopo.getSwitches().get(i).getSwitchPorts();
-//                for (int j = 0; j < phySwitchPorts.size(); j++) {
-//                    int phyPortIndex = physicalTopo.getSwitchPorts().indexOf(phySwitchPorts.get(j));
-//                    for (int virtPortIndex = 0; virtPortIndex < virtualTopo.getSwitchPorts().size(); virtPortIndex++) {
-//                        switchTcam.addTerm(virtualTopo.getSwitchPorts().get(virtPortIndex).getTCAM(), switchPortMapper[virtPortIndex][phyPortIndex]);
-//                    }
-//                }
-//                model.addConstr(switchTcam, GRB.LESS_EQUAL, physicalTopo.getSwitches().get(i).getTCAMCapacity(), st);
-//            }
+            for (i = 0; i < physicalTopo.getSwitches().size(); i++) {
+                String st = "PhysicalSwitchTcam-" + i;
+                GRBLinExpr switchTcam = new GRBLinExpr();
+                //System.out.println("phys switch "+ physicalTopo.getSwitches().get(i).toString());
+                ArrayList<PhyCoreLink> phyCoreLinks = physicalTopo.getSwitches().get(i).getCoreLinks();
+                for (int j = 0; j < phyCoreLinks.size(); j++) {
+                    int phyPortIndex = physicalTopo.getCoreLinks().indexOf(phyCoreLinks.get(j));
+                    for (int virtPortIndex = 0; virtPortIndex < virtualTopo.getCoreLinks().size(); virtPortIndex++) {
+                        switchTcam.addTerm(virtualTopo.getCoreLinks().get(virtPortIndex).getTCAM(), corelinkMapper[virtPortIndex][phyPortIndex]);
+                    }
+                }
+                ArrayList<PhyHostLink> phyHostLinks = physicalTopo.getSwitches().get(i).getHostLinks();
+                for (int j = 0; j < phyHostLinks.size(); j++) {
+                    int phyPortIndex = physicalTopo.getHostLinks().indexOf(phyHostLinks.get(j));
+                    for (int virtPortIndex = 0; virtPortIndex < virtualTopo.getHostLinks().size(); virtPortIndex++) {
+                        switchTcam.addTerm(virtualTopo.getHostLinks().get(virtPortIndex).getTCAM(), hostlinkMapper[virtPortIndex][phyPortIndex]);
+                    }
+                }
+                model.addConstr(switchTcam, GRB.LESS_EQUAL, physicalTopo.getSwitches().get(i).getTCAMCapacity(), st);
+            }
 
 
 
@@ -999,7 +1011,7 @@ public class Mapper {
             GRBLinExpr obj = new GRBLinExpr();
             for (i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
                 for (PhyCoreLink pcl : physicalTopo.getBackboneLinks()) {
-                    System.out.println(pcl.toString());
+                    //System.out.println(pcl.toString());
                     int j = physicalTopo.getCoreLinks().indexOf(pcl);
                     obj.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(), corelinkMapper[i][j]);
                 }
@@ -1018,14 +1030,14 @@ public class Mapper {
                 System.out.println("LP RESULT : OPTIMAL");
                 printAndStoreSolutionLinkBased(corelinkMapper, hostlinkMapper);
                 //model.dispose();
-                for (i=0;i< virtualTopo.getSwitches().size();i++) {
-                    Double val = 0.0;
-                    for (int j=0;j< physicalTopo.getSwitches().size();j++) {
-                        val = backplaneMapper[i][j].get(GRB.DoubleAttr.X);
-                        System.out.println("Z-"+i+","+j+"= "+val);
-                    }
-
-                }
+//                for (i=0;i< virtualTopo.getSwitches().size();i++) {
+//                    Double val = 0.0;
+//                    for (int j=0;j< physicalTopo.getSwitches().size();j++) {
+//                        val = backplaneMapper[i][j].get(GRB.DoubleAttr.X);
+//                        System.out.println("Z-"+i+","+j+"= "+val);
+//                    }
+//
+//                }
                 env.dispose();
 
 
@@ -2283,12 +2295,12 @@ public class Mapper {
                 PhySwitchPort psp1 = null;
                 psp1 = switchPortMapping.get(vcl.getEndPoints()[0]);
                 if (psp1 == null) {
-                   // System.out.println("psp1 is null\n");
+                   System.out.println("psp1 is null\n");
                 }
                 PhySwitchPort psp2 = null;
                 psp2 = switchPortMapping.get(vcl.getEndPoints()[1]);
                 if (psp2 == null) {
-                    //System.out.println("psp2 is null\n");
+                    System.out.println("psp2 is null\n");
                 }
                 System.out.println("linksimple/"+vcl.getID()+"/"+vcl.getEndPoints()[0].getID()+":1,"+vcl.getEndPoints()[1].getID()+":1 direct link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)" + " link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)");
 
@@ -2359,31 +2371,33 @@ public class Mapper {
 
     private void printAndStoreSolutionLinkBased(GRBVar[][] corelinkMapper, GRBVar[][] hostlinkMapper) throws Exception {
         if (Global.environment.equals("ncl")) {
+            ArrayList<PhyHost> reservedNodes = new ArrayList<>();
+            PhyHost ofctrl = null;
             for (int i=0;i< virtualTopo.getHostLinks().size();i++) {
                 for (int j=0;j< physicalTopo.getHostLinks().size();j++) {
                     if (hostlinkMapper[i][j].get(GRB.DoubleAttr.X) == 1.0) {
-                        //System.out.println("i="+i+",j="+j);
-                        //System.out.println(virtualTopo.getHostLinks().get(i).getHostPort().toString()+ " Mapped to "+ physicalTopo.getHostLinks().get(j).getHostPort().toString());
-                        //System.out.println(virtualTopo.getHostLinks().get(i).getSwitchPort().toString()+ " Mapped to "+ physicalTopo.getHostLinks().get(j).getSwitchPort().toString());
+                        System.out.println("i="+i+",j="+j);
+                        System.out.println(virtualTopo.getHostLinks().get(i).getHostPort().toString()+ " Mapped to "+ physicalTopo.getHostLinks().get(j).getHostPort().toString());
+                        System.out.println(virtualTopo.getHostLinks().get(i).getSwitchPort().toString()+ " Mapped to "+ physicalTopo.getHostLinks().get(j).getSwitchPort().toString());
                         hostMapping.put(virtualTopo.getHostLinks().get(i).getHostPort(), physicalTopo.getHostLinks().get(j).getHostPort());
                         switchPortMapping.put(virtualTopo.getHostLinks().get(i).getSwitchPort(), physicalTopo.getHostLinks().get(j).getSwitchPort());
+                        reservedNodes.add(physicalTopo.getHostLinks().get(j).getHostPort());
                     }
                 }
             }
             for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
                 for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
                     if (corelinkMapper[i][j].get(GRB.DoubleAttr.X) == 1.0) {
-                        //System.out.println("i="+i+",j="+j);
-                        //System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[0].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[0].toString());
-                        //System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[1].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[1].toString());
+                        System.out.println("i="+i+",j="+j);
+                        System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[0].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[0].toString());
+                        System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[1].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[1].toString());
                         switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[0], physicalTopo.getCoreLinks().get(j).getEndPoints()[0]);
                         switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[1], physicalTopo.getCoreLinks().get(j).getEndPoints()[1]);
 
                     }
                 }
             }
-            ArrayList<PhyHost> reservedNodes = new ArrayList<>();
-            PhyHost ofctrl = null;
+
             System.out.println("Nodes:");
             for (VirtHost vhost: hostMapping.keySet()) {
                 System.out.println(vhost.getID() +" "+ hostMapping.get(vhost).getID());

@@ -137,6 +137,9 @@ public class BNVMapper {
         } else if (type.equals("fastpath")) {
             System.out.println("Using Fast allocation.");
             status = myMapper.allocateFastSafePaths();
+        } else if (type.equals("linksafe")) {
+            System.out.println("Using link safe  allocation.");
+            status = myMapper.allocateLinkSafe();
         }
         if (status == GRB.OPTIMAL) {
             System.out.println("Success!!!");

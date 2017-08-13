@@ -50,6 +50,12 @@ public class VirtTopo {
             for (int j=0;j< mySwitch.getSwitchPorts().size();j++) {
                 mySwitch.getSwitchPorts().get(j).setTCAM(indivTcam);
             }
+            for (int j=0;j< mySwitch.getCoreLinks().size();j++) {
+                mySwitch.getCoreLinks().get(j).setTCAM(indivTcam);
+            }
+            for (int j=0;j< mySwitch.getHostLinks().size();j++) {
+                mySwitch.getHostLinks().get(j).setTCAM(indivTcam);
+            }
         }
     }
 
@@ -136,6 +142,9 @@ public class VirtTopo {
                 break;
             }
         }
+        setTCAMCaps();
+        dumpLinks();
+        groupAllLinkPairs();
     }
     public  void loadFatTreeTopo(int degree) {
 
@@ -224,6 +233,9 @@ public class VirtTopo {
         }
         System.out.println("Total HostLinks = "+ hostLinks.size());
         System.out.println("Total CoreLinks = "+ coreLinks.size());
+        setTCAMCaps();
+        dumpLinks();
+        groupAllLinkPairs();
     }
 
 
