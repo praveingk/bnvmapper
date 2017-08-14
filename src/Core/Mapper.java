@@ -1028,16 +1028,17 @@ public class Mapper {
             int status = model.get(GRB.IntAttr.Status);
             if (status == GRB.OPTIMAL) {
                 System.out.println("LP RESULT : OPTIMAL");
+                for (i=0;i< virtualTopo.getSwitches().size();i++) {
+                    Double val = 0.0;
+                    for (int j=0;j< physicalTopo.getSwitches().size();j++) {
+                        val = backplaneMapper[i][j].get(GRB.DoubleAttr.X);
+                        System.out.println("Z-"+i+","+j+"= "+val);
+                    }
+
+                }
                 printAndStoreSolutionLinkBased(corelinkMapper, hostlinkMapper);
                 //model.dispose();
-//                for (i=0;i< virtualTopo.getSwitches().size();i++) {
-//                    Double val = 0.0;
-//                    for (int j=0;j< physicalTopo.getSwitches().size();j++) {
-//                        val = backplaneMapper[i][j].get(GRB.DoubleAttr.X);
-//                        System.out.println("Z-"+i+","+j+"= "+val);
-//                    }
-//
-//                }
+
                 env.dispose();
 
 
@@ -2248,6 +2249,9 @@ public class Mapper {
 
 
     private void printAndStoreSolution(GRBVar[][] switchPortMapper, GRBVar[][] hostMapper) throws Exception {
+        HashMap<String, Double> backboneStatMap = new HashMap<>();
+        BufferedWriter bw = new BufferedWriter((new FileWriter("backboneStats")));
+
         if (Global.environment.equals("ncl")) {
             ArrayList<PhyHost> reservedNodes = new ArrayList<>();
             PhyHost ofctrl = null;
@@ -2303,6 +2307,18 @@ public class Mapper {
                     System.out.println("psp2 is null\n");
                 }
                 System.out.println("linksimple/"+vcl.getID()+"/"+vcl.getEndPoints()[0].getID()+":1,"+vcl.getEndPoints()[1].getID()+":1 direct link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)" + " link-"+psp1.getID()+":eth0-"+psp2.getID()+":eth0 ("+psp1.getID()+"/eth0,eth0)");
+                if (!psp1.getParentSwitch().equals(psp2.getParentSwitch())) {
+                    //backboneStatMap.put(psp1.getID()+"-"+psp2.getID(), virtualTopo.getCoreLinks().get(i).getBandwidth());
+                    String link = psp1.getID()+"-"+psp2.getID();
+                    if (!backboneStatMap.containsKey(link)) {
+                        backboneStatMap.put(link, vcl.getBandwidth());
+                    } else {
+                        Double cap = backboneStatMap.get(link);
+                        cap += vcl.getBandwidth();
+                        backboneStatMap.put(link, cap);
+                    }
+
+                }
 
             }
             String exptswitch = switchCon.get(ofctrl.getID().substring(ofctrl.getID().length()-1));
@@ -2350,6 +2366,10 @@ public class Mapper {
             }
             System.out.println("End Edges");
             System.out.println("End solution");
+            for (String pcl : backboneStatMap.keySet()) {
+                bw.write(ofctrl.getID()+","+pcl+","+backboneStatMap.get(pcl)+System.getProperty("line.separator"));
+            }
+            bw.close();
         } else {
             for (int i = 0; i < virtualTopo.getSwitchPorts().size(); i++) {
                 for (int j = 0; j < physicalTopo.getSwitchPorts().size(); j++) {
@@ -2368,8 +2388,9 @@ public class Mapper {
         }
     }
 
-
     private void printAndStoreSolutionLinkBased(GRBVar[][] corelinkMapper, GRBVar[][] hostlinkMapper) throws Exception {
+        BufferedWriter bw = new BufferedWriter((new FileWriter("backboneStats")));
+        HashMap<String, Double> backboneStatMap = new HashMap<>();
         if (Global.environment.equals("ncl")) {
             ArrayList<PhyHost> reservedNodes = new ArrayList<>();
             PhyHost ofctrl = null;
@@ -2385,15 +2406,25 @@ public class Mapper {
                     }
                 }
             }
+
             for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
                 for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
                     if (corelinkMapper[i][j].get(GRB.DoubleAttr.X) == 1.0) {
                         System.out.println("i="+i+",j="+j);
-                        System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[0].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[0].toString());
-                        System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[1].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[1].toString());
-                        switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[0], physicalTopo.getCoreLinks().get(j).getEndPoints()[0]);
-                        switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[1], physicalTopo.getCoreLinks().get(j).getEndPoints()[1]);
-
+                        PhyCoreLink pcl = physicalTopo.getCoreLinks().get(j);
+                        System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[0].toString() + " Mapped to " + pcl.getEndPoints()[0].toString());
+                        System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[1].toString() + " Mapped to " + pcl.getEndPoints()[1].toString());
+                        switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[0], pcl.getEndPoints()[0]);
+                        switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[1], pcl.getEndPoints()[1]);
+                        if (physicalTopo.getBackboneLinks().contains(pcl)) {
+                            if (!backboneStatMap.containsKey(pcl.getLinkIdentifier())) {
+                                backboneStatMap.put(pcl.getLinkIdentifier(), virtualTopo.getCoreLinks().get(i).getBandwidth());
+                            } else {
+                                Double cap = backboneStatMap.get(pcl.getLinkIdentifier());
+                                cap += virtualTopo.getCoreLinks().get(i).getBandwidth();
+                                backboneStatMap.put(pcl.getLinkIdentifier(), cap);
+                            }
+                        }
                     }
                 }
             }
@@ -2488,6 +2519,12 @@ public class Mapper {
             }
             System.out.println("End Edges");
             System.out.println("End solution");
+
+            for (String pcl : backboneStatMap.keySet()) {
+                bw.write(ofctrl.getID()+","+pcl+","+backboneStatMap.get(pcl)+System.getProperty("line.separator"));
+            }
+            bw.close();
+
         } else {
             for (int i=0;i< virtualTopo.getHostLinks().size();i++) {
                 for (int j=0;j< physicalTopo.getHostLinks().size();j++) {

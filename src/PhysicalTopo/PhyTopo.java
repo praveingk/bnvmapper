@@ -4,8 +4,7 @@ import Core.Global;
 import Utils.LinkType;
 import VirtualTopo.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +27,7 @@ public class PhyTopo {
     private HashMap<String, PhyHost> HostMapper = new HashMap<>();
     private HashMap<String, PhySwitch> SwitchMapper = new HashMap<>();
     private HashMap<String, PhySwitchPort> SwitchPortMapper = new HashMap<>();
+    private HashMap<String, Double> backboneStatMap = new HashMap<>();
     private ArrayList<PhyCorePath> corePaths = new ArrayList<>();
 
     private ArrayList<PhyLinkPair> coreLinkPairs = new ArrayList<>();
@@ -50,6 +50,7 @@ public class PhyTopo {
     public ArrayList<PhyCorePath> getCorePaths() { return corePaths; }
     public String ncl_environment = "STAGING";
 
+    public String backboneStats = "backboneStats";
     public void findCoreSwitchPorts() {
         for (int i=0;i<coreLinks.size();i++) {
             PhySwitchPort[] psp = coreLinks.get(i).getEndPoints();
@@ -61,6 +62,55 @@ public class PhyTopo {
             }
         }
 
+    }
+
+    public void pruneOldExptStat() {
+        String line = null;
+        File tempFile = new File("tempStats");
+        File backBoneFile = new File(backboneStats) ;
+        try {
+            BufferedReader br = new BufferedReader((new FileReader(backBoneFile)));
+            BufferedWriter bw = new BufferedWriter((new FileWriter(tempFile)));
+            while ((line = br.readLine()) != null) {
+                String[] tokens = line.split(",");
+                /* Indicator is a PhyHost, which indicates whether an experiment is still in effect */
+
+                String indicator = tokens[0];
+                System.out.println("Checking "+ indicator);
+                if (this.HostMapper.containsKey(indicator)) {
+                    /* Means this indicator has become free, Implies that the expt is done. Hence, this line is no longer valid */
+                    System.out.println("Found a host, who is now free..");
+                    continue;
+                }
+                // If it came here, means this link is still being used.
+                bw.write(line + System.getProperty("line.separator"));
+            }
+            br.close();
+            bw.close();
+            tempFile.renameTo(backBoneFile);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getUsedBackboneStats() {
+        String line = null;
+        pruneOldExptStat();
+        try {
+            BufferedReader br = new BufferedReader((new FileReader(backboneStats)));
+            while ((line = br.readLine()) != null) {
+                String []tokens = line.split(",");
+                /* Indicator is a PhyHost, which indicates whether an experiment is still in effect */
+
+                String indicator = tokens[0];
+                String linkString = tokens[1];
+                Double occupied = Double.parseDouble(tokens[2]);
+                System.out.println("Used Backbone : "+ tokens[1] + ": "+ tokens[2]);
+                backboneStatMap.put(linkString, occupied);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void findDiffSwitchPorts() {
@@ -139,16 +189,29 @@ public class PhyTopo {
         HashMap<String,Integer> SwitchMap = new HashMap<>();
         this.disableAllLinks();
         int dis = 0;
-
         for (int i=0;i< coreLinks.size();i++) {
-            PhySwitchPort[] switchPorts = coreLinks.get(i).getEndPoints();
+            PhyCoreLink pcl = coreLinks.get(i);
+            Double capacity = pcl.getCapacity();
+            PhySwitchPort[] switchPorts = pcl.getEndPoints();
             PhySwitch sw1 = switchPorts[0].getParentSwitch();
             PhySwitch sw2 = switchPorts[1].getParentSwitch();
             System.out.println("CORElink :"+ coreLinks.get(i).toString());
             if (!sw1.equals(sw2)) {
                 /* Physical Core link */
-                PhyCorePath pcp1 = new PhyCorePath(switchPorts[0],coreLinks.get(i).getCapacity());
-                PhyCorePath pcp2 = new PhyCorePath(switchPorts[1],coreLinks.get(i).getCapacity());
+                System.out.println("Checking for "+ pcl.getLinkIdentifier());
+                if (backboneStatMap.containsKey(pcl.getLinkIdentifier())) {
+                    double used = backboneStatMap.get(pcl.getLinkIdentifier());
+                    capacity = capacity - used;
+                    System.out.println("Used "+used + " of "+ pcl.getLinkIdentifier());
+                }
+                if (capacity <= 0) {
+                    System.out.println(pcl.toString() +" is not available.");
+                    break;
+                }
+                pcl.setCapacity(capacity);
+                System.out.println(pcl.toString());
+                PhyCorePath pcp1 = new PhyCorePath(switchPorts[0],pcl.getCapacity());
+                PhyCorePath pcp2 = new PhyCorePath(switchPorts[1],pcl.getCapacity());
                 if (!corePaths.contains(pcp1)) {
                     System.out.println("Adding Core Path "+ pcp1.toString());
                     corePaths.add(pcp1);
@@ -162,6 +225,7 @@ public class PhyTopo {
                     sw2.addCorePath(pcp2);
                 }
                 coreLinks.get(i).enableLink();
+
                 backboneLinks.add(coreLinks.get(i));
                 System.out.println("Backbone link : "+i+" "+ coreLinks.get(i).toString());
                 continue;
@@ -271,7 +335,7 @@ public class PhyTopo {
                     }
                 } else if (type.equals("link")) {
                     String linkEndPoint = tokens[1].substring(linkIndex).split(":")[0];
-                    System.out.println("Link "+ linkEndPoint);
+                    //System.out.println("Link "+ linkEndPoint);
                     if (isNCLHost(linkEndPoint)) {
                         // Host Links
                         for (int i=2;i<tokens.length;i++) {
@@ -295,19 +359,19 @@ public class PhyTopo {
                             if (isNCLSwitchPort(tokens[i])) {
                                 String switchPort = tokens[i].split(":")[0];
                                 if (switchPort.equals(linkEndPoint)) continue;
-                                System.out.println(" Connected to "+ switchPort+ " token ="+ i);
+                                //System.out.println(" Connected to "+ switchPort+ " token ="+ i);
                                 PhySwitchPort psp = SwitchPortMapper.get(switchPort);
                                 if (psp == null) break;
                                 String linkID = "CoreLink"+coreLinkNum++;
                                 PhyCoreLink pcl = new PhyCoreLink(linkID, psp, SwitchPortMapper.get(linkEndPoint));
                                 pcl.setCapacity((double)1);
                                 psp.getParentSwitch().addCoreLink(pcl);
-                                coreLinks.add(pcl);
                                 if (pcl.linkType == LinkType.CORE) {
                                     linkID = "CoreLink"+coreLinkNum++;
+                                    Double capacity = 10.0;
+                                    pcl.setCapacity(capacity);
                                     PhyCoreLink pclrev = new PhyCoreLink(linkID, SwitchPortMapper.get(linkEndPoint), psp);
-                                    pcl.setCapacity((double)10);
-                                    pclrev.setCapacity((double)10);
+                                    pclrev.setCapacity(capacity);
                                     SwitchPortMapper.get(linkEndPoint).getParentSwitch().addCoreLink(pclrev);
                                     coreLinks.add(pclrev);
                                     System.out.println(pclrev.toString());
@@ -320,10 +384,11 @@ public class PhyTopo {
                                         pclrev.setCapacity((double) 1);
                                         SwitchPortMapper.get(linkEndPoint).getParentSwitch().addCoreLink(pclrev);
                                         coreLinks.add(pclrev);
-                                        System.out.println(pclrev.toString());
+                                        //System.out.println(pclrev.toString());
                                     }
 
                                 }
+                                coreLinks.add(pcl);
                                 System.out.println(pcl.toString());
                                 break;
                             } else if (isSDNCORE(tokens[i])) {
@@ -356,6 +421,7 @@ public class PhyTopo {
 
                 }
             }
+            getUsedBackboneStats();
             findCoreSwitchPorts();
             findDiffSwitchPorts();
             /* This is fixed to 12 loopbacks per switch */
