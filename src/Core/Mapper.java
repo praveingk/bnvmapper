@@ -28,7 +28,7 @@ public class Mapper {
     private GRBVar[][] hostlinkMapper;
     private GRBVar[][] corelinkMapper;
     private GRBVar[][] backplaneMapper;
-
+    private GRBVar[][] backplaneLinkMapper;
     HashMap<VirtHost, PhyHost> hostMapping = new HashMap<>();
     HashMap<VirtSwitchPort, PhySwitchPort> switchPortMapping = new HashMap<>();
 
@@ -886,14 +886,12 @@ public class Mapper {
             /* Constraint 3 : Core Link Bandwidth constraints */
 
             for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
-
                 if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
                     continue;
                 }
                 String st = "CoreLinkBW-" + j;
                // System.out.println(st);
                 GRBLinExpr coreLinkBandwidth = new GRBLinExpr();
-
                 /* Link B/W for core-links */
                 for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
                     VirtSwitchPort[] virtendPoints = virtualTopo.getCoreLinks().get(i).getEndPoints();
@@ -903,6 +901,30 @@ public class Mapper {
                 model.addConstr(coreLinkBandwidth, GRB.LESS_EQUAL, physicalTopo.getCoreLinks().get(j).getCapacity(), st);
             }
 
+            for (int cp = 0 ; cp < physicalTopo.getCorePaths().size();cp++) {
+                PhyCorePath pcp = physicalTopo.getCorePaths().get(cp);
+                System.out.println(" For Corepath :" + pcp.toString());
+                GRBLinExpr coreLinkBandwidth = new GRBLinExpr();
+                String st = "PCPBW-" + cp;
+                for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+                    PhyCoreLink pcl = physicalTopo.getCoreLinks().get(j);
+                    if (!pcp.getAttachPoint().equals(pcl.getEndPoints()[0])) {
+                        continue;
+                    }
+                    System.out.println("For "+ pcl.toString());
+                    if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
+                        continue;
+                    }
+                    // System.out.println(st);
+                    /* Link B/W for core-links */
+                    for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+                        //Double term = pcp.getAttachPoint().equals(pcl.getEndPoints()[0])?1.0:0.0;
+                        coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(),
+                                corelinkMapper[i][j]);
+                    }
+                }
+                model.addConstr(coreLinkBandwidth, GRB.LESS_EQUAL, pcp.getCapacity(), st);
+            }
             /* Constraint 4 : Host Link Bandwidth constraints */
 
             for (int j = 0; j < physicalTopo.getHostLinks().size(); j++) {
@@ -1017,6 +1039,309 @@ public class Mapper {
                 }
             }
 
+
+            model.update();
+            model.setObjective(obj, GRB.MINIMIZE);
+            model.update();
+            model.write("BNVMapper.lp");
+
+            model.optimize();
+
+            int status = model.get(GRB.IntAttr.Status);
+            if (status == GRB.OPTIMAL) {
+                System.out.println("LP RESULT : OPTIMAL");
+                for (i=0;i< virtualTopo.getSwitches().size();i++) {
+                    Double val = 0.0;
+                    for (int j=0;j< physicalTopo.getSwitches().size();j++) {
+                        val = backplaneMapper[i][j].get(GRB.DoubleAttr.X);
+                        System.out.println("Z-"+i+","+j+"= "+val);
+                    }
+
+                }
+                printAndStoreSolutionLinkBased(corelinkMapper, hostlinkMapper);
+                //model.dispose();
+
+                env.dispose();
+
+
+            } else if (status == GRB.INFEASIBLE) {
+                System.out.println("LP RESULT : INFEASIBLE");
+                model.dispose();
+                env.dispose();
+            } else if (status == GRB.UNBOUNDED) {
+                System.out.println("LP RESULT : UN_BOUNDED");
+                model.dispose();
+                env.dispose();
+            } else {
+                model.dispose();
+                env.dispose();
+
+                System.out.println("LP Stopped with status = " + status);
+            }
+            return status;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return GRB.INFEASIBLE;
+    }
+
+
+    public int allocateLinkOptimal() {
+        GRBEnv env;
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("ModelVirt.txt", "UTF-8");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            env = new GRBEnv();
+            //env.set(GRB.IntParam.PreQLinearize, 1);
+            //env.set(GRB.DoubleParam.TimeLimit, 200);
+            GRBModel model = new GRBModel(env);
+
+            hostlinkMapper = new GRBVar[virtualTopo.getHostLinks().size()][physicalTopo.getHostLinks().size()];
+            corelinkMapper = new GRBVar[virtualTopo.getCoreLinks().size()][physicalTopo.getCoreLinks().size()];
+            backplaneMapper = new GRBVar[virtualTopo.getSwitches().size()][physicalTopo.getSwitches().size()];
+
+            backplaneLinkMapper = new GRBVar[virtualTopo.getSwitches().size()][physicalTopo.getCorePaths().size()];
+
+            for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+                //System.out.println("i="+ i +" link = "+ virtualTopo.getCoreLinks().get(i));
+                for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+                    String st = "X[" + i + "," + j + "]";
+                    //System.out.println("j="+ j +" link = "+ physicalTopo.getCoreLinks().get(j));
+                    corelinkMapper[i][j] = model.addVar(0.0, 1.0, 0.0, GRB.BINARY, st);
+                }
+            }
+            for (int i = 0; i < virtualTopo.getHostLinks().size(); i++) {
+                // System.out.println("i="+ i +" link = "+ virtualTopo.getHostLinks().get(i));
+                for (int j = 0; j < physicalTopo.getHostLinks().size(); j++) {
+                    String st = "Y[" + i + "," + j + "]";
+                    //System.out.println("j="+ j +" link = "+ physicalTopo.getHostLinks().get(j));
+                    hostlinkMapper[i][j] = model.addVar(0.0, 1.0, 0.0, GRB.BINARY, st);
+                }
+            }
+
+            for (int i = 0; i < virtualTopo.getSwitches().size(); i++) {
+                for (int j = 0; j < physicalTopo.getSwitches().size(); j++) {
+                    String st = "Z[" + i + "," + j + "]";
+                    backplaneMapper[i][j] = model.addVar(0.0, 100.0, 0.0, GRB.INTEGER, st);
+                }
+            }
+
+            for (int i = 0; i < virtualTopo.getSwitches().size(); i++) {
+                for (int j = 0; j < physicalTopo.getCorePaths().size(); j++) {
+                    String st = "L[" + i + "," + j + "]";
+                    backplaneLinkMapper[i][j] = model.addVar(0.0, 1.0, 0.0, GRB.BINARY, st);
+                }
+            }
+            model.update();
+
+            /* Constraint 1: Each virtual core-link should be mapped to one physical core-link. */
+            GRBLinExpr[] corelinkPlacement = new GRBLinExpr[virtualTopo.getCoreLinks().size()];
+            for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+                String st = "CorelinkPlacement-" + i;
+                corelinkPlacement[i] = new GRBLinExpr();
+                for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+                    if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
+                        continue;
+                    }
+                    corelinkPlacement[i].addTerm(1.0, corelinkMapper[i][j]);
+                }
+                model.addConstr(corelinkPlacement[i], GRB.EQUAL, 1, st);
+            }
+
+
+            /* Constraint 2: Each virtual host0link should be mapped to one physical host-link. */
+            GRBLinExpr[] hostlinkPlacement = new GRBLinExpr[virtualTopo.getHostLinks().size()];
+            for (int i = 0; i < virtualTopo.getHostLinks().size(); i++) {
+                String st = "HostlinkPlacement-" + i;
+                hostlinkPlacement[i] = new GRBLinExpr();
+                for (int j = 0; j < physicalTopo.getHostLinks().size(); j++) {
+                    hostlinkPlacement[i].addTerm(1.0, hostlinkMapper[i][j]);
+                }
+                model.addConstr(hostlinkPlacement[i], GRB.EQUAL, 1, st);
+            }
+
+
+            /* Constraint 3 : Core Link Bandwidth constraints */
+
+            for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+                if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
+                    continue;
+                }
+                String st = "CoreLinkBW-" + j;
+                // System.out.println(st);
+                GRBLinExpr coreLinkBandwidth = new GRBLinExpr();
+                /* Link B/W for core-links */
+                for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+                    VirtSwitchPort[] virtendPoints = virtualTopo.getCoreLinks().get(i).getEndPoints();
+                    coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(),
+                            corelinkMapper[i][j]);
+                }
+                model.addConstr(coreLinkBandwidth, GRB.LESS_EQUAL, physicalTopo.getCoreLinks().get(j).getCapacity(), st);
+            }
+
+            for (int cp = 0 ; cp < physicalTopo.getCorePaths().size();cp++) {
+                PhyCorePath pcp = physicalTopo.getCorePaths().get(cp);
+                System.out.println(" For Corepath :" + pcp.toString());
+                GRBLinExpr coreLinkBandwidth = new GRBLinExpr();
+                String st = "PCPBW-" + cp;
+                for (int j = 0; j < physicalTopo.getCoreLinks().size(); j++) {
+                    PhyCoreLink pcl = physicalTopo.getCoreLinks().get(j);
+                    if (!pcp.getAttachPoint().equals(pcl.getEndPoints()[0])) {
+                        continue;
+                    }
+                    System.out.println("For "+ pcl.toString());
+                    if (!physicalTopo.getCoreLinks().get(j).isEnabled()) {
+                        continue;
+                    }
+                    // System.out.println(st);
+                    /* Link B/W for core-links */
+                    for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+                        //Double term = pcp.getAttachPoint().equals(pcl.getEndPoints()[0])?1.0:0.0;
+                        coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(),
+                                corelinkMapper[i][j]);
+                    }
+                }
+
+//                for (int i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+//                    coreLinkBandwidth.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(),
+//                            backplaneLinkMapper[i][cp]);
+//                }
+                model.addConstr(coreLinkBandwidth, GRB.LESS_EQUAL, pcp.getCapacity(), st);
+            }
+            /* Constraint 4 : Host Link Bandwidth constraints */
+
+            for (int j = 0; j < physicalTopo.getHostLinks().size(); j++) {
+                String st = "HostLinkCap-" + j;
+                GRBLinExpr hostLinkCap = new GRBLinExpr();
+
+                /* Link B/W for core-links */
+                for (int i = 0; i < virtualTopo.getHostLinks().size(); i++) {
+                    hostLinkCap.addTerm(1.0, hostlinkMapper[i][j]);
+                }
+                model.addConstr(hostLinkCap, GRB.LESS_EQUAL, 1, st);
+            }
+            /* Constraint 4 : Backplane Mapping to all VirtLinks */
+
+            for (int i=0;i<virtualTopo.getSwitches().size();i++) {
+                ArrayList<VirtCoreLink> virtCoreLinks = virtualTopo.getSwitches().get(i).getCoreLinks();
+                ArrayList<VirtHostLink> virtHostLinks = virtualTopo.getSwitches().get(i).getHostLinks();
+
+                for (int j=0;j<physicalTopo.getSwitches().size();j++) {
+                    String st = "BackPlaneSW-"+i+","+j;
+                    PhySwitch mySwitch = physicalTopo.getSwitches().get(j);
+                    GRBQuadExpr diffSwitch = new GRBQuadExpr();
+                    ArrayList<PhyCoreLink> phyCoreLinks = physicalTopo.getSwitches().get(j).getCoreLinks();
+                    ArrayList<PhyHostLink> phyHostLinks = physicalTopo.getSwitches().get(j).getHostLinks();
+                    for (VirtCoreLink vcl : virtCoreLinks) {
+                        int vclindex = virtualTopo.getCoreLinks().indexOf(vcl);
+                        for (PhyCoreLink pcl : phyCoreLinks) {
+                            for (int k = 0; k < physicalTopo.getSwitches().size(); k++) {
+                                PhySwitch dSwitch = physicalTopo.getSwitches().get(k);
+                                if (mySwitch.equals(dSwitch)) {
+                                    continue;
+                                }
+                                for (PhyCoreLink pcl : dSwitch.getCoreLinks()) {
+                                    int pclindex = physicalTopo.getCoreLinks().indexOf(pcl);
+                                    diffSwitch.addTerm(1.0, corelinkMapper[i][],corelinkMapper[i][pclindex]);
+
+                                }
+                            }
+                        }
+
+                    }
+                    model.addConstr(samePhySwitch, GRB.EQUAL, backplaneMapper[i][j], st);
+                    //model.addConstr(samePhySwitch, GRB.EQUAL, 0, st);
+                    //model.addConstr(backplaneMapper[i][j], GRB.EQUAL, 0, st);
+                }
+            }
+
+            for (int i=0;i<virtualTopo.getSwitches().size();i++) {
+
+                for (int j=0;j<physicalTopo.getCorePaths().size();j++) {
+                    GRBQuadExpr diffSwitch = new GRBQuadExpr();
+                    String st = "BackPlaneLink-" + i + "," + j;
+                    PhyCorePath pcp = physicalTopo.getCorePaths().get(j);
+                    PhySwitch mySwitch = pcp.getAttachPoint().getParentSwitch();
+                    int mySwitchIndex = physicalTopo.getSwitches().indexOf(mySwitch);
+                    for (int l = 0; l < physicalTopo.getSwitches().size(); l++) {
+                        if (physicalTopo.getSwitches().get(l).equals(mySwitch)) continue;
+                        diffSwitch.addTerm(1.0, backplaneMapper[i][mySwitchIndex], backplaneMapper[i][l]);
+
+                    }
+                    //model.addQConstr(diffSwitch, GRB.EQUAL, backplaneLinkMapper[i][j], st);
+                    model.addQConstr(backplaneLinkMapper[i][j], GRB.EQUAL, diffSwitch, st);
+                }
+            }
+
+            /* Constraint 6 : Multi-direction links must be mapped to the same multi-direction physical links */
+            int i=0;
+            for (VirtLinkPair vlp : virtualTopo.getCoreLinkPairs()) {
+                String st = "revLink-"+i++;
+                GRBQuadExpr revLink = new GRBQuadExpr();
+                for (PhyLinkPair plp : physicalTopo.getCoreLinkPairs()) {
+                    int v1 = virtualTopo.getCoreLinks().indexOf(vlp.getEndPoints()[0]);
+                    int v2 = virtualTopo.getCoreLinks().indexOf(vlp.getEndPoints()[1]);
+                    int p1 = physicalTopo.getCoreLinks().indexOf(plp.getEndPoints()[0]);
+                    int p2 = physicalTopo.getCoreLinks().indexOf(plp.getEndPoints()[1]);
+                    revLink.addTerm(1.0, corelinkMapper[v1][p1], corelinkMapper[v2][p2]);
+                    revLink.addTerm(1.0, corelinkMapper[v1][p2], corelinkMapper[v2][p1]);
+                }
+                model.addQConstr(revLink, GRB.EQUAL, 1.0, st);
+            }
+            /* Constraint 7 : Make sure physical switch TCAM capacity is not violated. */
+
+            for (i = 0; i < physicalTopo.getSwitches().size(); i++) {
+                String st = "PhysicalSwitchTcam-" + i;
+                GRBLinExpr switchTcam = new GRBLinExpr();
+                //System.out.println("phys switch "+ physicalTopo.getSwitches().get(i).toString());
+                ArrayList<PhyCoreLink> phyCoreLinks = physicalTopo.getSwitches().get(i).getCoreLinks();
+                for (int j = 0; j < phyCoreLinks.size(); j++) {
+                    int phyPortIndex = physicalTopo.getCoreLinks().indexOf(phyCoreLinks.get(j));
+                    for (int virtPortIndex = 0; virtPortIndex < virtualTopo.getCoreLinks().size(); virtPortIndex++) {
+                        switchTcam.addTerm(virtualTopo.getCoreLinks().get(virtPortIndex).getTCAM(), corelinkMapper[virtPortIndex][phyPortIndex]);
+                    }
+                }
+                ArrayList<PhyHostLink> phyHostLinks = physicalTopo.getSwitches().get(i).getHostLinks();
+                for (int j = 0; j < phyHostLinks.size(); j++) {
+                    int phyPortIndex = physicalTopo.getHostLinks().indexOf(phyHostLinks.get(j));
+                    for (int virtPortIndex = 0; virtPortIndex < virtualTopo.getHostLinks().size(); virtPortIndex++) {
+                        switchTcam.addTerm(virtualTopo.getHostLinks().get(virtPortIndex).getTCAM(), hostlinkMapper[virtPortIndex][phyPortIndex]);
+                    }
+                }
+                model.addConstr(switchTcam, GRB.LESS_EQUAL, physicalTopo.getSwitches().get(i).getTCAMCapacity(), st);
+            }
+
+
+
+            /* Set Objective */
+
+            /*
+             * Alternate Objective : Minimize the number backbone links used.
+             */
+            System.out.println("Minimize Usage of Below links..");
+            GRBLinExpr obj = new GRBLinExpr();
+            for (i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+                for (PhyCoreLink pcl : physicalTopo.getBackboneLinks()) {
+                    //System.out.println(pcl.toString());
+                    int j = physicalTopo.getCoreLinks().indexOf(pcl);
+                    obj.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(), corelinkMapper[i][j]);
+                }
+            }
+            for (i = 0; i < virtualTopo.getSwitches().size(); i++) {
+                for (int j=0;j< physicalTopo.getCorePaths().size();j++) {
+                    //System.out.println(pcl.toString());
+                    obj.addTerm(1.0, backplaneLinkMapper[i][j]);
+                }
+            }
 
             model.update();
             model.setObjective(obj, GRB.MINIMIZE);
@@ -2310,12 +2635,15 @@ public class Mapper {
                 if (!psp1.getParentSwitch().equals(psp2.getParentSwitch())) {
                     //backboneStatMap.put(psp1.getID()+"-"+psp2.getID(), virtualTopo.getCoreLinks().get(i).getBandwidth());
                     String link = psp1.getID()+"-"+psp2.getID();
-                    if (!backboneStatMap.containsKey(link)) {
+                    String revLink = psp2.getID()+"-"+psp1.getID();
+                    if (!backboneStatMap.containsKey(link) && !backboneStatMap.containsKey(revLink)) {
                         backboneStatMap.put(link, vcl.getBandwidth());
+                        backboneStatMap.put(revLink, vcl.getBandwidth());
                     } else {
                         Double cap = backboneStatMap.get(link);
                         cap += vcl.getBandwidth();
                         backboneStatMap.put(link, cap);
+                        backboneStatMap.put(revLink, cap);
                     }
 
                 }

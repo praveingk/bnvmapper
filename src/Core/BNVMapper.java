@@ -92,6 +92,9 @@ public class BNVMapper {
         } else if (type.equals("linksafe")) {
             System.out.println("Using link safe  allocation.");
             status = myMapper.allocateLinkSafe();
+        } else if (type.equals("linkoptimal")) {
+            System.out.println("Using link safe  allocation.");
+            status = myMapper.allocateLinkOptimal();
         }
         pw.close();
 

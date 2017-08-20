@@ -36,7 +36,14 @@ public class PhyCorePath {
         return false;
     }
     public String toString() {
-        return  "("+ this.attachPoint+")";
+        return  "("+ this.attachPoint+"["+ Capacity+"])";
     }
 
+    public void setCapacity(Double capacity) {
+        this.Capacity = capacity;
+    }
+
+    public void enumerateSwitchCombinations() {
+
+    }
 }

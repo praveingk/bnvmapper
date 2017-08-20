@@ -28,6 +28,7 @@ public class PhyTopo {
     private HashMap<String, PhySwitch> SwitchMapper = new HashMap<>();
     private HashMap<String, PhySwitchPort> SwitchPortMapper = new HashMap<>();
     private HashMap<String, Double> backboneStatMap = new HashMap<>();
+    private HashMap<String, Double> PCPStatMap = new HashMap<>();
     private ArrayList<PhyCorePath> corePaths = new ArrayList<>();
 
     private ArrayList<PhyLinkPair> coreLinkPairs = new ArrayList<>();
@@ -106,7 +107,20 @@ public class PhyTopo {
                 String linkString = tokens[1];
                 Double occupied = Double.parseDouble(tokens[2]);
                 System.out.println("Used Backbone : "+ tokens[1] + ": "+ tokens[2]);
-                backboneStatMap.put(linkString, occupied);
+                if (!backboneStatMap.containsKey(linkString)) {
+                    backboneStatMap.put(linkString, occupied);
+                } else {
+                    Double cap = backboneStatMap.get(linkString);
+                    backboneStatMap.put(linkString, occupied+cap);
+                }
+                String endpoint = linkString.split("-")[0];
+                System.out.println(endpoint);
+                if (!PCPStatMap.containsKey(endpoint)) {
+                    PCPStatMap.put(endpoint, occupied);
+                } else {
+                    Double cap = PCPStatMap.get(endpoint);
+                    PCPStatMap.put(endpoint, occupied+cap);
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -164,6 +178,10 @@ public class PhyTopo {
         for (PhyLinkPair vcl : coreLinkPairs) {
             System.out.println(vcl.toString());
         }
+
+        for (PhyCorePath pcp : getCorePaths()) {
+            System.out.println(pcp.toString());
+        }
     }
     public ArrayList<PhyLinkPair> getCoreLinkPairs() {
         return coreLinkPairs;
@@ -213,17 +231,55 @@ public class PhyTopo {
                 PhyCorePath pcp1 = new PhyCorePath(switchPorts[0],pcl.getCapacity());
                 PhyCorePath pcp2 = new PhyCorePath(switchPorts[1],pcl.getCapacity());
                 if (!corePaths.contains(pcp1)) {
-                    System.out.println("Adding Core Path "+ pcp1.toString());
-                    corePaths.add(pcp1);
-                    sw1.addCorePath(pcp1);
-
+                    System.out.println("Adding Core Path "+ pcp1.toString() + "Capacity ="+ pcp1.getCapacity());
+                    if ((PCPStatMap.containsKey(pcp1.attachPoint.getID()))) {
+                        if (capacity - PCPStatMap.get(pcp1.attachPoint.getID()) > 0 ) {
+                            pcp1.setCapacity(capacity - PCPStatMap.get(pcp1.attachPoint.getID()));
+                            System.out.println("After Updating Cap: "+ pcp1.toString());
+                            corePaths.add(pcp1);
+                            sw1.addCorePath(pcp1);
+                        }
+                    } else {
+                        corePaths.add(pcp1);
+                        sw1.addCorePath(pcp1);
+                    }
                 }
                 if (!corePaths.contains(pcp2)) {
-                    System.out.println("Adding Core Path "+ pcp2.toString());
-
-                    corePaths.add(pcp2);
-                    sw2.addCorePath(pcp2);
+                    System.out.println("Adding Core Path "+ pcp2.toString() + "Capacity ="+ pcp2.getCapacity());
+                    if ((PCPStatMap.containsKey(pcp2.attachPoint.getID()))) {
+                        if (capacity - PCPStatMap.get(pcp2.attachPoint.getID()) > 0 ) {
+                            pcp2.setCapacity(capacity - PCPStatMap.get(pcp2.attachPoint.getID()));
+                            System.out.println("After Updating Cap: "+ pcp2.toString());
+                            corePaths.add(pcp2);
+                            sw1.addCorePath(pcp2);
+                        }
+                    } else {
+                        corePaths.add(pcp2);
+                        sw1.addCorePath(pcp2);
+                    }
                 }
+//                if (!corePaths.contains(pcp1)) {
+//                    System.out.println("Adding Core Path "+ pcp1.toString() + "Capacity ="+ pcp1.getCapacity());
+//                    corePaths.add(pcp1);
+//                    sw1.addCorePath(pcp1);
+//
+//                } else {
+//                    int index = corePaths.indexOf(pcp1);
+//                    PhyCorePath pcp = corePaths.get(index);
+//                    pcp.setCapacity(pcl.getCapacity());
+//                    System.out.println("Updating Core Path "+ pcp1.toString() + "Capacity ="+ pcp1.getCapacity());
+//
+//                }
+//                if (!corePaths.contains(pcp2)) {
+//                    System.out.println("Updating Core Path "+ pcp2.toString()+ "Capacity = "+ pcp1.getCapacity());
+//
+//                    corePaths.add(pcp2);
+//                    sw2.addCorePath(pcp2);
+//                } else {
+//                    int index = corePaths.indexOf(pcp2);
+//                    PhyCorePath pcp = corePaths.get(index);
+//                    pcp.setCapacity(pcl.getCapacity());
+//                }
                 coreLinks.get(i).enableLink();
 
                 backboneLinks.add(coreLinks.get(i));
