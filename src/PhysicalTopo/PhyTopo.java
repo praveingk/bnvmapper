@@ -251,11 +251,11 @@ public class PhyTopo {
                             pcp2.setCapacity(capacity - PCPStatMap.get(pcp2.attachPoint.getID()));
                             System.out.println("After Updating Cap: "+ pcp2.toString());
                             corePaths.add(pcp2);
-                            sw1.addCorePath(pcp2);
+                            sw2.addCorePath(pcp2);
                         }
                     } else {
                         corePaths.add(pcp2);
-                        sw1.addCorePath(pcp2);
+                        sw2.addCorePath(pcp2);
                     }
                 }
 //                if (!corePaths.contains(pcp1)) {

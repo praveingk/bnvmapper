@@ -59,6 +59,11 @@ public class VirtTopo {
         }
     }
 
+    public void findInclusiveLinks() {
+        for (VirtSwitch vSwitch : Switches) {
+            vSwitch.findInclusiveLinks();
+        }
+    }
 
     public void addEdge(VirtSwitch Switch1, VirtSwitch Switch2, Double Bandwidth) {
         int curPort1 = Switch1.getSwitchPorts().size();
@@ -389,10 +394,10 @@ public class VirtTopo {
                         }
                     }
                 }
-            }
-            setTCAMCaps();
+            }setTCAMCaps();
             dumpLinks();
             groupAllLinkPairs();
+            //findInclusiveLinks();
         } catch (Exception e) {
             e.printStackTrace();
         }
