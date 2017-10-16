@@ -1,0 +1,23 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf dashed color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Shuffle Read Time(s)"  offset 0,0.5,0
+set ylabel "CDF" offset 2,0,0
+set key top right
+set terminal pdf
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+set size 1,1
+set yrange [0:1]
+
+set xrange [0:50]
+set xtics 10
+
+set output "Spark_FT_JF_CDF.pdf"
+
+
+plot 'spark_intrarack_fattree_cdf.csv'  using 1:2 smooth bezier with lines lw 3 dashtype 1 lc rgb "#0000FF" title "FatTree", \
+ 'spark_intrarack_flattree_cdf.csv'  using 1:2  smooth bezier with lines  lw 3 dashtype 2 lc rgb "#FF0000" title "Jellyfish", \

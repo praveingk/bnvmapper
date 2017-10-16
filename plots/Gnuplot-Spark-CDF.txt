@@ -1,0 +1,28 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf dashed color enhanced  font 'Helvetica,21'
+# Parameters
+set xlabel "Shuffle Read Time"  offset 0,0.5,0
+set ylabel "CDF" offset 2,0,0
+set key top right
+set terminal pdf
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+set size 1,1
+set yrange [0:1]
+
+set lmargin 5.7
+set rmargin 1.75
+set tmargin 0.25
+set bmargin 2.6
+set xrange [0:100]
+set xtics 10
+
+set output "Spark_CDF.pdf"
+
+
+plot 'spark-time-comparison.csv'  using 3:1 smooth bezier with lines lw 3 dashtype 1 lc rgb "#000000" title "Tree", \
+ 'spark-time-comparison.csv'  using 4:1  smooth bezier with lines  lw 3 dashtype 2 lc rgb "#000000" title "FatTree", \
+ 'spark-time-comparison.csv'  using 2:1 smooth bezier with lines lw 3 dashtype 5 lc rgb "#000000" title "Star"
