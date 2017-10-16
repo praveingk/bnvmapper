@@ -1,0 +1,30 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Time (in sec)"
+#set ylabel "Throughput"
+set ylabel "Ping (RTT)"
+set terminal pdf
+set key top right
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+#set y2tics
+
+set yrange [0:5]
+
+set xrange [1:90]
+
+#set y2range [0:5]
+
+set output "flow-delay-comparison.pdf"
+
+set style rect fc lt -1 fs solid 0.15 noborder
+set obj rect from 30, graph 0 to 60, graph 1
+
+plot 'Loop-bnv/procd_Delay-flow1-ping'  using 1  with lines lw 3 dashtype 11 lc rgb "#00FF00"  title "L- Ping-H2-H4", \
+ 'Covisor/procd_Delay-flow2-ping'  using 1  with lines  lw 3 dashtype 11 lc rgb "#0000FF"  title "C- Ping-H2-H4", \
+ 'Multiswitch-bnv/procd_Delay-flow2-ping'  using 1  with lines  lw 3 dashtype 3 lc rgb "#660033"  title "B- Ping-H2-H4"
+

@@ -1,0 +1,25 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Time (in sec)"
+set ylabel "Throughput"
+set terminal pdf
+set key top left
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+
+
+set yrange [0:1]
+
+set xrange [1:60]
+
+
+set output "Loop-flow-throughput.pdf"
+
+
+
+plot 'procd_loop-flow1-iperf'  using 1  with lines lw 3 dashtype 11 lc rgb "#FF0000" title "Iperf-H1-H3", \
+ 'procd_loop-flow2-iperf'  using 1  with lines lw 3 dashtype 11 lc rgb "#0000FF" title "Iperf-H2-H4"
