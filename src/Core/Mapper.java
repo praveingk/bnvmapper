@@ -35,6 +35,7 @@ public class Mapper {
     HashMap<String, String> switchCon = new HashMap<>();
     HashMap<String, String> sdnswitchCon = new HashMap<>();
 
+    private int backBoneUsed = 0;
     public Mapper(VirtTopo virtualTopo, PhyTopo physicalTopo) {
         this.virtualTopo = virtualTopo;
         this.physicalTopo = physicalTopo;
@@ -740,8 +741,7 @@ public class Mapper {
 //                            switchPortMapper[virtport2Index][phyport2Index]);
 ////                    obj.addTerm(1.0,
 ////                            switchPortMapper[virtport1Index][phyport2Index],
-////                            switchPortMapper[virtport2Index][phyport1Index]);
-//                }
+//                }s
 //            }
 //
 //            // Second Intra-Switch
@@ -1058,8 +1058,8 @@ public class Mapper {
             }
 
 
-            //model.update();
-            //model.setObjective(obj, GRB.MINIMIZE);
+            model.update();
+            model.setObjective(obj, GRB.MINIMIZE);
             model.update();
             model.write("BNVMapper.lp");
 
@@ -1249,55 +1249,83 @@ public class Mapper {
             }
             /* Constraint 4 : Backplane Mapping to all VirtLinks */
 
-            GRBQuadExpr[][] backBone = new GRBQuadExpr[virtualTopo.getSwitches().size()][physicalTopo.getCorePaths().size()];
             for (int i = 0; i < virtualTopo.getSwitches().size(); i++) {
-                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
-                        backBone[i][k] = new GRBQuadExpr();
-                    }
-            }
-            //Y.Y
-            for (int i=0;i<virtualTopo.getSwitches().size();i++) {
                 ArrayList<VirtCoreLink> virtCoreLinks = virtualTopo.getSwitches().get(i).getCoreLinks();
                 ArrayList<VirtHostLink> virtHostLinks = virtualTopo.getSwitches().get(i).getHostLinks();
-                for (VirtHostLink vhl1 : virtHostLinks) {
-                    int vhl1index = virtualTopo.getHostLinks().indexOf(vhl1);
-                    /* Do for all host links2 */
-                    for (VirtHostLink vhl2 : virtHostLinks) {
-                        int vhl2index = virtualTopo.getHostLinks().indexOf(vhl2);
-                        for (int j = 0; j < physicalTopo.getSwitches().size(); j++) { //PS1
-                            PhySwitch mySwitch = physicalTopo.getSwitches().get(j);
-                            PhyCorePath corePath1 = mySwitch.getCorePath();
-                            System.out.println(mySwitch);
-                            System.out.println(corePath1);
-                            ArrayList<PhyHostLink> phyHostLinks = mySwitch.getHostLinks();
-                            for (PhyHostLink phl1 : phyHostLinks) {
-                                int phl1index = physicalTopo.getHostLinks().indexOf(phl1);
-                                for (int k = 0; k < physicalTopo.getSwitches().size(); k++) { //PS2
-                                    PhySwitch dSwitch = physicalTopo.getSwitches().get(k);
-                                    if (mySwitch.equals(dSwitch)) {
-                                        continue;
-                                    }
 
-                                    PhyCorePath corePath2 = dSwitch.getCorePath();
-                                    System.out.println(dSwitch);
-                                    System.out.println(corePath2);
-
-                                    for (PhyHostLink phl2 : dSwitch.getHostLinks()) {
-                                        int phl2index = physicalTopo.getHostLinks().indexOf(phl2);
-                                        int corePath1Index = physicalTopo.getCorePaths().indexOf(corePath1);
-                                        int corePath2Index = physicalTopo.getCorePaths().indexOf(corePath2);
-                                        System.out.println(vhl1index+","+phl1index+","+vhl2index+","+phl2index);
-                                        System.out.println(i+","+corePath2Index);
-                                        backBone[i][corePath1Index].addTerm(1.0, hostlinkMapper[vhl1index][phl1index], hostlinkMapper[vhl2index][phl2index]);
-                                        backBone[i][corePath2Index].addTerm(1.0, hostlinkMapper[vhl1index][phl1index], hostlinkMapper[vhl2index][phl2index]);
-
-                                    }
-                                }
-                            }
-
+                for (int j = 0; j < physicalTopo.getSwitches().size(); j++) {
+                    String st = "BackPlaneSW-" + i + "," + j;
+                    GRBLinExpr samePhySwitch = new GRBLinExpr();
+                    ArrayList<PhyCoreLink> phyCoreLinks = physicalTopo.getSwitches().get(j).getCoreLinks();
+                    ArrayList<PhyHostLink> phyHostLinks = physicalTopo.getSwitches().get(j).getHostLinks();
+                    for (VirtCoreLink vcl : virtCoreLinks) {
+                        for (PhyCoreLink pcl : phyCoreLinks) {
+                            int vclindex = virtualTopo.getCoreLinks().indexOf(vcl);
+                            int pclindex = physicalTopo.getCoreLinks().indexOf(pcl);
+                            samePhySwitch.addTerm(1.0, corelinkMapper[vclindex][pclindex]);
                         }
                     }
+                    for (VirtHostLink vhl : virtHostLinks) {
+                        for (PhyHostLink phl : phyHostLinks) {
+                            int vhlindex = virtualTopo.getHostLinks().indexOf(vhl);
+                            int phlindex = physicalTopo.getHostLinks().indexOf(phl);
+                            samePhySwitch.addTerm(1.0, hostlinkMapper[vhlindex][phlindex]);
+                        }
+                    }
+                    model.addConstr(samePhySwitch, GRB.EQUAL, backplaneMapper[i][j], st);
+                    //model.addConstr(samePhySwitch, GRB.EQUAL, 0, st);
+                    //model.addConstr(backplaneMapper[i][j], GRB.EQUAL, 0, st);
                 }
+            }
+//            GRBQuadExpr[][] backBone = new GRBQuadExpr[virtualTopo.getSwitches().size()][physicalTopo.getCorePaths().size()];
+//            for (int i = 0; i < virtualTopo.getSwitches().size(); i++) {
+//                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
+//                        backBone[i][k] = new GRBQuadExpr();
+//                    }
+//            }
+//            //Y.Y
+//            for (int i=0;i<virtualTopo.getSwitches().size();i++) {
+//                ArrayList<VirtCoreLink> virtCoreLinks = virtualTopo.getSwitches().get(i).getCoreLinks();
+//                ArrayList<VirtHostLink> virtHostLinks = virtualTopo.getSwitches().get(i).getHostLinks();
+//                for (VirtHostLink vhl1 : virtHostLinks) {
+//                    int vhl1index = virtualTopo.getHostLinks().indexOf(vhl1);
+//                    /* Do for all host links2 */
+//                    for (VirtHostLink vhl2 : virtHostLinks) {
+//                        int vhl2index = virtualTopo.getHostLinks().indexOf(vhl2);
+//                        for (int j = 0; j < physicalTopo.getSwitches().size(); j++) { //PS1
+//                            PhySwitch mySwitch = physicalTopo.getSwitches().get(j);
+//                            PhyCorePath corePath1 = mySwitch.getCorePath();
+//                            System.out.println(mySwitch);
+//                            System.out.println(corePath1);
+//                            ArrayList<PhyHostLink> phyHostLinks = mySwitch.getHostLinks();
+//                            for (PhyHostLink phl1 : phyHostLinks) {
+//                                int phl1index = physicalTopo.getHostLinks().indexOf(phl1);
+//                                for (int k = 0; k < physicalTopo.getSwitches().size(); k++) { //PS2
+//                                    PhySwitch dSwitch = physicalTopo.getSwitches().get(k);
+//                                    if (mySwitch.equals(dSwitch)) {
+//                                        continue;
+//                                    }
+//
+//                                    PhyCorePath corePath2 = dSwitch.getCorePath();
+//                                    System.out.println(dSwitch);
+//                                    System.out.println(corePath2);
+//
+//                                    for (PhyHostLink phl2 : dSwitch.getHostLinks()) {
+//                                        int phl2index = physicalTopo.getHostLinks().indexOf(phl2);
+//                                        int corePath1Index = physicalTopo.getCorePaths().indexOf(corePath1);
+//                                        int corePath2Index = physicalTopo.getCorePaths().indexOf(corePath2);
+//                                        System.out.println(vhl1index+","+phl1index+","+vhl2index+","+phl2index);
+//                                        System.out.println(i+","+corePath2Index);
+//                                        backBone[i][corePath1Index].addTerm(1.0, hostlinkMapper[vhl1index][phl1index], hostlinkMapper[vhl2index][phl2index]);
+//                                        backBone[i][corePath2Index].addTerm(1.0, hostlinkMapper[vhl1index][phl1index], hostlinkMapper[vhl2index][phl2index]);
+//
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//                }
 //                //X.Y and Y.Y
 //                for (VirtCoreLink vcl1 : virtCoreLinks) {
 //                    int vcl1index = virtualTopo.getCoreLinks().indexOf(vcl1);
@@ -1361,14 +1389,16 @@ public class Mapper {
 //                        }
 //                    }
 //                }
-                System.out.println("Iter : " + i);
-                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
-                        String st = "Z[" + i  + "," + k + "]";
-                        model.addQConstr(backBone[i][k], GRB.EQUAL, backplaneLinkMapper[i][k], st);
-                    }
+//                   System.out.println("Iter : " + i);
+//                    for (int k = 0; k < physicalTopo.getCorePaths().size(); k++) {
+//                        String st = "Z[" + i  + "," + k + "]";
+//                        model.addQConstr(backBone[i][k], GRB.EQUAL, backplaneLinkMapper[i][k], st);
+//                    }
+//
+//
+//            }
 
 
-            }
 //            for (int i=0;i<virtualTopo.getSwitches().size();i++) {
 //
 //                for (int j=0;j<physicalTopo.getCorePaths().size();j++) {
@@ -1432,24 +1462,24 @@ public class Mapper {
             /*
              * Alternate Objective : Minimize the number backbone links used.
              */
-            System.out.println("Minimize Usage of Below links..");
-            GRBLinExpr obj = new GRBLinExpr();
-            for (i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
-                for (PhyCoreLink pcl : physicalTopo.getBackboneLinks()) {
-                    //System.out.println(pcl.toString());
-                    int j = physicalTopo.getCoreLinks().indexOf(pcl);
-                    obj.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(), corelinkMapper[i][j]);
-                }
-            }
-            for (i = 0; i < virtualTopo.getSwitches().size(); i++) {
-                for (int j=0;j< physicalTopo.getCorePaths().size();j++) {
-                    //System.out.println(pcl.toString());
-                    obj.addTerm(1.0, backplaneLinkMapper[i][j]);
-                }
-            }
+//            System.out.println("Minimize Usage of Below links..");
+//            GRBLinExpr obj = new GRBLinExpr();
+//            for (i = 0; i < virtualTopo.getCoreLinks().size(); i++) {
+//                for (PhyCoreLink pcl : physicalTopo.getBackboneLinks()) {
+//                    //System.out.println(pcl.toString());
+//                    int j = physicalTopo.getCoreLinks().indexOf(pcl);
+//                    obj.addTerm(virtualTopo.getCoreLinks().get(i).getBandwidth(), corelinkMapper[i][j]);
+//                }
+//            }
+//            for (i = 0; i < virtualTopo.getSwitches().size(); i++) {
+//                for (int j=0;j< physicalTopo.getCorePaths().size();j++) {
+//                    //System.out.println(pcl.toString());
+//                    obj.addTerm(1.0, backplaneLinkMapper[i][j]);
+//                }
+//            }
 
             model.update();
-            model.setObjective(obj, GRB.MINIMIZE);
+            //model.setObjective(obj, GRB.MINIMIZE);
             model.update();
             model.write("BNVMapper.lp");
 
@@ -2730,6 +2760,10 @@ public class Mapper {
         }
     }
 
+    public int getBackboneAlloc() throws  Exception {
+        return backBoneUsed;
+    }
+
     private void printAndStoreSolutionLinkBased(GRBVar[][] corelinkMapper, GRBVar[][] hostlinkMapper) throws Exception {
         BufferedWriter bw = new BufferedWriter((new FileWriter("backboneStats")));
         HashMap<String, Double> backboneStatMap = new HashMap<>();
@@ -2887,6 +2921,9 @@ public class Mapper {
                         //System.out.println(virtualTopo.getCoreLinks().get(i).getEndPoints()[1].toString() + " Mapped to " + physicalTopo.getCoreLinks().get(j).getEndPoints()[1].toString());
                         switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[0], physicalTopo.getCoreLinks().get(j).getEndPoints()[0]);
                         switchPortMapping.put(virtualTopo.getCoreLinks().get(i).getEndPoints()[1], physicalTopo.getCoreLinks().get(j).getEndPoints()[1]);
+                        if (physicalTopo.getBackboneLinks().contains(physicalTopo.getCoreLinks().get(j))) {
+                            backBoneUsed++;
+                        }
 
                     }
                 }

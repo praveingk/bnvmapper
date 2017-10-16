@@ -244,16 +244,16 @@ HL:pc22e:SwitchE/22:1
 HL:pc23e:SwitchE/23:1
 HL:pc24e:SwitchE/24:1
 #Core Physical Links
-CL:SwitchA/49:SwitchB/49:20
-CL:SwitchA/49:SwitchC/49:20
-CL:SwitchA/49:SwitchD/49:20
-CL:SwitchB/49:SwitchC/49:20
-CL:SwitchB/49:SwitchD/49:20
-CL:SwitchC/49:SwitchD/49:20
-CL:SwitchA/49:SwitchE/49:20
-CL:SwitchB/49:SwitchE/49:20
-CL:SwitchC/49:SwitchE/49:20
-CL:SwitchD/49:SwitchE/49:20
+CL:SwitchA/49:SwitchB/49:40
+CL:SwitchA/49:SwitchC/49:40
+CL:SwitchA/49:SwitchD/49:40
+CL:SwitchB/49:SwitchC/49:40
+CL:SwitchB/49:SwitchD/49:40
+CL:SwitchC/49:SwitchD/49:40
+CL:SwitchA/49:SwitchE/49:40
+CL:SwitchB/49:SwitchE/49:40
+CL:SwitchC/49:SwitchE/49:40
+CL:SwitchD/49:SwitchE/49:40
 #Looped Links
 CL:SwitchA/25:SwitchA/26:1
 CL:SwitchA/27:SwitchA/28:1

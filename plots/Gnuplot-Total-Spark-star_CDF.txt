@@ -1,0 +1,26 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhanced  font 'Helve7ica,14'
+set term pdf dashed color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Shuffle Read Completion Time"
+set ylabel "CDF"
+set key top right
+set terminal pdf
+set datafile separator ","
+
+
+
+set yrange [0:1]
+set xrange [0:100]
+
+
+set output "Spark-Star-fidelity_CDF.pdf"
+
+
+plot 'spark-expts/1star-cdf.csv'  using 1:2  with lines lw 3 dashtype 11 lc rgb "#e7298a" title "Star (Single Switch)", \
+ 'spark-expts/multi-star-cdf.csv'  using 1:2   with lines  lw 3 dashtype 7 lc rgb "#525252" title "Star (Multi Switch)", \
+ 'spark-expts/spark_clos_loop.csv'  using 1:2  with lines lw 3 dashtype 11 lc rgb "#1f78b4" title "Clos (Single Switch)", \
+ 'spark-expts/spark_clos_multi.csv'  using 1:2   with lines  lw 3 dashtype 7 lc rgb "#33a02c" title "Clos (Multi Switch)"
+
+

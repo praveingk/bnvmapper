@@ -415,9 +415,17 @@ public class PhyTopo {
                             if (isNCLSwitchPort(tokens[i])) {
                                 String switchPort = tokens[i].split(":")[0];
                                 if (switchPort.equals(linkEndPoint)) continue;
-                                //System.out.println(" Connected to "+ switchPort+ " token ="+ i);
+                                System.out.println(" Creating a core link b/w "+ switchPort +" and "+  linkEndPoint);
                                 PhySwitchPort psp = SwitchPortMapper.get(switchPort);
-                                if (psp == null) break;
+                                if (psp == null) {
+                                    System.out.println(switchPort+" is null");
+                                    break;
+                                }
+
+                                if (SwitchPortMapper.get(linkEndPoint) ==null) {
+                                    System.out.println(linkEndPoint+" is null");
+                                    break;
+                                }
                                 String linkID = "CoreLink"+coreLinkNum++;
                                 PhyCoreLink pcl = new PhyCoreLink(linkID, psp, SwitchPortMapper.get(linkEndPoint));
                                 pcl.setCapacity((double)1);

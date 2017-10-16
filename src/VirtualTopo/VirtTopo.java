@@ -46,6 +46,10 @@ public class VirtTopo {
         for (int i=0;i< this.Switches.size();i++) {
             VirtSwitch mySwitch = this.Switches.get(i);
 
+            System.out.println(mySwitch.getID());
+            if (mySwitch.getSwitchPorts().size() == 0) {
+                continue;
+            }
             int indivTcam = Math.round(mySwitch.getTCAMCapacity() / mySwitch.getSwitchPorts().size());
             for (int j=0;j< mySwitch.getSwitchPorts().size();j++) {
                 mySwitch.getSwitchPorts().get(j).setTCAM(indivTcam);
@@ -113,6 +117,8 @@ public class VirtTopo {
         return switchPorts.indexOf(mySwitchPort);
     }
 
+
+
     public void loadRandomGraphTopo(int numSwitches, int numLinks) {
         int SwitchRuleSize = 100;
         System.out.println("Creating a random graph with "+ numSwitches +" and link : "+ numLinks);
@@ -125,7 +131,27 @@ public class VirtTopo {
             System.out.println(mySwitch.toString());
         }
         Random r = new Random();
-        for (int i=0;i< numLinks;i++) {
+        for (int l=0;l< numSwitches;l++) {
+            int p = (l+1)%numSwitches;
+            String switch1 = "Switch" + l;
+            String switch2 = "Switch" + p;
+            String linkholder = switch1 + switch2;
+            String linkholder2 = switch2+ switch1;
+            if (switch1.equals(switch2)) {
+                continue;
+            }
+            if (links.contains(linkholder) || links.contains(linkholder2)) {
+                continue;
+            }
+            links.add(linkholder);
+            links.add(linkholder2);
+            if (SwitchMapper.get(switch1) == null) {
+                System.out.println(switch1+"  is null");
+            }
+            addEdge(SwitchMapper.get(switch1), SwitchMapper.get(switch2), 1.0);
+            System.out.println("Created link between "+ switch1+ " and "+ switch2);
+        }
+        for (int i=numSwitches-1;i< numLinks;i++) {
             while(true) {
                 String switch1 = "Switch" + r.nextInt(numSwitches);
                 String switch2 = "Switch" + r.nextInt(numSwitches);
@@ -285,6 +311,72 @@ public class VirtTopo {
             System.out.println("-----------------------------------");
         }
     }
+
+    public void loadVirtTopologyZoo (String virtTopoFile) {
+
+        try {
+            BufferedReader br = new BufferedReader((new FileReader(virtTopoFile)));
+            String line;
+            int hostLinkNum = 0;
+            int coreLinkNum = 0;
+            HashMap<String, Integer> SwitchPortMap = new HashMap<>();
+            // Need One More pass for reading the switches and Ports
+            while ((line = br.readLine()) != null) {
+                //System.out.println(line);
+                if (line.trim().equals("node [")) {
+                    // Its a Switch
+                    String switchName = br.readLine().split(" ")[5];
+                    int tcap = 10;
+                    VirtSwitch ps = new VirtSwitch(switchName);
+                    ps.setTcamCapacity(tcap);
+                    Switches.add(ps);
+                    SwitchMapper.put(switchName, ps);
+                    System.out.println(ps.toString());
+                }
+                if (line.trim().equals("edge [")) {
+                    String node1 = br.readLine().split(" ")[5];
+                    String node2 = br.readLine().split(" ")[5];
+                    int n1port = 0;
+                    int n2port = 0;
+                    VirtSwitch node1Switch = SwitchMapper.get(node1);
+                    VirtSwitch node2Switch = SwitchMapper.get(node2);
+
+                    if (SwitchPortMap.containsKey(node1)) {
+                        n1port = SwitchPortMap.get(node1) + 1;
+                    }
+                    if (SwitchPortMap.containsKey(node2)) {
+                        n2port = SwitchPortMap.get(node2) + 1;
+                    }
+                    VirtSwitchPort vsp1 = new VirtSwitchPort(node1+"p"+n1port, node1Switch);
+                    SwitchPortMapper.put(node1+"p"+n1port, vsp1);
+                    VirtSwitchPort vsp2 = new VirtSwitchPort(node2+"p"+n2port, node2Switch);
+                    SwitchPortMapper.put(node2+"p"+n2port, vsp2);
+                    SwitchPortMap.put(node1, n1port);
+                    SwitchPortMap.put(node2, n2port);
+                    System.out.println("Creating link b/w "+ vsp1.toString() + " and "+ vsp2.toString());
+                    VirtCoreLink vcl = new VirtCoreLink("link"+coreLinkNum++, vsp1, vsp2);
+                    coreLinks.add(vcl);
+                    vcl.setBandWidth(1.0);
+                    System.out.println(vcl.toString());
+                    vsp1.getParentSwitch().addCoreLink(vcl);
+                            /* Below code is only for link mapper */
+                    if (Global.duplex == 1) {
+                        VirtCoreLink vclrev = new VirtCoreLink("link"+coreLinkNum++, vsp2, vsp1);
+                        vclrev.setIsRev();
+                        coreLinks.add(vclrev);
+                        vclrev.setBandWidth(1.0);
+                        System.out.println(vclrev.toString());
+                        vsp2.getParentSwitch().addCoreLink(vclrev);
+                    }
+                }
+            }
+            setTCAMCaps();
+            dumpLinks();
+            groupAllLinkPairs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void loadVirtTopologyNCL (String phyTopoFile) {
         System.out.println("Loading Virtual Topology..");
         try {
@@ -309,7 +401,7 @@ public class VirtTopo {
                         if (SwitchMapper.containsKey(linkName)) {
                             ps = SwitchMapper.get(linkName);
                         } else {
-                            ps = new VirtSwitch(linkName);
+                            ps = new  VirtSwitch(linkName);
                             ps.setTcamCapacity(100);
                             Switches.add(ps);
                             SwitchMapper.put(linkName, ps);
@@ -394,7 +486,8 @@ public class VirtTopo {
                         }
                     }
                 }
-            }setTCAMCaps();
+            }
+            setTCAMCaps();
             dumpLinks();
             groupAllLinkPairs();
             //findInclusiveLinks();
