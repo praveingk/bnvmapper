@@ -19,11 +19,15 @@ public class PhyCoreLink {
         this.ID = ID;
         endPoints[0] = sp1;
         endPoints[1] = sp2;
-        hc = endPoints[0]+"-"+endPoints[1];
+        hc = endPoints[0].getID()+"-"+endPoints[1].getID();
         setLinkType();
         isEnable = false;
     }
 
+
+    public String getLinkIdentifier() {
+        return hc;
+    }
     public void disableLink() {
         isEnable = false;
     }
@@ -59,7 +63,14 @@ public class PhyCoreLink {
             return true;
         }
         /* Also the reverse, Since the link is duplex by design */
-        if (this.endPoints[0].equals(compareVCL.endPoints[1]) && this.endPoints[1].equals(compareVCL.endPoints[0])){
+//        if (this.endPoints[0].equals(compareVCL.endPoints[1]) && this.endPoints[1].equals(compareVCL.endPoints[0])){
+//            return true;
+//        }
+        return false;
+    }
+
+    public boolean isRev(PhyCoreLink comparePCL) {
+        if (this.endPoints[0].equals(comparePCL.endPoints[1]) && this.endPoints[1].equals(comparePCL.endPoints[0])){
             return true;
         }
         return false;
@@ -74,4 +85,5 @@ public class PhyCoreLink {
     public double getCapacity() {
         return this.Capacity;
     }
+
 }

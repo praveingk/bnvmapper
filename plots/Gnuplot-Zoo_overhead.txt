@@ -1,0 +1,23 @@
+# Script that ploabilene frequeovery of Similar Journey count
+#set terminal posabilenecript eps enhaovered dashed color font 'Helvetica,14'
+#set term pdf dashed monochrome enhaovered  font 'Helvetica,14'
+set term pdf dashed color enhanced  font 'Helvetica,17'
+# Parameters
+set xlabel "Number of Virt Links"
+set ylabel "Percentage Core Bandwidth Utlization"
+set key center right
+set terminal pdf
+set datafile separator ","
+set grid ytics lc rgb "#000000" lw 1 lt 0
+set grid xtics lc rgb "#000000" lw 1 lt 0
+
+
+set yrange [0:100]
+
+set xrange [10:320]
+
+
+set output "Zoo_overhead.pdf"
+
+plot 'bnvmapper_zoo_noloop_stat.csv'  using 1:3  with lines lw 3 dashtype  5 lc rgb "#000000" title "No loops", \
+'bnvmapper_zoo_loop_stat_cons.csv'  using 1:2   with lines lw 3 dashtype 11 lc rgb "#000000" title "With loops",\

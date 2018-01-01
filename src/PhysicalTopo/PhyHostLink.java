@@ -1,5 +1,8 @@
 package PhysicalTopo;
 
+import VirtualTopo.VirtHost;
+import VirtualTopo.VirtSwitchPort;
+
 /**
  * Created by pravein on 15/12/16.
  */
@@ -35,5 +38,17 @@ public class PhyHostLink {
 
     public void setCapacity(Double Capacity) {
         this.Capacity = Capacity;
+    }
+
+    public PhyHost getHostPort(){
+        return hostPort;
+    }
+
+    public String getID(){
+        return ID;
+    }
+
+    public PhySwitchPort getSwitchPort() {
+        return switchPort;
     }
 }

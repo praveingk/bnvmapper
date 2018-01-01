@@ -18,8 +18,8 @@ set xrange [2:8]
 
 set xtics 2
 
-set output "FatTree_overhead.pdf"
+set output "FatTree_overhead_new.pdf"
 
-plot 'fattree_overhead.csv'  using 1:2   with linespoints  lw 3 pt 5 dashtype  5 lc rgb "#000000" title "No loops", \
- 'fattree_overhead.csv'  using 1:3   with linespoints  lw 3 pt 11 dashtype  11 lc rgb "#000000" title "With loops", \
+plot 'fattree_overhead_noloop.csv'  using 1:2   with linespoints  lw 3 pt 5 dashtype  5 lc rgb "#000000" title "No loops", \
+ 'fattree_overhead_loop.csv'  using 1:2   with linespoints  lw 3 pt 11 dashtype  11 lc rgb "#000000" title "With loops", \
 

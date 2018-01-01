@@ -1,0 +1,24 @@
+# Script that plots frequency of Similar Journey count
+#set terminal postscript eps enhanced dashed color font 'Helvetica,14'
+#set term cairopdf dashed monochrome enhanced  font 'Helvetica,14'
+set term pdf  enhanced color enhanced  font 'Helvetica,17'
+# Parameter
+set xlabel ""
+set ylabel "Avg Reduce task completion time (sec)"
+set key off
+
+set datafile separator ","
+
+set style fill solid 1.0 border -1
+set style histogram errorbars gap 2 lw 1
+
+
+#set yrange [0:1]
+
+#set xrange [0:100]
+#set xtics 10
+
+set output "Hadoop-mr-time.pdf"
+
+
+plot 'hadoop-time-comparison.csv'  using 2:3:4:xtic(1)  with hist  lw 3 lt 1 lc rgb "0xff0000"

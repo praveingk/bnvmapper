@@ -12,6 +12,7 @@ public class PhySwitchPort {
         this.parentSwitch = parentSwitch;
     }
 
+
     public String getID() {
         return ID;
     }
@@ -36,4 +37,6 @@ public class PhySwitchPort {
     public String toString() {
         return "PSP:"+ID;
     }
+
+
 }

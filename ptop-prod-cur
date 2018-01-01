@@ -1,0 +1,479 @@
+node HPCore1 switch:1 *lan:* -  -
+node HPCore2 switch:1 *lan:* -  -
+node HPClus1Expt switch:1 *lan:* -  -
+node HPClus2Expt switch:1 *lan:* -  -
+node HPClus3Expt switch:1 *lan:* -  -
+node HPClus1SDN switch:1 *lan:* -  -
+node HPClus2SDN switch:1 *lan:* -  -
+node HPClus3SDN switch:1 *lan:* -  -
+node ofport14b ofedge:1 - connected-to-pc14b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport18b ofedge:1 - connected-to-pc18b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport37a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport38a:0.0 -
+node ofport30b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport29b:0.0 -
+node ofport47d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport48d:0.0 -
+node ofport43d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport44d:0.0 -
+node ofport31d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport32d:0.0 -
+node ofport29d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport30d:0.0 -
+node ofport14a ofedge:1 - connected-to-pc14a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport36b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport35b:0.0 -
+node ofport30a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport29a:0.0 -
+node ofport36a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport35a:0.0 -
+node ofport40a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport39a:0.0 -
+node pc13d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus1Expt:0.0 connected-to-HPClus1Ctrl:0.0 connected-to-ofport13d:0.0 -
+node ofport21a ofedge:1 - connected-to-pc21a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport32a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport31a:0.0 -
+node ofport11a ofedge:1 - connected-to-pc11a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport48b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport47b:0.0 -
+node ofport46d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport45d:0.0 -
+node ofport26d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport25d:0.0 -
+node ofport36d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport35d:0.0 -
+node ofport8d ofedge:1 - connected-to-pc8d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport101a ofcorelink:1 ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport101d:0.0 connected-to-ofport101b:0.0 -
+node pc18a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus2Expt:0.0 connected-to-ofport18a:0.0 connected-to-HPClus2Ctrl:0.0 -
+node ofport21b ofedge:1 - connected-to-pc21b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport28d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport27d:0.0 -
+node ofport101d ofcorelink:1 ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport101a:0.0 connected-to-ofport101b:0.0 -
+node ofport17b ofedge:1 - connected-to-pc17b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport15b ofedge:1 - connected-to-pc15b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport14d ofedge:1 - connected-to-pc14d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport45b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport46b:0.0 -
+node ofport23d ofedge:1 - connected-to-pc23d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport42d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport41d:0.0 -
+node ofport29a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport30a:0.0 -
+node ofport19b ofedge:1 - connected-to-pc19b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport17d ofedge:1 - connected-to-pc17d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport2b ofedge:1 - connected-to-pc2b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport15d ofedge:1 - connected-to-pc15d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport16a ofedge:1 - connected-to-pc16a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport1d ofedge:1 - connected-to-pc1d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport10d ofedge:1 - connected-to-pc10d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport18a ofedge:1 - connected-to-pc18a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc7d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-ofport7d:0.0 connected-to-HPClus1Expt:0.0 connected-to-HPClus1Ctrl:0.0 connected-to-NotConnected:0.0 -
+node pc16a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-ofport16a:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-HPClus2Expt:0.0 -
+node ofport7b ofedge:1 - connected-to-pc7b:0.0 connected-to-HPClus3SDN:0.0 -
+node pc12a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-ofport12a:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-HPClus2Expt:0.0 prereserved:0.9 -
+node pc9b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus3Ctrl:0.0 connected-to-HPClus3Expt:0.0 connected-to-NotConnected:0.0 connected-to-ofport9b:0.0 -
+node ofport38b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport37b:0.0 -
+node pc19b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus3Ctrl:0.0 connected-to-HPClus3Expt:0.0 connected-to-NotConnected:0.0 connected-to-ofport19b:0.0 -
+node pc17a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus2Expt:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-ofport17a:0.0 -
+node ofport12b ofedge:1 - connected-to-pc12b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport9a ofedge:1 - connected-to-pc9a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport10a ofedge:1 - connected-to-pc10a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport35d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport36d:0.0 -
+node ofport4a ofedge:1 - connected-to-pc4a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport7a ofedge:1 - connected-to-pc7a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport45a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport46a:0.0 -
+node ofport41b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport42b:0.0 -
+node ofport16d ofedge:1 - connected-to-pc16d:0.0 connected-to-HPClus1SDN:0.0 -
+node pc6d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus1Ctrl:0.0 connected-to-HPClus1Expt:0.0 connected-to-NotConnected:0.0 connected-to-ofport6d:0.0 -
+node ofport6a ofedge:1 - connected-to-pc6a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc17d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus1Ctrl:0.0 connected-to-ofport17d:0.0 connected-to-HPClus1Expt:0.0 connected-to-NotConnected:0.0 -
+node ofport28b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport27b:0.0 -
+node ofport45d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport46d:0.0 -
+node ofport22b ofedge:1 - connected-to-pc22b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport24a ofedge:1 - connected-to-pc24a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc20d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus1Expt:0.0 connected-to-HPClus1Ctrl:0.0 connected-to-ofport20d:0.0 -
+node ofport31b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport32b:0.0 -
+node ofport29b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport30b:0.0 -
+node ofport12d ofedge:1 - connected-to-pc12d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport5d ofedge:1 - connected-to-pc5d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport11d ofedge:1 - connected-to-pc11d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport9b ofedge:1 - connected-to-pc9b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport30d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport29d:0.0 -
+node ofport2a ofedge:1 - connected-to-pc2a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc2d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus1Ctrl:0.0 connected-to-ofport2d:0.0 connected-to-HPClus1Expt:0.0 connected-to-NotConnected:0.0 -
+node ofport17a ofedge:1 - connected-to-pc17a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc15a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus2Expt:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-NotConnected:0.0 connected-to-ofport15a:0.0 -
+node ofport47a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport48a:0.0 -
+node ofport31a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport32a:0.0 -
+node ofport43a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport44a:0.0 -
+node pc5a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus2Expt:0.0 connected-to-ofport5a:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-NotConnected:0.0 -
+node ofport33b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport34b:0.0 -
+node pc4d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus1Ctrl:0.0 connected-to-NotConnected:0.0 connected-to-HPClus1Expt:0.0 connected-to-ofport4d:0.0 -
+node pc7b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-ofport7b:0.0 connected-to-NotConnected:0.0 connected-to-HPClus3Ctrl:0.0 connected-to-HPClus3Expt:0.0 -
+node ofport48a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport47a:0.0 -
+node ofport25a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport26a:0.0 -
+node ofport23a ofedge:1 - connected-to-pc23a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport39b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport40b:0.0 -
+node pc24d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus1Expt:0.0 connected-to-ofport24d:0.0 connected-to-HPClus1Ctrl:0.0 -
+node ofport47b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport48b:0.0 -
+node ofport46a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport45a:0.0 -
+node ofport1a ofedge:1 - connected-to-pc1a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc14b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus3Expt:0.0 connected-to-NotConnected:0.0 connected-to-HPClus3Ctrl:0.0 connected-to-ofport14b:0.0 -
+node ofport42a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport41a:0.0 -
+node pc13a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus2Ctrl:0.0 connected-to-HPClus2Expt:0.0 connected-to-ofport13a:0.0 connected-to-NotConnected:0.0 -
+node ofport19d ofedge:1 - connected-to-pc19d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport5b ofedge:1 - connected-to-pc5b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport35b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport36b:0.0 -
+node ofport27d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport28d:0.0 -
+node ofport22a ofedge:1 - connected-to-pc22a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport40d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport39d:0.0 -
+node ofport32d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport31d:0.0 -
+node pc9a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-ofport9a:0.0 connected-to-HPClus2Expt:0.0 connected-to-HPClus2Ctrl:0.0 -
+node ofport13b ofedge:1 - connected-to-pc13b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport38d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport37d:0.0 -
+node ofport37d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport38d:0.0 -
+node ofport3d ofedge:1 - connected-to-pc3d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport35a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport36a:0.0 -
+node pc5b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus3Expt:0.0 connected-to-ofport5b:0.0 connected-to-HPClus3Ctrl:0.0 -
+node ofport3b ofedge:1 - connected-to-pc3b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport21d ofedge:1 - connected-to-pc21d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport18d ofedge:1 - connected-to-pc18d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport20b ofedge:1 - connected-to-pc20b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport4b ofedge:1 - connected-to-pc4b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport16b ofedge:1 - connected-to-pc16b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport13a ofedge:1 - connected-to-pc13a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport9d ofedge:1 - connected-to-pc9d:0.0 connected-to-HPClus1SDN:0.0 -
+node pc22b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-ofport22b:0.0 connected-to-NotConnected:0.0 connected-to-HPClus3Expt:0.0 connected-to-HPClus3Ctrl:0.0 -
+node ofport7d ofedge:1 - connected-to-pc7d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport24b ofedge:1 - connected-to-pc24b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport101b ofcorelink:1 ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport101a:0.0 connected-to-ofport101d:0.0 -
+node pc6b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus3Expt:0.0 connected-to-HPClus3Ctrl:0.0 connected-to-NotConnected:0.0 connected-to-ofport6b:0.0 -
+node ofport20d ofedge:1 - connected-to-pc20d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport40b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport39b:0.0 -
+node ofport33d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport34d:0.0 -
+node ofport26a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport25a:0.0 -
+node ofport12a ofedge:1 - connected-to-pc12a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport4d ofedge:1 - connected-to-pc4d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport11b ofedge:1 - connected-to-pc11b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport41d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport42d:0.0 -
+node ofport2d ofedge:1 - connected-to-pc2d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport34b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport33b:0.0 -
+node ofport19a ofedge:1 - connected-to-pc19a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport5a ofedge:1 - connected-to-pc5a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport27a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport28a:0.0 -
+node pc20b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-ofport20b:0.0 connected-to-HPClus3Expt:0.0 connected-to-HPClus3Ctrl:0.0 -
+node ofport1b ofedge:1 - connected-to-pc1b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport28a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport27a:0.0 -
+node pc22a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-ofport22a:0.0 connected-to-NotConnected:0.0 connected-to-HPClus2Expt:0.0 connected-to-HPClus2Ctrl:0.0 -
+node ofport32b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport31b:0.0 -
+node ofport43b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport44b:0.0 -
+node ofport44d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport43d:0.0 -
+node pc4a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus2Expt:0.0 connected-to-ofport4a:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-NotConnected:0.0 -
+node ofport44a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport43a:0.0 -
+node pc13b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus3Ctrl:0.0 connected-to-HPClus3Expt:0.0 connected-to-NotConnected:0.0 connected-to-ofport13b:0.0 -
+node ofport6b ofedge:1 - connected-to-pc6b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport39d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport40d:0.0 -
+node pc7a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-HPClus2Expt:0.0 connected-to-ofport7a:0.0 -
+node ofport15a ofedge:1 - connected-to-pc15a:0.0 connected-to-HPClus2SDN:0.0 -
+node pc2a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus2Ctrl:0.0 connected-to-HPClus2Expt:0.0 connected-to-ofport2a:0.0 -
+node pc1a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-HPClus2Expt:0.0 connected-to-ofport1a:0.0 connected-to-HPClus2Ctrl:0.0 -
+node ofport25b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport26b:0.0 -
+node ofport27b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport28b:0.0 -
+node ofport38a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport37a:0.0 -
+node pc21b SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-ofport21b:0.0 connected-to-NotConnected:0.0 connected-to-HPClus3Expt:0.0 connected-to-HPClus3Ctrl:0.0 -
+node ofport34d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport33d:0.0 -
+node ofport44b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport43b:0.0 -
+node ofport48d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport47d:0.0 -
+node ovx *ovxctl:* - connected-to-HPCore1:0.0 -
+node ofport34a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport33a:0.0 -
+node ofport22d ofedge:1 - connected-to-pc22d:0.0 connected-to-HPClus1SDN:0.0 -
+node pc24a SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-NotConnected:0.0 connected-to-ofport24a:0.0 connected-to-HPClus2Expt:0.0 connected-to-HPClus2Ctrl:0.0 -
+node ofport6d ofedge:1 - connected-to-pc6d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport3a ofedge:1 - connected-to-pc3a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport33a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport34a:0.0 -
+node ofport20a ofedge:1 - connected-to-pc20a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport8a ofedge:1 - connected-to-pc8a:0.0 connected-to-HPClus2SDN:0.0 -
+node ofport37b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport38b:0.0 -
+node ofport42b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport41b:0.0 -
+node ofport46b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport45b:0.0 -
+node ofport26b ofcore:1 - connected-to-HPClus3SDN:0.0 connected-to-ofport25b:0.0 -
+node ofport25d ofcore:1 - connected-to-HPClus1SDN:0.0 connected-to-ofport26d:0.0 -
+node ofport24d ofedge:1 - connected-to-pc24d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport23b ofedge:1 - connected-to-pc23b:0.0 connected-to-HPClus3SDN:0.0 -
+node ofport13d ofedge:1 - connected-to-pc13d:0.0 connected-to-HPClus1SDN:0.0 -
+node ofport41a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport42a:0.0 -
+node ofport10b ofedge:1 - connected-to-pc10b:0.0 connected-to-HPClus3SDN:0.0 -
+node pc15d SystemX:1 pc:1 delay:2 delay-SystemX:2 ofcontrol:1 - OS-10007:0 OS-10009:0 OS-10005:0 OS-10008:0 OS-10006:0 OS-10010:0 OS-10011:0 OS-10030:0 OS-10036:0 OS-10040:0 OS-10043:0 OS-10048:0 OS-10067:0 OS-10083:0 OS-10066:0 OS-10084:0 OS-10068:0 OS-10069:0 OS-10070:0 OS-10071:0 OS-10072:0 OS-10073:0 OS-10074:0 OS-10075:0 OS-10090:0 OS-10089:0 OS-10096:0 OS-10000:0 OS-10001:0 connected-to-HPClus1Expt:0.0 connected-to-NotConnected:0.0 connected-to-HPClus1Ctrl:0.0 connected-to-ofport15d:0.0 -
+node ofport39a ofcore:1 - connected-to-HPClus2SDN:0.0 connected-to-ofport40a:0.0 -
+node ofport8b ofedge:1 - connected-to-pc8b:0.0 connected-to-HPClus3SDN:0.0 -
+link link-pc7d:eth3-ofport7d:eth0 pc7d:pc7d/eth3 ofport7d:eth0 1000000 0 0 1 ethernet ethernet-ofport7d ethernet-bge ethernet-1000000
+link link-pc7d:eth0-HPClus1Expt:(null) pc7d:pc7d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc7d:eth1-HPClus1Expt:(null) pc7d:pc7d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc6d:eth1-HPClus1Expt:(null) pc6d:pc6d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc6d:eth0-HPClus1Expt:(null) pc6d:pc6d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc6d:eth3-ofport6d:eth0 pc6d:pc6d/eth3 ofport6d:eth0 1000000 0 0 1 ethernet ethernet-ofport6d ethernet-bge ethernet-1000000
+link link-pc4d:eth0-HPClus1Expt:(null) pc4d:pc4d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc4d:eth3-ofport4d:eth0 pc4d:pc4d/eth3 ofport4d:eth0 1000000 0 0 1 ethernet ethernet-ofport4d ethernet-bge ethernet-1000000
+link link-pc4d:eth1-HPClus1Expt:(null) pc4d:pc4d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc2d:eth3-ofport2d:eth0 pc2d:pc2d/eth3 ofport2d:eth0 1000000 0 0 1 ethernet ethernet-ofport2d ethernet-bge ethernet-1000000
+link link-pc2d:eth1-HPClus1Expt:(null) pc2d:pc2d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc2d:eth0-HPClus1Expt:(null) pc2d:pc2d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc2a:eth1-HPClus2Expt:(null) pc2a:pc2a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc2a:eth3-ofport2a:eth0 pc2a:pc2a/eth3 ofport2a:eth0 1000000 0 0 1 ethernet ethernet-ofport2a ethernet-bge ethernet-1000000
+link link-pc2a:eth0-HPClus2Expt:(null) pc2a:pc2a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc4a:eth1-HPClus2Expt:(null) pc4a:pc4a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc4a:eth3-ofport4a:eth0 pc4a:pc4a/eth3 ofport4a:eth0 1000000 0 0 1 ethernet ethernet-ofport4a ethernet-bge ethernet-1000000
+link link-pc4a:eth0-HPClus2Expt:(null) pc4a:pc4a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc5a:eth1-HPClus2Expt:(null) pc5a:pc5a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc5a:eth3-ofport5a:eth0 pc5a:pc5a/eth3 ofport5a:eth0 1000000 0 0 1 ethernet ethernet-ofport5a ethernet-bge ethernet-1000000
+link link-pc5a:eth0-HPClus2Expt:(null) pc5a:pc5a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc18a:eth1-HPClus2Expt:(null) pc18a:pc18a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc18a:eth0-HPClus2Expt:(null) pc18a:pc18a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc18a:eth3-ofport18a:eth0 pc18a:pc18a/eth3 ofport18a:eth0 1000000 0 0 1 ethernet ethernet-ofport18a ethernet-bge ethernet-1000000
+link link-pc7a:eth1-HPClus2Expt:(null) pc7a:pc7a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc7a:eth0-HPClus2Expt:(null) pc7a:pc7a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc7a:eth3-ofport7a:eth0 pc7a:pc7a/eth3 ofport7a:eth0 1000000 0 0 1 ethernet ethernet-ofport7a ethernet-bge ethernet-1000000
+link link-pc17a:eth0-HPClus2Expt:(null) pc17a:pc17a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc17a:eth1-HPClus2Expt:(null) pc17a:pc17a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc17a:eth3-ofport17a:eth0 pc17a:pc17a/eth3 ofport17a:eth0 1000000 0 0 1 ethernet ethernet-ofport17a ethernet-bge ethernet-1000000
+link link-pc5b:eth0-HPClus3Expt:(null) pc5b:pc5b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc5b:eth1-HPClus3Expt:(null) pc5b:pc5b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc5b:eth3-ofport5b:eth0 pc5b:pc5b/eth3 ofport5b:eth0 1000000 0 0 1 ethernet ethernet-ofport5b ethernet-bge ethernet-1000000
+link link-pc6b:eth0-HPClus3Expt:(null) pc6b:pc6b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc6b:eth1-HPClus3Expt:(null) pc6b:pc6b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc6b:eth3-ofport6b:eth0 pc6b:pc6b/eth3 ofport6b:eth0 1000000 0 0 1 ethernet ethernet-ofport6b ethernet-bge ethernet-1000000
+link link-pc16a:eth3-ofport16a:eth0 pc16a:pc16a/eth3 ofport16a:eth0 1000000 0 0 1 ethernet ethernet-ofport16a ethernet-bge ethernet-1000000
+link link-pc16a:eth1-HPClus2Expt:(null) pc16a:pc16a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc16a:eth0-HPClus2Expt:(null) pc16a:pc16a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc15a:eth1-HPClus2Expt:(null) pc15a:pc15a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc15a:eth0-HPClus2Expt:(null) pc15a:pc15a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc15a:eth3-ofport15a:eth0 pc15a:pc15a/eth3 ofport15a:eth0 1000000 0 0 1 ethernet ethernet-ofport15a ethernet-bge ethernet-1000000
+link link-pc9a:eth3-ofport9a:eth0 pc9a:pc9a/eth3 ofport9a:eth0 1000000 0 0 1 ethernet ethernet-ofport9a ethernet-bge ethernet-1000000
+link link-pc9a:eth0-HPClus2Expt:(null) pc9a:pc9a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc9a:eth1-HPClus2Expt:(null) pc9a:pc9a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc13a:eth0-HPClus2Expt:(null) pc13a:pc13a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc13a:eth1-HPClus2Expt:(null) pc13a:pc13a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc13a:eth3-ofport13a:eth0 pc13a:pc13a/eth3 ofport13a:eth0 1000000 0 0 1 ethernet ethernet-ofport13a ethernet-bge ethernet-1000000
+link link-pc12a:eth3-ofport12a:eth0 pc12a:pc12a/eth3 ofport12a:eth0 1000000 0 0 1 ethernet ethernet-ofport12a ethernet-bge ethernet-1000000
+link link-pc12a:eth1-HPClus2Expt:(null) pc12a:pc12a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc12a:eth0-HPClus2Expt:(null) pc12a:pc12a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc22a:eth3-ofport22a:eth0 pc22a:pc22a/eth3 ofport22a:eth0 1000000 0 0 1 ethernet ethernet-ofport22a ethernet-bge ethernet-1000000
+link link-pc22a:eth1-HPClus2Expt:(null) pc22a:pc22a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc22a:eth0-HPClus2Expt:(null) pc22a:pc22a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc13b:eth0-HPClus3Expt:(null) pc13b:pc13b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc13b:eth3-ofport13b:eth0 pc13b:pc13b/eth3 ofport13b:eth0 1000000 0 0 1 ethernet ethernet-ofport13b ethernet-bge ethernet-1000000
+link link-pc13b:eth1-HPClus3Expt:(null) pc13b:pc13b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc7b:eth3-ofport7b:eth0 pc7b:pc7b/eth3 ofport7b:eth0 1000000 0 0 1 ethernet ethernet-ofport7b ethernet-bge ethernet-1000000
+link link-pc7b:eth0-HPClus3Expt:(null) pc7b:pc7b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc7b:eth1-HPClus3Expt:(null) pc7b:pc7b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc14b:eth0-HPClus3Expt:(null) pc14b:pc14b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc14b:eth3-ofport14b:eth0 pc14b:pc14b/eth3 ofport14b:eth0 1000000 0 0 1 ethernet ethernet-ofport14b ethernet-bge ethernet-1000000
+link link-pc14b:eth1-HPClus3Expt:(null) pc14b:pc14b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc9b:eth0-HPClus3Expt:(null) pc9b:pc9b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc9b:eth3-ofport9b:eth0 pc9b:pc9b/eth3 ofport9b:eth0 1000000 0 0 1 ethernet ethernet-ofport9b ethernet-bge ethernet-1000000
+link link-pc9b:eth1-HPClus3Expt:(null) pc9b:pc9b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc20d:eth1-HPClus1Expt:(null) pc20d:pc20d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc20d:eth0-HPClus1Expt:(null) pc20d:pc20d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc20d:eth3-ofport20d:eth0 pc20d:pc20d/eth3 ofport20d:eth0 1000000 0 0 1 ethernet ethernet-ofport20d ethernet-bge ethernet-1000000
+link link-pc13d:eth1-HPClus1Expt:(null) pc13d:pc13d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc13d:eth0-HPClus1Expt:(null) pc13d:pc13d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc13d:eth3-ofport13d:eth0 pc13d:pc13d/eth3 ofport13d:eth0 1000000 0 0 1 ethernet ethernet-ofport13d ethernet-bge ethernet-1000000
+link link-pc15d:eth1-HPClus1Expt:(null) pc15d:pc15d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc15d:eth3-ofport15d:eth0 pc15d:pc15d/eth3 ofport15d:eth0 1000000 0 0 1 ethernet ethernet-ofport15d ethernet-bge ethernet-1000000
+link link-pc15d:eth0-HPClus1Expt:(null) pc15d:pc15d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc17d:eth3-ofport17d:eth0 pc17d:pc17d/eth3 ofport17d:eth0 1000000 0 0 1 ethernet ethernet-ofport17d ethernet-bge ethernet-1000000
+link link-pc17d:eth0-HPClus1Expt:(null) pc17d:pc17d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc17d:eth1-HPClus1Expt:(null) pc17d:pc17d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc24a:eth3-ofport24a:eth0 pc24a:pc24a/eth3 ofport24a:eth0 1000000 0 0 1 ethernet ethernet-ofport24a ethernet-bge ethernet-1000000
+link link-pc24a:eth0-HPClus2Expt:(null) pc24a:pc24a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc24a:eth1-HPClus2Expt:(null) pc24a:pc24a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc22b:eth3-ofport22b:eth0 pc22b:pc22b/eth3 ofport22b:eth0 1000000 0 0 1 ethernet ethernet-ofport22b ethernet-bge ethernet-1000000
+link link-pc22b:eth1-HPClus3Expt:(null) pc22b:pc22b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc22b:eth0-HPClus3Expt:(null) pc22b:pc22b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc21b:eth3-ofport21b:eth0 pc21b:pc21b/eth3 ofport21b:eth0 1000000 0 0 1 ethernet ethernet-ofport21b ethernet-bge ethernet-1000000
+link link-pc21b:eth1-HPClus3Expt:(null) pc21b:pc21b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc21b:eth0-HPClus3Expt:(null) pc21b:pc21b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc19b:eth0-HPClus3Expt:(null) pc19b:pc19b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc19b:eth1-HPClus3Expt:(null) pc19b:pc19b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc19b:eth3-ofport19b:eth0 pc19b:pc19b/eth3 ofport19b:eth0 1000000 0 0 1 ethernet ethernet-ofport19b ethernet-bge ethernet-1000000
+link link-pc20b:eth3-ofport20b:eth0 pc20b:pc20b/eth3 ofport20b:eth0 1000000 0 0 1 ethernet ethernet-ofport20b ethernet-bge ethernet-1000000
+link link-pc20b:eth1-HPClus3Expt:(null) pc20b:pc20b/eth1 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc20b:eth0-HPClus3Expt:(null) pc20b:pc20b/eth0 HPClus3Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus3Expt ethernet-ix ethernet-10000000
+link link-pc1a:eth0-HPClus2Expt:(null) pc1a:pc1a/eth0 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc1a:eth1-HPClus2Expt:(null) pc1a:pc1a/eth1 HPClus2Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus2Expt ethernet-ix ethernet-10000000
+link link-pc1a:eth3-ofport1a:eth0 pc1a:pc1a/eth3 ofport1a:eth0 1000000 0 0 1 ethernet ethernet-ofport1a ethernet-bge ethernet-1000000
+link link-pc24d:eth0-HPClus1Expt:(null) pc24d:pc24d/eth0 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-pc24d:eth3-ofport24d:eth0 pc24d:pc24d/eth3 ofport24d:eth0 1000000 0 0 1 ethernet ethernet-ofport24d ethernet-bge ethernet-1000000
+link link-pc24d:eth1-HPClus1Expt:(null) pc24d:pc24d/eth1 HPClus1Expt:(null) 10000000 0 0 1 ethernet ethernet-HPClus1Expt ethernet-ix ethernet-10000000
+link link-ofport1d:eth1-HPClus1SDN:(null) ofport1d:ofport1d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport2d:eth1-HPClus1SDN:(null) ofport2d:ofport2d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport3d:eth1-HPClus1SDN:(null) ofport3d:ofport3d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport4d:eth1-HPClus1SDN:(null) ofport4d:ofport4d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport5d:eth1-HPClus1SDN:(null) ofport5d:ofport5d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport6d:eth1-HPClus1SDN:(null) ofport6d:ofport6d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport7d:eth1-HPClus1SDN:(null) ofport7d:ofport7d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport8d:eth1-HPClus1SDN:(null) ofport8d:ofport8d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport9d:eth1-HPClus1SDN:(null) ofport9d:ofport9d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport10d:eth1-HPClus1SDN:(null) ofport10d:ofport10d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport11d:eth1-HPClus1SDN:(null) ofport11d:ofport11d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport12d:eth1-HPClus1SDN:(null) ofport12d:ofport12d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport13d:eth1-HPClus1SDN:(null) ofport13d:ofport13d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport14d:eth1-HPClus1SDN:(null) ofport14d:ofport14d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport15d:eth1-HPClus1SDN:(null) ofport15d:ofport15d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport16d:eth1-HPClus1SDN:(null) ofport16d:ofport16d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport17d:eth1-HPClus1SDN:(null) ofport17d:ofport17d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport18d:eth1-HPClus1SDN:(null) ofport18d:ofport18d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport19d:eth1-HPClus1SDN:(null) ofport19d:ofport19d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport20d:eth1-HPClus1SDN:(null) ofport20d:ofport20d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport21d:eth1-HPClus1SDN:(null) ofport21d:ofport21d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport22d:eth1-HPClus1SDN:(null) ofport22d:ofport22d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport23d:eth1-HPClus1SDN:(null) ofport23d:ofport23d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport24d:eth1-HPClus1SDN:(null) ofport24d:ofport24d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport25d:eth1-HPClus1SDN:(null) ofport25d:ofport25d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport26d:eth1-HPClus1SDN:(null) ofport26d:ofport26d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport27d:eth1-HPClus1SDN:(null) ofport27d:ofport27d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport28d:eth1-HPClus1SDN:(null) ofport28d:ofport28d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport29d:eth1-HPClus1SDN:(null) ofport29d:ofport29d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport30d:eth1-HPClus1SDN:(null) ofport30d:ofport30d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport31d:eth1-HPClus1SDN:(null) ofport31d:ofport31d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport32d:eth1-HPClus1SDN:(null) ofport32d:ofport32d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport33d:eth1-HPClus1SDN:(null) ofport33d:ofport33d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport34d:eth1-HPClus1SDN:(null) ofport34d:ofport34d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport35d:eth1-HPClus1SDN:(null) ofport35d:ofport35d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport36d:eth1-HPClus1SDN:(null) ofport36d:ofport36d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport37d:eth1-HPClus1SDN:(null) ofport37d:ofport37d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport38d:eth1-HPClus1SDN:(null) ofport38d:ofport38d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport39d:eth1-HPClus1SDN:(null) ofport39d:ofport39d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport40d:eth1-HPClus1SDN:(null) ofport40d:ofport40d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport41d:eth1-HPClus1SDN:(null) ofport41d:ofport41d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport42d:eth1-HPClus1SDN:(null) ofport42d:ofport42d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport43d:eth1-HPClus1SDN:(null) ofport43d:ofport43d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport44d:eth1-HPClus1SDN:(null) ofport44d:ofport44d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport45d:eth1-HPClus1SDN:(null) ofport45d:ofport45d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport46d:eth1-HPClus1SDN:(null) ofport46d:ofport46d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport47d:eth1-HPClus1SDN:(null) ofport47d:ofport47d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport48d:eth1-HPClus1SDN:(null) ofport48d:ofport48d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport101d:eth1-HPClus1SDN:(null) ofport101d:ofport101d/eth1 HPClus1SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus1SDN ethernet-bge ethernet-1000000
+link link-ofport25d:eth0-ofport26d:eth0 ofport25d:ofport25d/eth0 ofport26d:eth0 1000000 0 0 1 ethernet ethernet-ofport26d ethernet-bge ethernet-1000000
+link link-ofport27d:eth0-ofport28d:eth0 ofport27d:ofport27d/eth0 ofport28d:eth0 1000000 0 0 1 ethernet ethernet-ofport28d ethernet-bge ethernet-1000000
+link link-ofport29d:eth0-ofport30d:eth0 ofport29d:ofport29d/eth0 ofport30d:eth0 1000000 0 0 1 ethernet ethernet-ofport30d ethernet-bge ethernet-1000000
+link link-ofport31d:eth0-ofport32d:eth0 ofport31d:ofport31d/eth0 ofport32d:eth0 1000000 0 0 1 ethernet ethernet-ofport32d ethernet-bge ethernet-1000000
+link link-ofport33d:eth0-ofport34d:eth0 ofport33d:ofport33d/eth0 ofport34d:eth0 1000000 0 0 1 ethernet ethernet-ofport34d ethernet-bge ethernet-1000000
+link link-ofport35d:eth0-ofport36d:eth0 ofport35d:ofport35d/eth0 ofport36d:eth0 1000000 0 0 1 ethernet ethernet-ofport36d ethernet-bge ethernet-1000000
+link link-ofport37d:eth0-ofport38d:eth0 ofport37d:ofport37d/eth0 ofport38d:eth0 1000000 0 0 1 ethernet ethernet-ofport38d ethernet-bge ethernet-1000000
+link link-ofport39d:eth0-ofport40d:eth0 ofport39d:ofport39d/eth0 ofport40d:eth0 1000000 0 0 1 ethernet ethernet-ofport40d ethernet-bge ethernet-1000000
+link link-ofport41d:eth0-ofport42d:eth0 ofport41d:ofport41d/eth0 ofport42d:eth0 1000000 0 0 1 ethernet ethernet-ofport42d ethernet-bge ethernet-1000000
+link link-ofport43d:eth0-ofport44d:eth0 ofport43d:ofport43d/eth0 ofport44d:eth0 1000000 0 0 1 ethernet ethernet-ofport44d ethernet-bge ethernet-1000000
+link link-ofport45d:eth0-ofport46d:eth0 ofport45d:ofport45d/eth0 ofport46d:eth0 1000000 0 0 1 ethernet ethernet-ofport46d ethernet-bge ethernet-1000000
+link link-ofport47d:eth0-ofport48d:eth0 ofport47d:ofport47d/eth0 ofport48d:eth0 1000000 0 0 1 ethernet ethernet-ofport48d ethernet-bge ethernet-1000000
+link link-ofport1a:eth1-HPClus2SDN:(null) ofport1a:ofport1a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport2a:eth1-HPClus2SDN:(null) ofport2a:ofport2a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport3a:eth1-HPClus2SDN:(null) ofport3a:ofport3a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport4a:eth1-HPClus2SDN:(null) ofport4a:ofport4a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport5a:eth1-HPClus2SDN:(null) ofport5a:ofport5a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport6a:eth1-HPClus2SDN:(null) ofport6a:ofport6a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport7a:eth1-HPClus2SDN:(null) ofport7a:ofport7a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport8a:eth1-HPClus2SDN:(null) ofport8a:ofport8a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport9a:eth1-HPClus2SDN:(null) ofport9a:ofport9a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport10a:eth1-HPClus2SDN:(null) ofport10a:ofport10a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport11a:eth1-HPClus2SDN:(null) ofport11a:ofport11a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport12a:eth1-HPClus2SDN:(null) ofport12a:ofport12a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport13a:eth1-HPClus2SDN:(null) ofport13a:ofport13a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport14a:eth1-HPClus2SDN:(null) ofport14a:ofport14a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport15a:eth1-HPClus2SDN:(null) ofport15a:ofport15a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport16a:eth1-HPClus2SDN:(null) ofport16a:ofport16a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport17a:eth1-HPClus2SDN:(null) ofport17a:ofport17a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport18a:eth1-HPClus2SDN:(null) ofport18a:ofport18a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport19a:eth1-HPClus2SDN:(null) ofport19a:ofport19a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport20a:eth1-HPClus2SDN:(null) ofport20a:ofport20a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport21a:eth1-HPClus2SDN:(null) ofport21a:ofport21a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport22a:eth1-HPClus2SDN:(null) ofport22a:ofport22a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport23a:eth1-HPClus2SDN:(null) ofport23a:ofport23a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport24a:eth1-HPClus2SDN:(null) ofport24a:ofport24a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport25a:eth1-HPClus2SDN:(null) ofport25a:ofport25a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport26a:eth1-HPClus2SDN:(null) ofport26a:ofport26a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport27a:eth1-HPClus2SDN:(null) ofport27a:ofport27a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport28a:eth1-HPClus2SDN:(null) ofport28a:ofport28a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport29a:eth1-HPClus2SDN:(null) ofport29a:ofport29a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport30a:eth1-HPClus2SDN:(null) ofport30a:ofport30a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport31a:eth1-HPClus2SDN:(null) ofport31a:ofport31a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport32a:eth1-HPClus2SDN:(null) ofport32a:ofport32a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport33a:eth1-HPClus2SDN:(null) ofport33a:ofport33a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport34a:eth1-HPClus2SDN:(null) ofport34a:ofport34a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport35a:eth1-HPClus2SDN:(null) ofport35a:ofport35a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport36a:eth1-HPClus2SDN:(null) ofport36a:ofport36a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport37a:eth1-HPClus2SDN:(null) ofport37a:ofport37a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport38a:eth1-HPClus2SDN:(null) ofport38a:ofport38a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport39a:eth1-HPClus2SDN:(null) ofport39a:ofport39a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport40a:eth1-HPClus2SDN:(null) ofport40a:ofport40a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport41a:eth1-HPClus2SDN:(null) ofport41a:ofport41a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport42a:eth1-HPClus2SDN:(null) ofport42a:ofport42a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport43a:eth1-HPClus2SDN:(null) ofport43a:ofport43a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport44a:eth1-HPClus2SDN:(null) ofport44a:ofport44a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport45a:eth1-HPClus2SDN:(null) ofport45a:ofport45a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport46a:eth1-HPClus2SDN:(null) ofport46a:ofport46a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport47a:eth1-HPClus2SDN:(null) ofport47a:ofport47a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport48a:eth1-HPClus2SDN:(null) ofport48a:ofport48a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport101a:eth1-HPClus2SDN:(null) ofport101a:ofport101a/eth1 HPClus2SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus2SDN ethernet-bge ethernet-1000000
+link link-ofport25a:eth0-ofport26a:eth0 ofport25a:ofport25a/eth0 ofport26a:eth0 1000000 0 0 1 ethernet ethernet-ofport26a ethernet-bge ethernet-1000000
+link link-ofport27a:eth0-ofport28a:eth0 ofport27a:ofport27a/eth0 ofport28a:eth0 1000000 0 0 1 ethernet ethernet-ofport28a ethernet-bge ethernet-1000000
+link link-ofport29a:eth0-ofport30a:eth0 ofport29a:ofport29a/eth0 ofport30a:eth0 1000000 0 0 1 ethernet ethernet-ofport30a ethernet-bge ethernet-1000000
+link link-ofport31a:eth0-ofport32a:eth0 ofport31a:ofport31a/eth0 ofport32a:eth0 1000000 0 0 1 ethernet ethernet-ofport32a ethernet-bge ethernet-1000000
+link link-ofport33a:eth0-ofport34a:eth0 ofport33a:ofport33a/eth0 ofport34a:eth0 1000000 0 0 1 ethernet ethernet-ofport34a ethernet-bge ethernet-1000000
+link link-ofport35a:eth0-ofport36a:eth0 ofport35a:ofport35a/eth0 ofport36a:eth0 1000000 0 0 1 ethernet ethernet-ofport36a ethernet-bge ethernet-1000000
+link link-ofport37a:eth0-ofport38a:eth0 ofport37a:ofport37a/eth0 ofport38a:eth0 1000000 0 0 1 ethernet ethernet-ofport38a ethernet-bge ethernet-1000000
+link link-ofport39a:eth0-ofport40a:eth0 ofport39a:ofport39a/eth0 ofport40a:eth0 1000000 0 0 1 ethernet ethernet-ofport40a ethernet-bge ethernet-1000000
+link link-ofport41a:eth0-ofport42a:eth0 ofport41a:ofport41a/eth0 ofport42a:eth0 1000000 0 0 1 ethernet ethernet-ofport42a ethernet-bge ethernet-1000000
+link link-ofport43a:eth0-ofport44a:eth0 ofport43a:ofport43a/eth0 ofport44a:eth0 1000000 0 0 1 ethernet ethernet-ofport44a ethernet-bge ethernet-1000000
+link link-ofport45a:eth0-ofport46a:eth0 ofport45a:ofport45a/eth0 ofport46a:eth0 1000000 0 0 1 ethernet ethernet-ofport46a ethernet-bge ethernet-1000000
+link link-ofport47a:eth0-ofport48a:eth0 ofport47a:ofport47a/eth0 ofport48a:eth0 1000000 0 0 1 ethernet ethernet-ofport48a ethernet-bge ethernet-1000000
+link link-ofport1b:eth1-HPClus3SDN:(null) ofport1b:ofport1b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport2b:eth1-HPClus3SDN:(null) ofport2b:ofport2b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport3b:eth1-HPClus3SDN:(null) ofport3b:ofport3b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport4b:eth1-HPClus3SDN:(null) ofport4b:ofport4b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport5b:eth1-HPClus3SDN:(null) ofport5b:ofport5b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport6b:eth1-HPClus3SDN:(null) ofport6b:ofport6b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport7b:eth1-HPClus3SDN:(null) ofport7b:ofport7b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport8b:eth1-HPClus3SDN:(null) ofport8b:ofport8b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport9b:eth1-HPClus3SDN:(null) ofport9b:ofport9b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport10b:eth1-HPClus3SDN:(null) ofport10b:ofport10b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport11b:eth1-HPClus3SDN:(null) ofport11b:ofport11b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport12b:eth1-HPClus3SDN:(null) ofport12b:ofport12b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport13b:eth1-HPClus3SDN:(null) ofport13b:ofport13b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport14b:eth1-HPClus3SDN:(null) ofport14b:ofport14b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport15b:eth1-HPClus3SDN:(null) ofport15b:ofport15b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport16b:eth1-HPClus3SDN:(null) ofport16b:ofport16b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport17b:eth1-HPClus3SDN:(null) ofport17b:ofport17b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport18b:eth1-HPClus3SDN:(null) ofport18b:ofport18b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport19b:eth1-HPClus3SDN:(null) ofport19b:ofport19b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport20b:eth1-HPClus3SDN:(null) ofport20b:ofport20b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport21b:eth1-HPClus3SDN:(null) ofport21b:ofport21b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport22b:eth1-HPClus3SDN:(null) ofport22b:ofport22b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport23b:eth1-HPClus3SDN:(null) ofport23b:ofport23b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport24b:eth1-HPClus3SDN:(null) ofport24b:ofport24b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport25b:eth1-HPClus3SDN:(null) ofport25b:ofport25b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport26b:eth1-HPClus3SDN:(null) ofport26b:ofport26b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport27b:eth1-HPClus3SDN:(null) ofport27b:ofport27b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport28b:eth1-HPClus3SDN:(null) ofport28b:ofport28b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport29b:eth1-HPClus3SDN:(null) ofport29b:ofport29b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport30b:eth1-HPClus3SDN:(null) ofport30b:ofport30b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport31b:eth1-HPClus3SDN:(null) ofport31b:ofport31b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport32b:eth1-HPClus3SDN:(null) ofport32b:ofport32b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport33b:eth1-HPClus3SDN:(null) ofport33b:ofport33b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport34b:eth1-HPClus3SDN:(null) ofport34b:ofport34b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport35b:eth1-HPClus3SDN:(null) ofport35b:ofport35b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport36b:eth1-HPClus3SDN:(null) ofport36b:ofport36b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport37b:eth1-HPClus3SDN:(null) ofport37b:ofport37b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport38b:eth1-HPClus3SDN:(null) ofport38b:ofport38b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport39b:eth1-HPClus3SDN:(null) ofport39b:ofport39b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport40b:eth1-HPClus3SDN:(null) ofport40b:ofport40b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport41b:eth1-HPClus3SDN:(null) ofport41b:ofport41b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport42b:eth1-HPClus3SDN:(null) ofport42b:ofport42b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport43b:eth1-HPClus3SDN:(null) ofport43b:ofport43b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport44b:eth1-HPClus3SDN:(null) ofport44b:ofport44b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport45b:eth1-HPClus3SDN:(null) ofport45b:ofport45b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport46b:eth1-HPClus3SDN:(null) ofport46b:ofport46b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport47b:eth1-HPClus3SDN:(null) ofport47b:ofport47b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport48b:eth1-HPClus3SDN:(null) ofport48b:ofport48b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport101b:eth1-HPClus3SDN:(null) ofport101b:ofport101b/eth1 HPClus3SDN:(null) 1000000 0 0 1 ethernet ethernet-HPClus3SDN ethernet-bge ethernet-1000000
+link link-ofport25b:eth0-ofport26b:eth0 ofport25b:ofport25b/eth0 ofport26b:eth0 1000000 0 0 1 ethernet ethernet-ofport26b ethernet-bge ethernet-1000000
+link link-ofport27b:eth0-ofport28b:eth0 ofport27b:ofport27b/eth0 ofport28b:eth0 1000000 0 0 1 ethernet ethernet-ofport28b ethernet-bge ethernet-1000000
+link link-ofport29b:eth0-ofport30b:eth0 ofport29b:ofport29b/eth0 ofport30b:eth0 1000000 0 0 1 ethernet ethernet-ofport30b ethernet-bge ethernet-1000000
+link link-ofport31b:eth0-ofport32b:eth0 ofport31b:ofport31b/eth0 ofport32b:eth0 1000000 0 0 1 ethernet ethernet-ofport32b ethernet-bge ethernet-1000000
+link link-ofport33b:eth0-ofport34b:eth0 ofport33b:ofport33b/eth0 ofport34b:eth0 1000000 0 0 1 ethernet ethernet-ofport34b ethernet-bge ethernet-1000000
+link link-ofport35b:eth0-ofport36b:eth0 ofport35b:ofport35b/eth0 ofport36b:eth0 1000000 0 0 1 ethernet ethernet-ofport36b ethernet-bge ethernet-1000000
+link link-ofport37b:eth0-ofport38b:eth0 ofport37b:ofport37b/eth0 ofport38b:eth0 1000000 0 0 1 ethernet ethernet-ofport38b ethernet-bge ethernet-1000000
+link link-ofport39b:eth0-ofport40b:eth0 ofport39b:ofport39b/eth0 ofport40b:eth0 1000000 0 0 1 ethernet ethernet-ofport40b ethernet-bge ethernet-1000000
+link link-ofport41b:eth0-ofport42b:eth0 ofport41b:ofport41b/eth0 ofport42b:eth0 1000000 0 0 1 ethernet ethernet-ofport42b ethernet-bge ethernet-1000000
+link link-ofport43b:eth0-ofport44b:eth0 ofport43b:ofport43b/eth0 ofport44b:eth0 1000000 0 0 1 ethernet ethernet-ofport44b ethernet-bge ethernet-1000000
+link link-ofport45b:eth0-ofport46b:eth0 ofport45b:ofport45b/eth0 ofport46b:eth0 1000000 0 0 1 ethernet ethernet-ofport46b ethernet-bge ethernet-1000000
+link link-ofport47b:eth0-ofport48b:eth0 ofport47b:ofport47b/eth0 ofport48b:eth0 1000000 0 0 1 ethernet ethernet-ofport48b ethernet-bge ethernet-1000000
+link link-ofport101d:eth0-ofport101a:eth0 ofport101d:ofport101d/eth0 ofport101a:eth0 1000000 0 0 1 ethernet ethernet-ofport101a ethernet-bge ethernet-1000000
+link link-ofport101a:eth0-ofport101b:eth0 ofport101a:ofport101a/eth0 ofport101b:eth0 1000000 0 0 1 ethernet ethernet-ofport101b ethernet-bge ethernet-1000000
+link link-ovx:eth0-HPCore1:Bridge-Aggregation1 ovx:ovx/eth0 HPCore1:Bridge-Aggregation1 10000000 0 0 1 ethernet ethernet-HPCore1 ethernet-ix ethernet-10000000
+link link-ofport101b:eth0-ofport101d:eth0 ofport101b:ofport101b/eth0 ofport101d:eth0 1000000 0 0 1 ethernet ethernet-ofport101d ethernet-bge ethernet-1000000
+link link-HPCore1:HPClus1Expt HPCore1:HPCore1/(null) HPClus1Expt:(null) 40000000 0 0 1 ethernet
+link link-HPCore1:HPClus2Expt HPCore1:HPCore1/(null) HPClus2Expt:(null) 40000000 0 0 1 ethernet
+link link-HPCore1:HPClus3Expt HPCore1:HPCore1/(null) HPClus3Expt:(null) 40000000 0 0 1 ethernet
+node airswitch *80211:* *80211a:* *80211b:* *80211g:* *flex900:* -  -
